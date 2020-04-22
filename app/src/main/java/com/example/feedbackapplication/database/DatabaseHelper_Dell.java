@@ -1,4 +1,4 @@
-package com.example.feedbackapplication;
+package com.example.feedbackapplication.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,14 +10,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper_Dell extends SQLiteOpenHelper {
     private static DatabaseHelper mInstance = null;
 
     public static DatabaseHelper getInstance(Context ctx) {
@@ -31,36 +29,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return mInstance;
     }
 
-    public DatabaseHelper(Context context) {
-        super(context, "pun_feedback.db", null, 1);
+    public DatabaseHelper_Dell(Context context) {
+        super(context, "feedback.db", null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-    
-        sqLiteDatabase.execSQL(" CREATE TABLE SyncInfo (Id INTEGER PRIMARY KEY, Auto_Id TEXT, Mac_Address TEXT, Apk_Version TEXT, Sync_Date_Time TEXT, Device_Name TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE admin_login (ID INTEGER PRIMARY KEY,User_Id TEXT, User_Name TEXT, Password TEXT,Company_Name TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE admin_details(ID INTEGER PRIMARY KEY,Company_ID TEXT,Company_Name TEXT,Location_Id TEXT,Location_Name TEXT,Site_Id TEXT, Site_Name TEXT,Building_Id TEXT, Building_Name TEXT,Wing_Id TEXT,Wing_Name TEXT,Floor_Id TEXT, Floor_Name TEXT,Area_Id TEXT, Area_Name TEXT,RecordStatus TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE feedback_adminquestions (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Feedback_Question TEXT,Order_Id TEXT, Area_Id TEXT, Weightage TEXT,EmailSMS TEXT,RecordStatus TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE feedback_adminsubquestions (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Feedback_Id TEXT, Feedback_Sub_Question TEXT,Icon Blob, Order_Id TEXT,Weightage TEXT,RecordStatus TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE feedback_admin_icondetails (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Icon_Name TEXT, Icon_value BLOB,Icon_Type TEXT, Status TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE feedback_details (ID INTEGER PRIMARY KEY ,Rec_Id TEXT,Admin_Id TEXT, Supervisor_Id TEXT, Display_Name Text,Feedback_DateTime TEXT, UpdatedStatus TEXT,Last_IP TEXT,Apk_Web_Version TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE feedback_userquestiondata (ID INTEGER PRIMARY KEY ,Rec_Id TEXT,Question_ID TEXT, Feedback_Icon_Id TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE feedback_usersubquestiondata (ID INTEGER PRIMARY KEY ,Rec_Id TEXT,Question_ID TEXT,Sub_Question_ID TEXT,Response TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE emp_ratings(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,Emp_Id TEXT,Ratings TEXT,UpdatedStatus TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE emp_neg_ratings(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,Emp_Feedback_Id TEXT,Name TEXT,Email TEXT,Contact TEXT,Comment TEXT,UpdatedStatus TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE EmailSMSList (Id INTEGER PRIMARY KEY, Auto_Id TEXT,Building_Id TEXT, Employee_Email TEXT, Recipient_Type TEXT,Mobile_Number TEXT, Record_Status TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE sms_master(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,UserName TEXT, Password TEXT, Type TEXT, Source TEXT, URL TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE store_setting(Admin_Id INTEGER PRIMARY KEY , Auto_Id TEXT, Site_Name TEXT, Building_Name TEXT, Floor_Name TEXT, Area_Name TEXT, Display_Name TEXT, Checked_Display_Name TEXT,Active_Setting Text,Icon_Type TEXT)");
-    
+
         //sqLiteDatabase.execSQL(" CREATE TABLE  feedback_details (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Supervisor_Id TEXT,User_Id TEXT, Display_Name Text,Gender TEXT,Site_Location_Id TEXT,Feedback_Icon_Id TEXT, Feedback_Question_Id TEXT, Feedback_DateTime TEXT,Site_Name TEXT, Building_Name TEXT, Floor_Name TEXT, Area_Name TEXT, Comment TEXT, Company_Name TEXT, Employee_Name TEXT, Email TEXT, Phone_Number TEXT, UpdatedStatus TEXT, Last_IP TEXT, Update_Location TEXT, Apk_Web_Version TEXT)");
-        //sqLiteDatabase.execSQL(" CREATE TABLE area_details(ID INTEGER PRIMARY KEY , Auto_Id TEXT, Company_Id TEXT, Area_Name TEXT,Site_Location_Id TEXT,RecordStatus TEXT)");
-    
-      
-       // sqLiteDatabase.execSQL(" CREATE TABLE admin_asset_site_details (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Supervisor_Id TEXT,User_Id TEXT, Display_Name Text,Gender TEXT,Site_Location_Id TEXT,Feedback_Icon_Id TEXT, Feedback_Question_Id TEXT, Feedback_DateTime TEXT, Building_Id TEXT, Floor_Id TEXT, Area_Id TEXT, Comments TEXT, Company_Name TEXT,Service_Id TEXT ,Emp_Code TEXT, Employee_Name TEXT, Employee_Id TEXT, Email TEXT, Phone_Number TEXT, UpdatedStatus TEXT,Last_IP TEXT, Update_Location TEXT, Apk_Web_Version TEXT)");
-        
-        
-    
+        sqLiteDatabase.execSQL(" CREATE TABLE  feedback_details (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Supervisor_Id TEXT,WorkStation_Number TEXT, Display_Name Text,Gender TEXT,Site_Location_Id TEXT,Feedback_Icon_Id TEXT, Feedback_Question_Id TEXT, Feedback_DateTime TEXT, Building_Id TEXT, Floor_Id TEXT, Area_Id TEXT, Comments TEXT, Company_Name TEXT, Employee_Name TEXT, Employee_Id TEXT, Email TEXT, Phone_Number TEXT, UpdatedStatus TEXT,Last_IP TEXT, Update_Location TEXT, Apk_Web_Version TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE  feedback_icons_details (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Feedback_Name TEXT,Score TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE  feedback_adminquestions (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Feedback_Question TEXT,Area_Id TEXT, RecordStatus TEXT,RatingValue TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE  negative_feedback (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Feedback_Id TEXT, Negative_Feedback TEXT, Company TEXT, Name TEXT, Email TEXT, Contact TEXT, Comment TEXT,UpdatedStatus TEXT, Last_IP TEXT, Update_Location TEXT, Apk_Web_Version TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE  public_details (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Feedback_Id TEXT, Public_Name TEXT, Email TEXT, Contact TEXT,UpdatedStatus TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE  user_master (ID INTEGER PRIMARY KEY ,User_Id TEXT, Username TEXT, Password TEXT, Email TEXT, Name TEXT, User_Type TEXT,EmpImage BLOB)");
+        sqLiteDatabase.execSQL(" CREATE TABLE  site_detail(ID INTEGER PRIMARY KEY , Auto_Id TEXT,Company_Id TEXT, Location_Id TEXT, Site_Name TEXT,RecordStatus TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE  building_detail(ID INTEGER PRIMARY KEY , Auto_Id TEXT,Company_Id TEXT, Building_Name TEXT,Site_Location_Id TEXT,RecordStatus TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE  floor_detail(ID INTEGER PRIMARY KEY , Auto_Id TEXT,Company_Id TEXT, Floor_Name TEXT,Building_Id TEXT ,Site_Location_Id TEXT,RecordStatus TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE  area_detail(ID INTEGER PRIMARY KEY , Auto_Id TEXT, Company_Id TEXT, Area_Name TEXT,Site_Location_Id TEXT,RecordStatus TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE  store_setting(ID INTEGER PRIMARY KEY , Auto_Id TEXT, Site_Name TEXT, Building_Name TEXT, Floor_Name TEXT, Area_Name TEXT, Feedback_Question TEXT, Display_Name TEXT, Checked_Display_Name TEXT,Active_Setting Text)");
+        sqLiteDatabase.execSQL(" CREATE TABLE emp_neg_rating_info(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,Emp_Feedback_Id TEXT,Name TEXT,Email TEXT,Contact TEXT,Comment TEXT,UpdatedStatus TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE emp_feedback(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,Emp_Id TEXT,Ratings TEXT,UpdatedStatus TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE feedback_sms(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,Building_Id TEXT, Mobile_Number TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE company_details(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,Company_Name TEXT)");
+        sqLiteDatabase.execSQL("CREATE TABLE EmailList (Id INTEGER PRIMARY KEY, Auto_Id TEXT,Building_Id TEXT, Employee_Email TEXT, Recipient_Type TEXT, Record_Status TEXT)");
+        sqLiteDatabase.execSQL("CREATE TABLE location_detail(ID INTEGER PRIMARY KEY , Auto_Id TEXT, Company_Id TEXT, Location_Name TEXT,RecordStatus TEXT)");
+        sqLiteDatabase.execSQL("CREATE TABLE SyncInfo (Id INTEGER PRIMARY KEY, Auto_Id TEXT, Mac_Address TEXT, Apk_Version TEXT, Sync_Date_Time TEXT, Device_Name TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE sms_master(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,UserName TEXT, Password TEXT, Type TEXT, Source TEXT, URL TEXT)");
     }
 
     @Override
@@ -68,24 +63,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-//    public JSONArray SyncInfo(){
-//
-//        JSONArray TicketJsonArray = new JSONArray();
-//        String[]loggerData = new LoggerFile().loggerFunction();
-//        try {
-//            JSONObject TicketJsonObject = new JSONObject();
-//            TicketJsonObject.put("Sync_Date_Time",loggerData[0]);
-//            TicketJsonObject.put("MacAddress",loggerData[1]);
-//            TicketJsonObject.put("Apk_Web_Version", loggerData[3]);
-//            //TicketJsonObject.put("GeoLoc", loggerData[5]);
-//            TicketJsonObject.put("Device_Name", loggerData[4]);
-//
-//            TicketJsonArray.put(TicketJsonObject);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        return TicketJsonArray;
-//    }
+/*
+    public JSONArray SyncInfo(){
+
+        JSONArray TicketJsonArray = new JSONArray();
+        String[]loggerData = new LoggerFile().loggerFunction();
+        try {
+            JSONObject TicketJsonObject = new JSONObject();
+            TicketJsonObject.put("Sync_Date_Time",loggerData[0]);
+            TicketJsonObject.put("MacAddress",loggerData[1]);
+            TicketJsonObject.put("Apk_Web_Version", loggerData[3]);
+            //TicketJsonObject.put("GeoLoc", loggerData[5]);
+            TicketJsonObject.put("Device_Name", loggerData[4]);
+
+            TicketJsonArray.put(TicketJsonObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return TicketJsonArray;
+    }
+*/
 
 
     public String getsmsURL(){
@@ -251,18 +248,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return site_id;
     }
 
-    public String getBuildingId(String Building_Name){
+    public String getBuildingId(String Building_Name) {
 
-        String site_id="";
+        String auto_id = "";
         try {
-            String query = "SELECT Auto_Id FROM building_detail Where Building_Name ='"+Building_Name+"'";
+            String query = "SELECT Auto_Id FROM building_detail Where Building_Name ='" + Building_Name + "'";
 
-            Log.d("building_query",query);
+            Log.d("building_query", query);
             SQLiteDatabase db = getWritableDatabase();
-            Cursor res =db.rawQuery(query, null);
+            Cursor res = db.rawQuery(query, null);
             if (res.moveToFirst()) {
                 do {
-                    site_id=res.getString(res.getColumnIndex("Auto_Id"));
+                    auto_id = res.getString(res.getColumnIndex("Auto_Id"));
                 } while (res.moveToNext());
             }
             res.close();
@@ -270,30 +267,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return site_id;
+        return auto_id;
     }
 
-    public String getFloorId(String Floor_Name){
-
-        String floor_id="";
-        try {
-            String query = "SELECT Auto_Id FROM floor_detail Where Floor_Name ='"+Floor_Name+"'";
-
-            Log.d("floor_query",query);
-            SQLiteDatabase db = getWritableDatabase();
-            Cursor res =db.rawQuery(query, null);
-            if (res.moveToFirst()) {
-                do {
-                    floor_id=res.getString(res.getColumnIndex("Auto_Id"));
-                } while (res.moveToNext());
-            }
-            res.close();
-            db.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return floor_id;
-    }
     public String getBuildingName(String floor_Id){
 
         String Building_Name="";
@@ -318,7 +294,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public String getAreaId(String Area_Name){
 
-        String area_id="";
+        String site_id="";
         try {
             String query = "SELECT Auto_Id FROM area_detail Where Area_Name ='"+Area_Name+"'";
 
@@ -327,29 +303,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Cursor res =db.rawQuery(query, null);
             if (res.moveToFirst()) {
                 do {
-                    area_id=res.getString(res.getColumnIndex("Auto_Id"));
+                    site_id=res.getString(res.getColumnIndex("Auto_Id"));
                 } while (res.moveToNext());
             }
             res.close();
             db.close();
+
+            System.out.println("getAreaId Auto_Id  = " + site_id);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return area_id;
+        return site_id;
     }
 
-    public String getAreaName(String Area_Id){
+    public String getQuestionId(String Question_Name){
 
-        String Area_Name="";
+        String site_id="";
         try {
-            String query = "SELECT Area_Name FROM area_detail Where Auto_Id ='"+Area_Id+"'";
+            String query = "SELECT Auto_Id FROM feedback_questions Where Feedback_Question ='"+Question_Name+"'";
 
-            Log.d("Area_query",query+" :: "+Area_Id);
+            Log.d("area_query",query);
             SQLiteDatabase db = getWritableDatabase();
             Cursor res =db.rawQuery(query, null);
             if (res.moveToFirst()) {
                 do {
-                    Area_Name=res.getString(res.getColumnIndex("Area_Name"));
+                    site_id=res.getString(res.getColumnIndex("Auto_Id"));
                 } while (res.moveToNext());
             }
             res.close();
@@ -357,6 +335,154 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return site_id;
+    }
+
+    public String getFeedbackQuestionId(String Question_Name){
+
+        String site_id="";
+        try {
+            String query = "SELECT Auto_Id FROM feedback_questions Where Feedback_Question ='"+Question_Name+"' ";
+
+            Log.d("area_query",query);
+            SQLiteDatabase db = getWritableDatabase();
+            Cursor res =db.rawQuery(query, null);
+            if (res.moveToFirst()) {
+                do {
+                    site_id=res.getString(res.getColumnIndex("Auto_Id"));
+                } while (res.moveToNext());
+            }
+            res.close();
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return site_id;
+    }
+
+    public String getFloorId(String Floor_Name){
+       // sqLiteDatabase.execSQL(" CREATE TABLE  floor_detail(ID INTEGER PRIMARY KEY , Auto_Id TEXT,Company_Id TEXT, Floor_Name TEXT,Site_Location_Id TEXT,RecordStatus TEXT)");
+
+        String AUTO_id="";
+        try {
+            String query = "SELECT Auto_Id FROM floor_detail Where Floor_Name ='"+Floor_Name+"'";
+
+            Log.d("area_query",query);
+            SQLiteDatabase db = getWritableDatabase();
+            Cursor res =db.rawQuery(query, null);
+            if (res.moveToFirst()) {
+                do {
+                    AUTO_id=res.getString(res.getColumnIndex("Auto_Id"));
+                } while (res.moveToNext());
+            }
+            res.close();
+            db.close();
+
+            System.out.println("getFloorId  = " + AUTO_id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return AUTO_id;
+    }
+
+    public List<String> getFeedbackQuestions(String area_id) {
+        List<String> list = new ArrayList<String>();
+
+        // Select All Query
+        String selectQuery = "SELECT Feedback_Question FROM feedback_questions where Area_Id = '" + area_id + "' and ID IN (9,10,11,12,13) and RatingValue = 'no' ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);//selectQuery,selectedArguments
+        // list.add("Select");
+        // looping through all rows and adding to list
+        if (cursor.moveToNext()) {
+            // while (cursor.moveToNext();
+            list.add(cursor.getString(0));//adding 2nd column data
+
+        do {
+
+        } while (cursor.moveToNext());
+    }
+        // closing connection
+        cursor.close();
+        db.close();
+        // returning lables
+
+        System.out.println("list = " + list);
+        return list;
+    }
+
+    public int getTotalQuestionCount(){
+
+        String countQuery = "SELECT  * FROM  feedback_questions where ID <= 8"  ;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        // System.out.println("count no.of questions= " + count);
+        cursor.close();
+
+        return count;
+    }
+
+    public int getCafeQuestionCount(String area_id){
+
+        String countQuery = "SELECT  * FROM  feedback_questions Where Area_Id ='"+area_id+"' and ID IN (9,10,11,12,13,14)"  ;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+       // System.out.println("count no.of questions= " + count);
+        cursor.close();
+
+        return count;
+    }
+
+    public String getQuestionName(String Area_Id){
+
+        String Area_Name="";
+        
+                try {
+                    String query = "SELECT Feedback_Question FROM feedback_questions Where Area_Id ='"+Area_Id+"' and id <= 8 ";
+
+                    Log.d("Feedback_Question_query",query+" :: "+Area_Id);
+                    SQLiteDatabase db = getWritableDatabase();
+                    Cursor res =db.rawQuery(query, null);
+                    if (res.moveToFirst()) {
+                        do {
+                            Area_Name=res.getString(res.getColumnIndex("Feedback_Question"));
+                        } while (res.moveToNext());
+                    }
+                    res.close();
+                    db.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                System.out.println("Area_Name DB= " + Area_Name);
+
+        return Area_Name;
+    }
+
+    public String getRatingName(String area_id){
+
+        String Area_Name="",Auto_Id="";
+        try {
+            String query = "SELECT Feedback_Question FROM feedback_questions where Area_Id = '"+area_id+"' and ID >= 9 and RatingValue = 'no' ";
+
+            SQLiteDatabase db = getWritableDatabase();
+            Cursor res =db.rawQuery(query, null);
+            if (res.moveToFirst())
+                {
+               // do {
+                   // Auto_Id = res.getString(res.getColumnIndex("Auto_Id"));
+                    Area_Name = res.getString(res.getColumnIndex("Feedback_Question"));
+                //} while (res.moveToNext());
+                 }
+
+            res.close();
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("getRatingName Area_Name = " + Area_Name);
         return Area_Name;
     }
 
@@ -473,7 +599,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String feedbackId="";
         try {
-            String query = "SELECT Auto_Id FROM feedback_admin_icondetails Where FeedBack_Name ='"+feedbackName+"'";
+            String query = "SELECT Auto_Id FROM feedback_icons_details Where FeedBack_Name ='"+feedbackName+"'";
 
             Log.d("ASdasdasdasd",query);
             SQLiteDatabase db = getWritableDatabase();
@@ -495,7 +621,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         StringBuilder stringBuilder = new StringBuilder();
         String feedbackId="";
         try {
-            String query = "SELECT Mobile_Number FROM feedback_sms where Site_Location_Id = '"+Site_Id+"'";
+            String query = "SELECT Mobile_Number FROM feedback_sms where Building_Id = '"+Site_Id+"'";
 
             Log.d("ASdasdasdasd",query);
             SQLiteDatabase db = getWritableDatabase();
@@ -519,7 +645,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return stringBuilder.toString();
         }
     }
-
 
     public boolean insertBitmapUserId(Bitmap EmpImage, String Username)  {
         boolean image = false;
@@ -552,7 +677,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-
     public boolean insertBitmap(Bitmap EmpImage, String User_Id)  {
         boolean image = false;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -584,7 +708,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-
     public Bitmap getProfilePic(String UserId){
         Bitmap bitmap = null;
         try {
@@ -615,95 +738,53 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return bitmap;
     }
+    
+    public List<String> getAllBuilding() {
+        List<String> list = new ArrayList<String>();
 
-public byte[] readDataIcon(String strval) {
+        // Select All Query
+        String selectQuery = "SELECT Building_Name FROM building_detail" ;
 
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);//selectQuery,selectedArguments
+        list.add("Select Building");
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                list.add(cursor.getString(0));//adding 2nd column data
+            } while (cursor.moveToNext());
+        }
+        // closing connection
+        cursor.close();
+        db.close();
+        // returning lables
 
-    byte[] bdata = null;
-// Select All Query
-    String Sqlstring = "Select Icon_value from feedback_admin_icondetails Where Icon_Name='" + strval + "'";
+        System.out.println("list = " + list);
+        return list;
+    }
+    
+    public List<String> getAllLabels(String Building_Id) {
+    List<String> list = new ArrayList<String>();
+    
+    // Select All Query
+    String selectQuery = "SELECT Floor_Name FROM floor_detail where Building_Id ='"+Building_Id+"'";
+    Log.d("Query",""+selectQuery);
     SQLiteDatabase db = this.getReadableDatabase();
-    Cursor cursor = db.rawQuery(Sqlstring, null);
-
+    Cursor cursor = db.rawQuery(selectQuery, null);//selectQuery,selectedArguments
+    list.add("Select Floor");
+    // looping through all rows and adding to list
     if (cursor.moveToFirst()) {
         do {
-            bdata = cursor.getBlob(0);
+            list.add(cursor.getString(0));//adding 2nd column data
         } while (cursor.moveToNext());
     }
-
+    // closing connection
     cursor.close();
     db.close();
-
-    return bdata;
-}
-
-public int feedback_count() {
-    SQLiteDatabase db1 = this.getWritableDatabase();
-    Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_adminquestions where Weightage = 'yes';", null);
-    cursor1.moveToFirst();
-    int count = cursor1.getInt(0);
-    cursor1.close();
-    db1.close();
-    return count;
-}
-public int totalquestions_count() {
-    SQLiteDatabase db1 = this.getWritableDatabase();
-    Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_adminquestions ;", null);
-    cursor1.moveToFirst();
-    int count = cursor1.getInt(0);
-    cursor1.close();
-   // db1.close();
-    return count;
-}
-
-
-
-public boolean insertData (String AutoId ,String FeedbackQuestion ,String OrderId ,String IconType)
-{
-    SQLiteDatabase db=this.getWritableDatabase();
-    ContentValues contentValues=new ContentValues();
-    contentValues.put("Auto_Id",AutoId);
-    contentValues.put("Feedback_Question",FeedbackQuestion);
-    contentValues.put("Order_Id",OrderId);
-    //contentValues.put("Icon_Type",IconType);
-    long result=db.insert("feedback_adminquestions",null,contentValues);
-    if(result==-1)
-        return false;
-    else
-        return true;
+    // returning lables
     
-}
-
-public boolean insertAreaDetails (String AutoId ,String Company_Id, String Area_Name)
-{
-    SQLiteDatabase db=this.getWritableDatabase();
-    ContentValues contentValues=new ContentValues();
-    contentValues.put("Auto_Id",AutoId);
-    contentValues.put("Company_Id",Company_Id);
-    contentValues.put("Area_Name",Area_Name);
-    long result=db.insert("area_details",null,contentValues);
-    
-    if(result==-1)
-        return false;
-    else
-        return true;
-    
-}
-
-public Boolean isOrderIdpresent(int order_id)
-{
-    SQLiteDatabase db1 = this.getWritableDatabase();
-    Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_adminquestions where Order_Id = '"+String.valueOf(order_id)+"' ;", null);
-    cursor1.moveToFirst();
-    int count = cursor1.getInt(0);
-    cursor1.close();
-    db1.close();
-    if (count == 0) {
-        return false;
-    }else{
-        return true;
+    System.out.println("list = " + list);
+    return list;
     }
-}
-
-
+    
 }
