@@ -42,22 +42,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(" CREATE TABLE admin_login (ID INTEGER PRIMARY KEY,User_Id TEXT, User_Name TEXT, Password TEXT,Company_Name TEXT)");
         sqLiteDatabase.execSQL(" CREATE TABLE admin_details(ID INTEGER PRIMARY KEY,Company_ID TEXT,Company_Name TEXT,Location_Id TEXT,Location_Name TEXT,Site_Id TEXT, Site_Name TEXT,Building_Id TEXT, Building_Name TEXT,Wing_Id TEXT,Wing_Name TEXT,Floor_Id TEXT, Floor_Name TEXT,Area_Id TEXT, Area_Name TEXT,RecordStatus TEXT)");
         sqLiteDatabase.execSQL(" CREATE TABLE feedback_adminquestions (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Feedback_Question TEXT,Order_Id TEXT, Area_Id TEXT, Weightage TEXT,EmailSMS TEXT,RecordStatus TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE feedback_adminsubquestions (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Feedback_Id TEXT, Feedback_Sub_Question TEXT,Order_Id TEXT,Weightage TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE feedback_adminsubquestions (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Feedback_Id TEXT, Feedback_Sub_Question TEXT,Icon Blob, Order_Id TEXT,Weightage TEXT,RecordStatus TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE feedback_admin_icondetails (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Icon_Name TEXT, Icon_value BLOB,Icon_Type TEXT, Status TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE feedback_details (ID INTEGER PRIMARY KEY ,Rec_Id TEXT,Admin_Id TEXT, Supervisor_Id TEXT, Display_Name Text,Feedback_DateTime TEXT, UpdatedStatus TEXT,Last_IP TEXT,Apk_Web_Version TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE feedback_userquestiondata (ID INTEGER PRIMARY KEY ,Rec_Id TEXT,Question_ID TEXT, Feedback_Icon_Id TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE feedback_usersubquestiondata (ID INTEGER PRIMARY KEY ,Rec_Id TEXT,Question_ID TEXT,Sub_Question_ID TEXT,Response TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE emp_ratings(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,Emp_Id TEXT,Ratings TEXT,UpdatedStatus TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE emp_neg_ratings(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,Emp_Feedback_Id TEXT,Name TEXT,Email TEXT,Contact TEXT,Comment TEXT,UpdatedStatus TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE EmailSMSList (Id INTEGER PRIMARY KEY, Auto_Id TEXT,Building_Id TEXT, Employee_Email TEXT, Recipient_Type TEXT,Mobile_Number TEXT, Record_Status TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE sms_master(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,UserName TEXT, Password TEXT, Type TEXT, Source TEXT, URL TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE store_setting(Admin_Id INTEGER PRIMARY KEY , Auto_Id TEXT, Site_Name TEXT, Building_Name TEXT, Floor_Name TEXT, Area_Name TEXT, Display_Name TEXT, Checked_Display_Name TEXT,Active_Setting Text,Icon_Type TEXT)");
     
         //sqLiteDatabase.execSQL(" CREATE TABLE  feedback_details (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Supervisor_Id TEXT,User_Id TEXT, Display_Name Text,Gender TEXT,Site_Location_Id TEXT,Feedback_Icon_Id TEXT, Feedback_Question_Id TEXT, Feedback_DateTime TEXT,Site_Name TEXT, Building_Name TEXT, Floor_Name TEXT, Area_Name TEXT, Comment TEXT, Company_Name TEXT, Employee_Name TEXT, Email TEXT, Phone_Number TEXT, UpdatedStatus TEXT, Last_IP TEXT, Update_Location TEXT, Apk_Web_Version TEXT)");
         //sqLiteDatabase.execSQL(" CREATE TABLE area_details(ID INTEGER PRIMARY KEY , Auto_Id TEXT, Company_Id TEXT, Area_Name TEXT,Site_Location_Id TEXT,RecordStatus TEXT)");
     
       
        // sqLiteDatabase.execSQL(" CREATE TABLE admin_asset_site_details (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Supervisor_Id TEXT,User_Id TEXT, Display_Name Text,Gender TEXT,Site_Location_Id TEXT,Feedback_Icon_Id TEXT, Feedback_Question_Id TEXT, Feedback_DateTime TEXT, Building_Id TEXT, Floor_Id TEXT, Area_Id TEXT, Comments TEXT, Company_Name TEXT,Service_Id TEXT ,Emp_Code TEXT, Employee_Name TEXT, Employee_Id TEXT, Email TEXT, Phone_Number TEXT, UpdatedStatus TEXT,Last_IP TEXT, Update_Location TEXT, Apk_Web_Version TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE feedback_details (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Supervisor_Id TEXT,WorkStation_Number TEXT, Display_Name Text,Gender TEXT,Site_Location_Id TEXT,Feedback_Icon_Id TEXT, Feedback_Question_Id TEXT, Feedback_DateTime TEXT, Building_Id TEXT, Floor_Id TEXT, Area_Id TEXT, Comments TEXT, Company_Name TEXT, Employee_Name TEXT, Employee_Id TEXT, Email TEXT, Phone_Number TEXT, UpdatedStatus TEXT,Last_IP TEXT, Update_Location TEXT, Apk_Web_Version TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE feedback_icons_details (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Icon_Name TEXT, Icon_value BLOB,Icon_Type TEXT, Area_Name TEXT, Status TEXT)");
         
         
-        sqLiteDatabase.execSQL(" CREATE TABLE EmailSMSList (Id INTEGER PRIMARY KEY, Auto_Id TEXT,Building_Id TEXT, Employee_Email TEXT, Recipient_Type TEXT,Mobile_Number TEXT, Record_Status TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE sms_master(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,UserName TEXT, Password TEXT, Type TEXT, Source TEXT, URL TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE store_setting(ID INTEGER PRIMARY KEY , Auto_Id TEXT, Site_Name TEXT, Building_Name TEXT, Floor_Name TEXT, Area_Name TEXT, Feedback_Question TEXT, Display_Name TEXT, Checked_Display_Name TEXT,Active_Setting Text)");
-        sqLiteDatabase.execSQL(" CREATE TABLE emp_neg_rating_info(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,Emp_Feedback_Id TEXT,Name TEXT,Email TEXT,Contact TEXT,Comment TEXT,UpdatedStatus TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE emp_feedback(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,Emp_Id TEXT,Ratings TEXT,UpdatedStatus TEXT)");
     
     }
 
@@ -471,7 +473,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String feedbackId="";
         try {
-            String query = "SELECT Auto_Id FROM feedback_icons_details Where FeedBack_Name ='"+feedbackName+"'";
+            String query = "SELECT Auto_Id FROM feedback_admin_icondetails Where FeedBack_Name ='"+feedbackName+"'";
 
             Log.d("ASdasdasdasd",query);
             SQLiteDatabase db = getWritableDatabase();
@@ -619,7 +621,7 @@ public byte[] readDataIcon(String strval) {
 
     byte[] bdata = null;
 // Select All Query
-    String Sqlstring = "Select Icon_value from feedback_icons_details Where Icon_Name='" + strval + "'";
+    String Sqlstring = "Select Icon_value from feedback_admin_icondetails Where Icon_Name='" + strval + "'";
     SQLiteDatabase db = this.getReadableDatabase();
     Cursor cursor = db.rawQuery(Sqlstring, null);
 
@@ -663,7 +665,7 @@ public boolean insertData (String AutoId ,String FeedbackQuestion ,String OrderI
     contentValues.put("Auto_Id",AutoId);
     contentValues.put("Feedback_Question",FeedbackQuestion);
     contentValues.put("Order_Id",OrderId);
-    contentValues.put("Icon_Type",IconType);
+    //contentValues.put("Icon_Type",IconType);
     long result=db.insert("feedback_adminquestions",null,contentValues);
     if(result==-1)
         return false;
