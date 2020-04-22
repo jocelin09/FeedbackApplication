@@ -1,9 +1,11 @@
 package com.example.feedbackapplication;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -12,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -65,9 +68,21 @@ protected void onCreate(Bundle savedInstanceState) {
 //        setContentView(R.layout.activity_feedback);
     dbh = new DatabaseHelper(FeedbackActivity.this);
     sqLiteDatabase = dbh.getWritableDatabase();
+
+    prefs = PreferenceManager.getDefaultSharedPreferences(FeedbackActivity.this);
+    SharedPreferences.Editor editor = prefs.edit();
+    if (!prefs.contains("QuestNo")) {
+        editor.putInt("QuestNo", 1);
+        editor.commit();
+    } else {
+        totalfeedback = prefs.getInt("QuestNo", 1);
+    }
+    if (!prefs.contains("isVisible")) {
+        editor.putBoolean("isVisible", true);
+        editor.commit();
+    }
     
-    
-    //sqLiteDatabase.delete("feedback_icons_details", "ID" + "=" + 10, null);
+    //sqLiteDatabase.delete("feedback_admin_icondetails", "ID" + "=" + 10, null);
     
     
     questionscount1 = dbh.totalquestions_count();
@@ -92,11 +107,11 @@ protected void onCreate(Bundle savedInstanceState) {
         dbh.insertData(uuid8, "Food Hygiene", "6", "Smiley");
         
         
-        uuid5 = UUID.randomUUID().toString();
+       /* uuid5 = UUID.randomUUID().toString();
         dbh.insertAreaDetails(uuid5, "123", "Washroom");
         
         uuid6 = UUID.randomUUID().toString();
-        dbh.insertAreaDetails(uuid6, "456", "Cafeteria");
+        dbh.insertAreaDetails(uuid6, "456", "Cafeteria");*/
         
         
         try {
@@ -111,8 +126,8 @@ protected void onCreate(Bundle savedInstanceState) {
             cv6.put("Icon_Name", "Excellent");
             cv6.put("Icon_value", img6);
             cv6.put("Icon_Type", "Smiley");
-            cv6.put("Area_Name", "");
-            sqLiteDatabase.insert("feedback_icons_details", null, cv6);
+           // cv6.put("Area_Name", "");
+            sqLiteDatabase.insert("feedback_admin_icondetails", null, cv6);
             
             
             Bitmap b5 = BitmapFactory.decodeResource(getResources(), R.drawable.verygood);
@@ -125,8 +140,8 @@ protected void onCreate(Bundle savedInstanceState) {
             cv5.put("Icon_Name", "Very Good");
             cv5.put("Icon_value", img5);
             cv5.put("Icon_Type", "Smiley");
-            cv5.put("Area_Name", "");
-            sqLiteDatabase.insert("feedback_icons_details", null, cv5);
+          //  cv5.put("Area_Name", "");
+            sqLiteDatabase.insert("feedback_admin_icondetails", null, cv5);
             
             Bitmap b7 = BitmapFactory.decodeResource(getResources(), R.drawable.average);
             ByteArrayOutputStream bos7 = new ByteArrayOutputStream();
@@ -138,8 +153,8 @@ protected void onCreate(Bundle savedInstanceState) {
             cv7.put("Icon_Name", "Average");
             cv7.put("Icon_value", img7);
             cv7.put("Icon_Type", "Smiley");
-            cv7.put("Area_Name", "");
-            sqLiteDatabase.insert("feedback_icons_details", null, cv7);
+           // cv7.put("Area_Name", "");
+            sqLiteDatabase.insert("feedback_admin_icondetails", null, cv7);
             
             Bitmap b4 = BitmapFactory.decodeResource(getResources(), R.drawable.poor);
             ByteArrayOutputStream bos4 = new ByteArrayOutputStream();
@@ -151,9 +166,9 @@ protected void onCreate(Bundle savedInstanceState) {
             cv4.put("Icon_Name", "Poor");
             cv4.put("Icon_value", img4);
             cv4.put("Icon_Type", "Smiley");
-            cv4.put("Area_Name", "");
+            //cv4.put("Area_Name", "");
             
-            sqLiteDatabase.insert("feedback_icons_details", null, cv4);
+            sqLiteDatabase.insert("feedback_admin_icondetails", null, cv4);
             
             Bitmap b8 = BitmapFactory.decodeResource(getResources(), R.drawable.hygeine);
             ByteArrayOutputStream bos8 = new ByteArrayOutputStream();
@@ -165,9 +180,9 @@ protected void onCreate(Bundle savedInstanceState) {
             cv8.put("Icon_Name", "Hygiene");
             cv8.put("Icon_value", img8);
             cv8.put("Icon_Type", "Smiley");
-            cv8.put("Area_Name", "Cafeteria");
+            //cv8.put("Area_Name", "Cafeteria");
             
-            sqLiteDatabase.insert("feedback_icons_details", null, cv8);
+            sqLiteDatabase.insert("feedback_admin_icondetails", null, cv8);
             
             Bitmap b9 = BitmapFactory.decodeResource(getResources(), R.drawable.food);
             ByteArrayOutputStream bos9 = new ByteArrayOutputStream();
@@ -179,9 +194,9 @@ protected void onCreate(Bundle savedInstanceState) {
             cv9.put("Icon_Name", "Food");
             cv9.put("Icon_value", img9);
             cv9.put("Icon_Type", "Smiley");
-            cv9.put("Area_Name", "Cafeteria");
+            //cv9.put("Area_Name", "Cafeteria");
             
-            sqLiteDatabase.insert("feedback_icons_details", null, cv9);
+            sqLiteDatabase.insert("feedback_admin_icondetails", null, cv9);
             
             Bitmap b2 = BitmapFactory.decodeResource(getResources(), R.drawable.seating);
             ByteArrayOutputStream bos2 = new ByteArrayOutputStream();
@@ -193,9 +208,9 @@ protected void onCreate(Bundle savedInstanceState) {
             cv2.put("Icon_Name", "Seating");
             cv2.put("Icon_value", img2);
             cv2.put("Icon_Type", "Smiley");
-            cv2.put("Area_Name", "Cafeteria");
+//            cv2.put("Area_Name", "Cafeteria");
             
-            sqLiteDatabase.insert("feedback_icons_details", null, cv2);
+            sqLiteDatabase.insert("feedback_admin_icondetails", null, cv2);
             
             Bitmap b3 = BitmapFactory.decodeResource(getResources(), R.drawable.service);
             ByteArrayOutputStream bos3 = new ByteArrayOutputStream();
@@ -207,9 +222,9 @@ protected void onCreate(Bundle savedInstanceState) {
             cv3.put("Icon_Name", "Service");
             cv3.put("Icon_value", img3);
             cv3.put("Icon_Type", "Smiley");
-            cv3.put("Area_Name", "Cafeteria");
+//            cv3.put("Area_Name", "Cafeteria");
             
-            sqLiteDatabase.insert("feedback_icons_details", null, cv3);
+            sqLiteDatabase.insert("feedback_admin_icondetails", null, cv3);
             
             
             Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.ambience);
@@ -222,9 +237,9 @@ protected void onCreate(Bundle savedInstanceState) {
             cv.put("Icon_Name", "Ambience");
             cv.put("Icon_value", img);
             cv.put("Icon_Type", "Smiley");
-            cv.put("Area_Name", "Cafeteria");
+//            cv.put("Area_Name", "Cafeteria");
             
-            sqLiteDatabase.insert("feedback_icons_details", null, cv);
+            sqLiteDatabase.insert("feedback_admin_icondetails", null, cv);
             
             
             Bitmap b1 = BitmapFactory.decodeResource(getResources(), R.drawable.others);
@@ -237,9 +252,9 @@ protected void onCreate(Bundle savedInstanceState) {
             cv1.put("Icon_Name", "Others");
             cv1.put("Icon_value", img1);
             cv1.put("Icon_Type", "Smiley");
-            cv1.put("Area_Name", "Cafeteria");
+//            cv1.put("Area_Name", "Cafeteria");
             
-            sqLiteDatabase.insert("feedback_icons_details", null, cv1);
+            sqLiteDatabase.insert("feedback_admin_icondetails", null, cv1);
             
             Toast.makeText(this, "inserted successfully", Toast.LENGTH_SHORT).show();
             
@@ -269,11 +284,10 @@ protected void onCreate(Bundle savedInstanceState) {
     linearLayout1.setOrientation(VERTICAL);
     linearLayout1.setGravity(Gravity.CENTER_HORIZONTAL);
 //        linearLayout1.setPadding(10, 5, 2, 5);
-    totalfeedback = dbh.feedback_count();
-    
+//    totalfeedback = dbh.feedback_count();
+
     for (int i = 0; i < dbh.totalquestions_count(); i++) {
-        if (dbh.isOrderIdpresent(totalfeedback + 1)) {
-            //Toast.makeText(this, "not present", Toast.LENGTH_SHORT).show();
+        if (dbh.isOrderIdpresent(totalfeedback)) {
             break;
         } else {
             totalfeedback++;
@@ -283,7 +297,7 @@ protected void onCreate(Bundle savedInstanceState) {
         
         SQLiteDatabase db1 = dbh.getWritableDatabase();
         // Cursor cursor1 = db1.rawQuery("Select * from feedback_adminquestions where ID =" + (totalfeedback + 1) + ";", null); //
-        Cursor cursor1 = db1.rawQuery("Select * from feedback_adminquestions where Order_Id= '" + String.valueOf(totalfeedback + 1) + "' ;", null);
+        Cursor cursor1 = db1.rawQuery("Select * from feedback_adminquestions where Order_Id= '" + String.valueOf(totalfeedback) + "' ;", null);
         String feedback_question = "", order_id, a_id, icon_type;
         int id;
         if (cursor1.moveToFirst()) {
@@ -309,7 +323,7 @@ protected void onCreate(Bundle savedInstanceState) {
                 System.out.println("linear layout id = " + id);
                 linearLayout2.setId(id);
                 SQLiteDatabase db2 = dbh.getWritableDatabase();
-                Cursor cursor2 = db2.rawQuery("Select * from feedback_icons_details where Area_Name = '' ;", null); //
+                Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where ID IN(1,2,3,4) ;", null); //
                 String icon_name, icon_value;
                 int icon_id;
                 if (cursor2.moveToFirst()) {
@@ -341,22 +355,26 @@ protected void onCreate(Bundle savedInstanceState) {
                 int questionscount = dbh.totalquestions_count();
                 System.out.println("questionscount = " + questionscount);
                 
-              /*  linearLayout4 = new LinearLayout(this);
+                linearLayout4 = new LinearLayout(this);
                 new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
                 linearLayout4.setLayoutParams(params);
-                
-                
+
+
                 linearLayout4.setOrientation(LinearLayout.HORIZONTAL);
-                if (totalfeedback + 1 != 1) {
+                if (totalfeedback != 1) {
                     linearLayout4.addView(button("Prev"));
                 }
-                if (totalfeedback + 1 != questionscount) {
+                if (totalfeedback!= questionscount) {
                     linearLayout4.addView(button("Next"));
-                }*/
-                
-                
+                }
+
                 linearLayout1.addView(linearLayout2);
-                // linearLayout1.addView(linearLayout4);
+                linearLayout1.addView(linearLayout4);
+                boolean isvisible = prefs.getBoolean("isVisible", true);
+                if (!isvisible) {
+                    linearLayout4.setVisibility(View.GONE);
+                }
+
             } while (cursor1.moveToNext());
             db1.close();
             
@@ -384,6 +402,9 @@ private void updateRating(int id) {
     SQLiteDatabase sqLiteDatabase1 = dbh.getWritableDatabase();
     sqLiteDatabase1.update("feedback_adminquestions", values, "ID ='" + id + "' ", null);
     sqLiteDatabase1.close();
+    SharedPreferences.Editor editor = prefs.edit();
+    editor.putInt("QuestNo", totalfeedback + 1);
+    editor.commit();
 }
 
 
@@ -408,13 +429,22 @@ private Button button(final String bname) {
     button.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            SharedPreferences.Editor editor = prefs.edit();
             if (bname.equals("Prev")) {
-                button.setGravity(Gravity.LEFT);
+//                button.setGravity(Gravity.LEFT);
                 Toast.makeText(FeedbackActivity.this, "Previous", Toast.LENGTH_SHORT).show();
+                editor.putInt("QuestNo", totalfeedback - 1);
+                editor.commit();
+                finish();
+                startActivity(getIntent());
                 
             } else {
-                button.setGravity(Gravity.RIGHT);
+//                button.setGravity(Gravity.RIGHT);
                 Toast.makeText(FeedbackActivity.this, "Next", Toast.LENGTH_SHORT).show();
+                editor.putInt("QuestNo", totalfeedback + 1);
+                editor.commit();
+                finish();
+                startActivity(getIntent());
             }
         }
     });
@@ -519,9 +549,43 @@ public boolean onCreateOptionsMenu(Menu menu) {
 public boolean onOptionsItemSelected(@NonNull MenuItem item) {
     switch (item.getItemId()) {
         
+
         case R.id.settings:
-            
-            Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show();
+            String sentence;
+            if (prefs.getBoolean("isVisible", true)) {
+                sentence = "Hide next & previous button";
+            } else {
+                sentence = "Display next & previous button";
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(sentence)
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            SharedPreferences.Editor editor = prefs.edit();
+//                Toast.makeText(getApplicationContext(), "settings Selected", Toast.LENGTH_LONG).show();
+                            if (linearLayout4.getVisibility() == View.VISIBLE) {
+                                linearLayout4.setVisibility(View.GONE);
+                                editor.putBoolean("isVisible", false);
+                                editor.commit();
+                            } else {
+                                linearLayout4.setVisibility(View.VISIBLE);
+                                editor.putBoolean("isVisible", true);
+                                editor.commit();
+                            }
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Action for 'NO' Button
+                            dialog.cancel();
+//                                Toast.makeText(getApplicationContext(), "you choose no action for alertbox",
+//                                        Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+//            Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show();
             return true;
         
         
