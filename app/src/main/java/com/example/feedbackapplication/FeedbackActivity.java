@@ -282,8 +282,8 @@ protected void onCreate(Bundle savedInstanceState) {
     try {
         
         SQLiteDatabase db1 = dbh.getWritableDatabase();
-        // Cursor cursor1 = db1.rawQuery("Select * from feedback_questions where ID =" + (totalfeedback + 1) + ";", null); //
-        Cursor cursor1 = db1.rawQuery("Select * from feedback_questions where Order_Id= '" + String.valueOf(totalfeedback + 1) + "' ;", null);
+        // Cursor cursor1 = db1.rawQuery("Select * from feedback_adminquestions where ID =" + (totalfeedback + 1) + ";", null); //
+        Cursor cursor1 = db1.rawQuery("Select * from feedback_adminquestions where Order_Id= '" + String.valueOf(totalfeedback + 1) + "' ;", null);
         String feedback_question = "", order_id, a_id, icon_type;
         int id;
         if (cursor1.moveToFirst()) {
@@ -380,9 +380,9 @@ private void updateRating(int id) {
     
     
     ContentValues values = new ContentValues();
-    values.put("Is_Rated", "yes");
+    values.put("Weightage", "yes");
     SQLiteDatabase sqLiteDatabase1 = dbh.getWritableDatabase();
-    sqLiteDatabase1.update("feedback_questions", values, "ID ='" + id + "' ", null);
+    sqLiteDatabase1.update("feedback_adminquestions", values, "ID ='" + id + "' ", null);
     sqLiteDatabase1.close();
 }
 

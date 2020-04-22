@@ -37,9 +37,9 @@ public class ThankuActivityScore extends AppCompatActivity {
         
         dbh = new DatabaseHelper(ThankuActivityScore.this);
         ContentValues values = new ContentValues();
-        values.put("Is_Rated", "no");
+        values.put("Weightage", "no");
         SQLiteDatabase sqLiteDatabase1 = dbh.getWritableDatabase();
-        sqLiteDatabase1.update("feedback_questions", values, null, null);
+        sqLiteDatabase1.update("feedback_adminquestions", values, null, null);
         sqLiteDatabase1.close();
 
         final Handler handler = new Handler();

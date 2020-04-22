@@ -37,24 +37,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        
-        //sqLiteDatabase.execSQL(" CREATE TABLE  feedback_details (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Supervisor_Id TEXT,User_Id TEXT, Display_Name Text,Gender TEXT,Site_Location_Id TEXT,Feedback_Icon_Id TEXT, Feedback_Question_Id TEXT, Feedback_DateTime TEXT,Site_Name TEXT, Building_Name TEXT, Floor_Name TEXT, Area_Name TEXT, Comment TEXT, Company_Name TEXT, Employee_Name TEXT, Email TEXT, Phone_Number TEXT, UpdatedStatus TEXT, Last_IP TEXT, Update_Location TEXT, Apk_Web_Version TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE admin_details(ID INTEGER PRIMARY KEY,Company_AutoID TEXT,Company_Name TEXT,Location_Auto_Id TEXT,Location_Name TEXT,Site_Auto_Id TEXT, Site_Name TEXT,Building_Auto_Id TEXT, Building_Name TEXT,Wing_Auto_Id TEXT,Wing_Name TEXT,Floor_Auto_Id TEXT, Floor_Name TEXT,Area_Auto_Id TEXT, Area_Name TEXT,RecordStatus TEXT)");
-        //                                                                          company..............................location detail starts.......................................................site details starts...................................................................building detail starts...........................................................................wing details starts.........................................................................................floor detail starts...........................................................................................area detail starts.........................................................................
-        sqLiteDatabase.execSQL(" CREATE TABLE area_details(ID INTEGER PRIMARY KEY , Auto_Id TEXT, Company_Id TEXT, Area_Name TEXT,Site_Location_Id TEXT,RecordStatus TEXT)");
     
+        sqLiteDatabase.execSQL(" CREATE TABLE SyncInfo (Id INTEGER PRIMARY KEY, Auto_Id TEXT, Mac_Address TEXT, Apk_Version TEXT, Sync_Date_Time TEXT, Device_Name TEXT)");
         sqLiteDatabase.execSQL(" CREATE TABLE admin_login (ID INTEGER PRIMARY KEY,User_Id TEXT, User_Name TEXT, Password TEXT,Company_Name TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE admin_details(ID INTEGER PRIMARY KEY,Company_ID TEXT,Company_Name TEXT,Location_Id TEXT,Location_Name TEXT,Site_Id TEXT, Site_Name TEXT,Building_Id TEXT, Building_Name TEXT,Wing_Id TEXT,Wing_Name TEXT,Floor_Id TEXT, Floor_Name TEXT,Area_Id TEXT, Area_Name TEXT,RecordStatus TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE feedback_adminquestions (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Feedback_Question TEXT,Order_Id TEXT, Area_Id TEXT, Weightage TEXT,EmailSMS TEXT,RecordStatus TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE feedback_adminsubquestions (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Feedback_Id TEXT, Feedback_Sub_Question TEXT,Order_Id TEXT,Weightage TEXT)");
+    
+        //sqLiteDatabase.execSQL(" CREATE TABLE  feedback_details (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Supervisor_Id TEXT,User_Id TEXT, Display_Name Text,Gender TEXT,Site_Location_Id TEXT,Feedback_Icon_Id TEXT, Feedback_Question_Id TEXT, Feedback_DateTime TEXT,Site_Name TEXT, Building_Name TEXT, Floor_Name TEXT, Area_Name TEXT, Comment TEXT, Company_Name TEXT, Employee_Name TEXT, Email TEXT, Phone_Number TEXT, UpdatedStatus TEXT, Last_IP TEXT, Update_Location TEXT, Apk_Web_Version TEXT)");
+        //sqLiteDatabase.execSQL(" CREATE TABLE area_details(ID INTEGER PRIMARY KEY , Auto_Id TEXT, Company_Id TEXT, Area_Name TEXT,Site_Location_Id TEXT,RecordStatus TEXT)");
+    
       
        // sqLiteDatabase.execSQL(" CREATE TABLE admin_asset_site_details (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Supervisor_Id TEXT,User_Id TEXT, Display_Name Text,Gender TEXT,Site_Location_Id TEXT,Feedback_Icon_Id TEXT, Feedback_Question_Id TEXT, Feedback_DateTime TEXT, Building_Id TEXT, Floor_Id TEXT, Area_Id TEXT, Comments TEXT, Company_Name TEXT,Service_Id TEXT ,Emp_Code TEXT, Employee_Name TEXT, Employee_Id TEXT, Email TEXT, Phone_Number TEXT, UpdatedStatus TEXT,Last_IP TEXT, Update_Location TEXT, Apk_Web_Version TEXT)");
         sqLiteDatabase.execSQL(" CREATE TABLE feedback_details (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Supervisor_Id TEXT,WorkStation_Number TEXT, Display_Name Text,Gender TEXT,Site_Location_Id TEXT,Feedback_Icon_Id TEXT, Feedback_Question_Id TEXT, Feedback_DateTime TEXT, Building_Id TEXT, Floor_Id TEXT, Area_Id TEXT, Comments TEXT, Company_Name TEXT, Employee_Name TEXT, Employee_Id TEXT, Email TEXT, Phone_Number TEXT, UpdatedStatus TEXT,Last_IP TEXT, Update_Location TEXT, Apk_Web_Version TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE feedback_questions (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Feedback_Question TEXT,Order_Id TEXT,Icon_Type TEXT, Area_Name TEXT, Is_Rated TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE feedback_sub_questions (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Feedback_Id TEXT, Feedback_Sub_Question TEXT,Order_Id TEXT,Is_Rated TEXT)");
         sqLiteDatabase.execSQL(" CREATE TABLE feedback_icons_details (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Icon_Name TEXT, Icon_value BLOB,Icon_Type TEXT, Area_Name TEXT, Status TEXT)");
         
         
         sqLiteDatabase.execSQL(" CREATE TABLE EmailSMSList (Id INTEGER PRIMARY KEY, Auto_Id TEXT,Building_Id TEXT, Employee_Email TEXT, Recipient_Type TEXT,Mobile_Number TEXT, Record_Status TEXT)");
         sqLiteDatabase.execSQL(" CREATE TABLE sms_master(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,UserName TEXT, Password TEXT, Type TEXT, Source TEXT, URL TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE SyncInfo (Id INTEGER PRIMARY KEY, Auto_Id TEXT, Mac_Address TEXT, Apk_Version TEXT, Sync_Date_Time TEXT, Device_Name TEXT)");
         sqLiteDatabase.execSQL(" CREATE TABLE store_setting(ID INTEGER PRIMARY KEY , Auto_Id TEXT, Site_Name TEXT, Building_Name TEXT, Floor_Name TEXT, Area_Name TEXT, Feedback_Question TEXT, Display_Name TEXT, Checked_Display_Name TEXT,Active_Setting Text)");
         sqLiteDatabase.execSQL(" CREATE TABLE emp_neg_rating_info(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,Emp_Feedback_Id TEXT,Name TEXT,Email TEXT,Contact TEXT,Comment TEXT,UpdatedStatus TEXT)");
         sqLiteDatabase.execSQL(" CREATE TABLE emp_feedback(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,Emp_Id TEXT,Ratings TEXT,UpdatedStatus TEXT)");
@@ -637,7 +637,7 @@ public byte[] readDataIcon(String strval) {
 
 public int feedback_count() {
     SQLiteDatabase db1 = this.getWritableDatabase();
-    Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_questions where Is_Rated = 'yes';", null);
+    Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_adminquestions where Weightage = 'yes';", null);
     cursor1.moveToFirst();
     int count = cursor1.getInt(0);
     cursor1.close();
@@ -646,7 +646,7 @@ public int feedback_count() {
 }
 public int totalquestions_count() {
     SQLiteDatabase db1 = this.getWritableDatabase();
-    Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_questions ;", null);
+    Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_adminquestions ;", null);
     cursor1.moveToFirst();
     int count = cursor1.getInt(0);
     cursor1.close();
@@ -664,7 +664,7 @@ public boolean insertData (String AutoId ,String FeedbackQuestion ,String OrderI
     contentValues.put("Feedback_Question",FeedbackQuestion);
     contentValues.put("Order_Id",OrderId);
     contentValues.put("Icon_Type",IconType);
-    long result=db.insert("feedback_questions",null,contentValues);
+    long result=db.insert("feedback_adminquestions",null,contentValues);
     if(result==-1)
         return false;
     else
@@ -691,7 +691,7 @@ public boolean insertAreaDetails (String AutoId ,String Company_Id, String Area_
 public Boolean isOrderIdpresent(int order_id)
 {
     SQLiteDatabase db1 = this.getWritableDatabase();
-    Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_questions where Order_Id = '"+String.valueOf(order_id)+"' ;", null);
+    Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_adminquestions where Order_Id = '"+String.valueOf(order_id)+"' ;", null);
     cursor1.moveToFirst();
     int count = cursor1.getInt(0);
     cursor1.close();
