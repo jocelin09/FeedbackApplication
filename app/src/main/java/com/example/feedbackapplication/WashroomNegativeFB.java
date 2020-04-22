@@ -20,6 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.feedbackapplication.database.DatabaseHelper;
+
 import java.util.ArrayList;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
@@ -28,7 +30,7 @@ import static android.widget.LinearLayout.HORIZONTAL;
 
 public class WashroomNegativeFB extends AppCompatActivity {
 
-String area_name = "";
+String area_name = "Cafeteria";
 int totalquestionscount,current_question_id;
 
 DatabaseHelper dbh;
@@ -42,7 +44,7 @@ protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_feedback);
     
-    area_name = getIntent().getStringExtra("area_name");
+   // area_name = getIntent().getStringExtra("area_name");
     totalquestionscount = getIntent().getIntExtra("totalquestionscount",0);
     current_question_id = getIntent().getIntExtra("current_question_id",0);
     
@@ -62,7 +64,7 @@ protected void onCreate(Bundle savedInstanceState) {
  
     final ArrayList<String> neg_iconnames = new ArrayList<>();
     try {
-        String query = "Select * from feedback_icons_details where Area_Name = '"+area_name+"' ";
+        String query = "Select * from feedback_admin_icondetails where ID IN(5,6,7,8,9,10) ";
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         while (cursor.moveToNext()) {
             neg_iconnames.add(cursor.getString(cursor.getColumnIndex("Icon_Name")));

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<TextView android:id="@+id/spinner_text"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:drawableRight="@drawable/ic_downarrow"
+    android:drawablePadding="16dp"
+    android:text="Company Name"
+    android:maxLength="30"
+    android:maxLines="1"
+    android:padding="16dp"
+    android:textColor="#000"
+    android:textColorHint="#000"
+    android:textSize="18sp"
+    xmlns:android="http://schemas.android.com/apk/res/android" />
