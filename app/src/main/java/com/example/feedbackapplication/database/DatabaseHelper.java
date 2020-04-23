@@ -67,6 +67,16 @@ public int feedback_count() {
     return count;
 }
 
+public int admindetails_count() {
+    SQLiteDatabase db1 = this.getWritableDatabase();
+    Cursor cursor1 = db1.rawQuery("Select count(*) from admin_details;", null);
+    cursor1.moveToFirst();
+    int count = cursor1.getInt(0);
+    cursor1.close();
+    db1.close();
+    return count;
+}
+
 public int totalquestions_count() {
     SQLiteDatabase db1 = this.getWritableDatabase();
     Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_adminquestions ;", null);
@@ -85,6 +95,40 @@ public boolean insertLoginDetails(String User_Id, String User_Name, String Passw
     contentValues.put("User_Name", User_Name);
     contentValues.put("Password", Password);
     contentValues.put("Company_Name", Company_Name);
+    long result = db.insert("admin_login", null, contentValues);
+    
+    if (result == -1)
+        return false;
+    else
+        return true;
+    
+}
+
+
+public boolean insertAdminDetails(String Company_ID, String Company_Name, String Location_Id, String Location_Name,
+                                  String Site_Id, String Site_Name, String Building_Id, String Building_Name,
+                                  String Wing_Id,String Wing_Name,String Floor_Id,String Floor_Name,String Area_Id,String Area_Name) {
+    SQLiteDatabase db = this.getWritableDatabase();
+    ContentValues contentValues = new ContentValues();
+    
+    contentValues.put("Company_ID", Company_ID);
+    contentValues.put("Company_Name", Company_Name);
+    contentValues.put("Location_Id", Location_Id);
+    contentValues.put("Location_Name", Location_Name);
+    
+    contentValues.put("Site_Id", Site_Id);
+    contentValues.put("Site_Name", Site_Name);
+    contentValues.put("Building_Id", Building_Id);
+    contentValues.put("Building_Name", Building_Name);
+    
+    contentValues.put("Wing_Id", Wing_Id);
+    contentValues.put("Wing_Name", Wing_Name);
+    contentValues.put("Floor_Id", Floor_Id);
+    contentValues.put("Floor_Name", Floor_Name);
+    
+    contentValues.put("Area_Id", Area_Id);
+    contentValues.put("Area_Name", Area_Name);
+    
     long result = db.insert("admin_login", null, contentValues);
     
     if (result == -1)
