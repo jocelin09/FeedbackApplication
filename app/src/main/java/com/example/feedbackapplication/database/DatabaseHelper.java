@@ -160,24 +160,17 @@ public boolean insertData(String AutoId, String FeedbackQuestion, String OrderId
 public ArrayList<String> getAllCompanyNames(){
     ArrayList<String> companyname = new ArrayList<String>();
     companyname.add("Company Name");
-    // Select All Query
-    String selectQuery = "SELECT distinct(Company_Name) FROM admin_details";
+    String selectQuery = "SELECT distinct(Company_Name) FROM admin_details ASC ";
     
     SQLiteDatabase db = this.getReadableDatabase();
     Cursor cursor = db.rawQuery(selectQuery, null);
-    
-    // looping through all rows and adding to list
     if (cursor.moveToFirst()) {
         do {
             companyname.add(cursor.getString(0));
         } while (cursor.moveToNext());
     }
-    
-    //System.out.println("companyname = " + companyname);
-    
-//    cursor.close();
-//    db.close();
-    
+    cursor.close();
+    db.close();
     return companyname;
 }
 
@@ -185,23 +178,100 @@ public ArrayList<String> getAllLocations(String company){
     ArrayList<String> location_name = new ArrayList<String>();
     //location_name.add("Site Name");
     // Select All Query
-    String selectQuery = "SELECT * FROM admin_details where Company_Name = '"+company+"'";
-    
+    String selectQuery = "SELECT distinct(Location_Name) FROM admin_details where Company_Name = '"+company+"'";
+    String loc_name="";
     SQLiteDatabase db = this.getReadableDatabase();
     Cursor cursor = db.rawQuery(selectQuery, null);
     
     // looping through all rows and adding to list
     if (cursor.moveToFirst()) {
         do {
-            location_name.add(cursor.getString(4));
+            loc_name = cursor.getString(0);
+            if (!loc_name.equals(""))
+            {
+                location_name.add(loc_name);
+            }
         } while (cursor.moveToNext());
     }
-    System.out.println("location_name = " + location_name);
+    //System.out.println("location_name = " + location_name);
     
-//    cursor.close();
-//    db.close();
+    cursor.close();
+    db.close();
     
     return location_name;
+}
+
+public ArrayList<String> getAllSites(String companynm,String locationname){
+    ArrayList<String> site_name = new ArrayList<String>();
+    // Select All Query
+    String selectQuery = "SELECT distinct(Site_Name) FROM admin_details where Company_Name = '"+companynm+"' and Location_Name = '"+locationname+"'";
+    
+    SQLiteDatabase db = this.getReadableDatabase();
+    Cursor cursor = db.rawQuery(selectQuery, null);
+    String sitename="";
+    // looping through all rows and adding to list
+    if (cursor.moveToFirst()) {
+        do {
+            sitename = cursor.getString(0);
+            if (!site_name.equals(""))
+            {
+                site_name.add(sitename);
+            }
+        } while (cursor.moveToNext());
+    }
+    System.out.println("site_name = " + site_name);
+    
+    cursor.close();
+    db.close();
+    
+    return site_name;
+}
+
+
+///GET ID DATA///
+
+public String getCompanyId(String Company_name) {
+    String company_id="" ;
+    try {
+        String query = "SELECT * FROM admin_details Where Company_Name ='" + Company_name + "'";
+        
+        Log.d("company_query", query);
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor res = db.rawQuery(query, null);
+        if (res.moveToFirst()) {
+            do {
+                company_id = res.getString(1);
+            } while (res.moveToNext());
+        }
+        res.close();
+        db.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    
+   // System.out.println("company_id = " + company_id);
+    
+    return company_id;
+}
+
+public String getLocationId(String Location_Name) {
+    String location_id="" ;
+    try {
+        String query = "SELECT Location_Id FROM admin_details Where Location_Name ='" + Location_Name + "'";
+        
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor res = db.rawQuery(query, null);
+        if (res.moveToFirst()) {
+            do {
+                location_id = res.getString(0);
+            } while (res.moveToNext());
+        }
+        res.close();
+        db.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return location_id;
 }
 
 
@@ -325,27 +395,7 @@ public int loginCount() {
     return count;
 }
 
-public String getCompanyId(String Company_name) {
-    
-    String company_id = "";
-    try {
-        String query = "SELECT Auto_Id FROM company_details Where Company_Name ='" + Company_name + "'";
-        
-        Log.d("company_query", query);
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor res = db.rawQuery(query, null);
-        if (res.moveToFirst()) {
-            do {
-                company_id = res.getString(res.getColumnIndex("Auto_Id"));
-            } while (res.moveToNext());
-        }
-        res.close();
-        db.close();
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return company_id;
-}
+
 
 public String getSiteId(String Site_name) {
     
@@ -490,28 +540,6 @@ public String getExistSiteId(String Site_Id) {
         if (res.moveToFirst()) {
             do {
                 site_id = res.getString(res.getColumnIndex("Site_Location_Id"));
-            } while (res.moveToNext());
-        }
-        res.close();
-        db.close();
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return site_id;
-}
-
-public String getLocationId(String Location_name) {
-    
-    String site_id = "";
-    try {
-        String query = "SELECT Auto_Id FROM location_detail Where Location_Name ='" + Location_name + "'";
-        
-        Log.d("location_query", query);
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor res = db.rawQuery(query, null);
-        if (res.moveToFirst()) {
-            do {
-                site_id = res.getString(res.getColumnIndex("Auto_Id"));
             } while (res.moveToNext());
         }
         res.close();

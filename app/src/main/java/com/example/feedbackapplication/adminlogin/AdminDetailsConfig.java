@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.feedbackapplication.BaseActivity;
 import com.example.feedbackapplication.R;
 import com.example.feedbackapplication.database.DatabaseHelper;
 
@@ -29,12 +30,11 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 
-public class AdminDetailsConfig extends AppCompatActivity {
+public class AdminDetailsConfig extends BaseActivity {
 
 //Spinner s_client, s_region, s_site, s_building, s_wing, s_floor, s_areatype, s_area;
 //TextView greeting;
-DatabaseHelper databaseHelper;
-SQLiteDatabase sqLiteDatabase;
+//SQLiteDatabase sqLiteDatabase;
 
 private ArrayList<String> company_names = new ArrayList<String>();
 private ArrayList<String> location_names = new ArrayList<String>();
@@ -44,28 +44,33 @@ private ArrayList<String> wing_names = new ArrayList<String>();
 private ArrayList<String> floor_names = new ArrayList<String>();
 
 int questionscount;
-String str_companyname,str_locationname;
+String str_companyname, str_locationname;
+String company_id, location_id, site_id, building_id, wing_id, floor_id, area_id;
+
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.admindetailsconfig);
+
+//    databaseHelper = new DatabaseHelper(this);
+//    sqLiteDatabase = databaseHelper.getWritableDatabase();
     
-    databaseHelper = new DatabaseHelper(this);
-    sqLiteDatabase = databaseHelper.getWritableDatabase();
-    
-    questionscount = databaseHelper.admindetails_count();
+    questionscount = dbh.admindetails_count();
     
     if (questionscount == 0) {
-        databaseHelper.insertAdminDetails("1", "Dell Score Feedback", "12", "Mumbai",
+        dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Mumbai",
                 "13", "Mira Rd", "14", "Dell-6", "15", "Wing-A", "16",
                 "1st Floor", "17", "Washroom");
-        databaseHelper.insertAdminDetails("2", "ISS Feedback", "23", "Bangalore",
+        dbh.insertAdminDetails("22222", "ISS Feedback", "", "",
                 "24", "Mysore", "25", "HP Tower", "", "", "27",
                 "7-Floor", "28", "Cafeteria");
-        databaseHelper.insertAdminDetails("1", "Dell Score Feedback", "21", "Pune",
+        dbh.insertAdminDetails("22222", "ISS Feedback", "", "",
+                "24", "Kochi", "25", "HP Tower", "", "", "27",
+                "7-Floor", "28", "Washroom");
+        dbh.insertAdminDetails("11111", "Dell Score Feedback", "21", "Pune",
                 "22", "Pimpri", "23", "Dell-5", "24", "Wing-C", "18",
                 "2nd Floor", "17", "Washroom");
-        databaseHelper.insertAdminDetails("1", "Dell Score Feedback", "12", "Mumbai",
+        dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Mumbai",
                 "13", "Mira Rd", "14", "Dell-6", "15", "Wing-A", "16",
                 "1st Floor", "17", "Washroom");
     }
@@ -74,60 +79,143 @@ protected void onCreate(Bundle savedInstanceState) {
     main_Layout.addView(textView());
     
     //////////COMPANY NAME/////////
-    company_names = databaseHelper.getAllCompanyNames();
+    company_names = dbh.getAllCompanyNames();
     
     final Spinner company_spinner = new Spinner(this);
     final LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(MATCH_PARENT, 60);
-    params1.setMargins(16,8,16,8);
+    params1.setMargins(16, 8, 16, 8);
     company_spinner.setBackground(getDrawable(R.drawable.edit_style));
     company_spinner.setLayoutParams(params1);
     
     ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_text, company_names);
-    spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_text);
+    spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     company_spinner.setAdapter(spinnerArrayAdapter);
     
+    ////////////LOCATION NAME//////////
+    final Spinner location_spinner = new Spinner(getApplicationContext());
+    location_spinner.setBackground(getDrawable(R.drawable.edit_style));
+    location_spinner.setLayoutParams(params1);
     
+    ////////////SITE NAME//////////
     final Spinner site_spinner = new Spinner(getApplicationContext());
     site_spinner.setBackground(getDrawable(R.drawable.edit_style));
     site_spinner.setLayoutParams(params1);
+    
     
     company_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
             str_companyname = company_spinner.getSelectedItem().toString();
-            System.out.println("str_companyname = " + str_companyname);
-    
+            
             //////////LOCATION NAME//////////
-            location_names = databaseHelper.getAllLocations(str_companyname);
-            if (!location_names.isEmpty())
-            {
-                    System.out.println(" not EMPTY = ");
-                    ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<String>(getApplicationContext(),
-                            R.layout.spinner_text, location_names);
-                    spinnerArrayAdapter1.setDropDownViewResource(R.layout.spinner_dropdown_text);
-                    site_spinner.setAdapter(spinnerArrayAdapter1);
-                    str_locationname = site_spinner.getSelectedItem().toString();
-                    System.out.println("str_locationname = " + str_locationname);
+            location_names = dbh.getAllLocations(str_companyname);
+            System.out.println("Add location spinner.");
     
-                    if (site_spinner.getParent() != null) {
-                        ((ViewGroup) site_spinner.getParent()).removeView(site_spinner); // <- fix
+            if (!location_names.isEmpty()) {
+                ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<String>(getApplicationContext(),
+                        R.layout.spinner_text, location_names);
+                spinnerArrayAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    
+                if (!str_companyname.equals("")){
+                    company_id = dbh.getCompanyId(str_companyname);
+                    company_spinner.setId(Integer.parseInt(company_id));
+                }
+                
+                location_spinner.setAdapter(spinnerArrayAdapter1);
+                
+                if (location_names.size() == 0)
+                {
+                    main_Layout.removeView(location_spinner);
+                }
+                else
+                {
+                    if (location_spinner.getParent() != null) {
+                        ((ViewGroup) location_spinner.getParent()).removeView(location_spinner); //
                     }
-                    main_Layout.addView(site_spinner);
+                    main_Layout.addView(location_spinner);
+                }
+    
+                location_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        str_locationname = location_spinner.getSelectedItem().toString();
+                        
+                        site_names = dbh.getAllSites(str_companyname,str_locationname);
+                        if (!site_names.isEmpty())
+                        {
+                            ArrayAdapter<String> spinnerArrayAdapter2 = new ArrayAdapter<String>(getApplicationContext(),
+                                    R.layout.spinner_text, site_names);
+                            spinnerArrayAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            if (!str_locationname.equals(""))
+                            {
+                                location_id = dbh.getLocationId(str_locationname);
+                                location_spinner.setId(Integer.parseInt(location_id));
+                                
+                            }
+                            site_spinner.setAdapter(spinnerArrayAdapter2);
+                            
+                            if (site_spinner.getParent() != null) {
+                                ((ViewGroup) site_spinner.getParent()).removeView(site_spinner); //
+                            }
+                            main_Layout.addView(site_spinner);
+    
+                        }
+                        else
+                        {
+                            main_Layout.removeView(site_spinner);
+                        }
+                    }
+    
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+        
+                    }
+                });
+            
             }
-            else
-            {
-                System.out.println(" 3 = " );
-                main_Layout.removeView(site_spinner);
+            
+            else {
+                if (location_names.size() == 0)
+                {
+                    System.out.println("When Location is blank..add next spinner site name");
+    
+                    main_Layout.removeView(location_spinner);
+                    site_names = dbh.getAllSites(str_companyname,"");
+                    if (!site_names.isEmpty())
+                    {
+                        ArrayAdapter<String> spinnerArrayAdapter2 = new ArrayAdapter<String>(getApplicationContext(),
+                                R.layout.spinner_text, site_names);
+                        spinnerArrayAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        site_spinner.setAdapter(spinnerArrayAdapter2);
+        
+                        if (site_spinner.getParent() != null) {
+                            ((ViewGroup) site_spinner.getParent()).removeView(site_spinner); //
+                        }
+                        main_Layout.addView(site_spinner);
+        
+                    }
+                    else
+                    {
+                        main_Layout.removeView(site_spinner);
+                    }
+                }
+                else
+                {
+                    System.out.println(" 3 = ");
+                    main_Layout.removeView(location_spinner);
+                    main_Layout.removeView(site_spinner);
+                }
+               
                 
             }
         }
-    
+        
         @Override
         public void onNothingSelected(AdapterView<?> adapterView) {
             System.out.println(" Nothing selected...... ");
         }
     });
-   
+    
     main_Layout.addView(company_spinner);
     
 }
@@ -171,12 +259,12 @@ private TextView textView() {
 private Spinner spinner(int s_id, ArrayList<String> spinner_company) {
     final Spinner spinner = new Spinner(this);
     LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(MATCH_PARENT, 60);
-    params1.setMargins(16,8,16,8);
+    params1.setMargins(16, 8, 16, 8);
     spinner.setBackground(getDrawable(R.drawable.edit_style));
     spinner.setLayoutParams(params1);
     
     ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_text, spinner_company);
-    spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_text);
+    spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     spinner.setAdapter(spinnerArrayAdapter);
     
     return spinner;
