@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.feedbackapplication.BaseActivity;
 import com.example.feedbackapplication.R;
 import com.example.feedbackapplication.database.DatabaseHelper;
 
@@ -19,21 +20,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     String str_companyname,str_username,str_pwd,uuid="";
     Spinner companyname;
     EditText edt_username,edt_pwd;
     Button btn_login;
-    DatabaseHelper databaseHelper;
-    SQLiteDatabase sqLiteDatabase;
+//    DatabaseHelper databaseHelper;
+//    SQLiteDatabase sqLiteDatabase;
     
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_login);
-    databaseHelper = new DatabaseHelper(this);
-    sqLiteDatabase = databaseHelper.getWritableDatabase();
+//    databaseHelper = new DatabaseHelperr(this);
+//    sqLiteDatabase = databaseHelper.getWritableDatabase();
     
     
     companyname = (Spinner) findViewById(R.id.s_company_name);
@@ -79,7 +80,7 @@ public void onClick(View view) {
     else
     {
         uuid = UUID.randomUUID().toString();
-        databaseHelper.insertLoginDetails(uuid,str_username,str_pwd,str_companyname);
+        dbh.insertLoginDetails(uuid,str_username,str_pwd,str_companyname);
        Toast.makeText(this, str_username + " "+str_pwd + " " +str_companyname+" Succes....", Toast.LENGTH_LONG).show();
     
        startActivity(new Intent(LoginActivity.this,AdminDetailsConfig.class));

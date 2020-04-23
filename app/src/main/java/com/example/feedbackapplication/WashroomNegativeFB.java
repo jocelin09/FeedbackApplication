@@ -28,13 +28,13 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static android.widget.LinearLayout.HORIZONTAL;
 
-public class WashroomNegativeFB extends AppCompatActivity {
+public class WashroomNegativeFB extends BaseActivity {
 
 String area_name = "Cafeteria";
 int totalquestionscount,current_question_id;
 
-DatabaseHelper dbh;
-SQLiteDatabase sqLiteDatabase;
+//DatabaseHelper dbh;
+//SQLiteDatabase sqLiteDatabase;
 ArrayList<String> negative_lists = new ArrayList<String>();
 boolean food = false, seating = false, service = false, hygiene= false, ambience = false,others = false;
 boolean overallratingdone = false;
@@ -48,8 +48,8 @@ protected void onCreate(Bundle savedInstanceState) {
     totalquestionscount = getIntent().getIntExtra("totalquestionscount",0);
     current_question_id = getIntent().getIntExtra("current_question_id",0);
     
-    dbh = new DatabaseHelper(this);
-    sqLiteDatabase = dbh.getWritableDatabase();
+//    dbh = new DatabaseHelper(this);
+//    sqLiteDatabase = dbh.getWritableDatabase();
     
     
     System.out.println("totalquestionscount = " + totalquestionscount + " current_question_id = " +current_question_id);
