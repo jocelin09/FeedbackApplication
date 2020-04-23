@@ -21,9 +21,10 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true">
+            >
 
             <LinearLayout
+                android:id="@+id/main_admindetails_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -32,7 +33,7 @@
                 android:layout_marginBottom="16dp"
                 android:orientation="vertical">
 
-                <TextView android:id="@+id/greetingstxt"
+            <!--    <TextView android:id="@+id/greetingstxt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawablePadding="16dp"
@@ -43,9 +44,9 @@
                     android:fontFamily="sans-serif-light"
                     android:textStyle="bold"
                     android:textColorHint="#000"
-                    android:textSize="50sp" />
+                    android:textSize="50sp" />-->
 
-                <Spinner
+               <!-- <Spinner
                     android:id="@+id/clientname"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
@@ -70,7 +71,6 @@
                     android:text="LOGIN"
                     android:textColor="#fff"
                     android:textSize="18sp" />
-
 
                 <Spinner
                     android:id="@+id/sitename"
@@ -98,7 +98,6 @@
                     android:textColor="#fff"
                     android:textSize="18sp" />
 
-
                 <Spinner
                     android:id="@+id/wingname"
                     android:layout_width="match_parent"
@@ -111,7 +110,6 @@
                     android:text="LOGIN"
                     android:textColor="#fff"
                     android:textSize="20sp" />
-
 
                 <Spinner
                     android:id="@+id/floorname"
@@ -190,7 +188,7 @@
                     android:textColor="#000"
                     android:textSize="18sp" />
 
-            </LinearLayout>
+            </LinearLayout> -->
             </LinearLayout>
 
         </ScrollView>
