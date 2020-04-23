@@ -12,6 +12,8 @@ import android.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 private static DatabaseHelper mInstance = null;
@@ -129,7 +131,7 @@ public boolean insertAdminDetails(String Company_ID, String Company_Name, String
     contentValues.put("Area_Id", Area_Id);
     contentValues.put("Area_Name", Area_Name);
     
-    long result = db.insert("admin_login", null, contentValues);
+    long result = db.insert("admin_details", null, contentValues);
     
     if (result == -1)
         return false;
@@ -152,6 +154,56 @@ public boolean insertData(String AutoId, String FeedbackQuestion, String OrderId
         return true;
     
 }
+
+
+//Show data in list///
+public ArrayList<String> getAllCompanyNames(){
+    ArrayList<String> companyname = new ArrayList<String>();
+    companyname.add("Company Name");
+    // Select All Query
+    String selectQuery = "SELECT distinct(Company_Name) FROM admin_details";
+    
+    SQLiteDatabase db = this.getReadableDatabase();
+    Cursor cursor = db.rawQuery(selectQuery, null);
+    
+    // looping through all rows and adding to list
+    if (cursor.moveToFirst()) {
+        do {
+            companyname.add(cursor.getString(0));
+        } while (cursor.moveToNext());
+    }
+    
+    //System.out.println("companyname = " + companyname);
+    
+//    cursor.close();
+//    db.close();
+    
+    return companyname;
+}
+
+public ArrayList<String> getAllLocations(String company){
+    ArrayList<String> location_name = new ArrayList<String>();
+    //location_name.add("Site Name");
+    // Select All Query
+    String selectQuery = "SELECT * FROM admin_details where Company_Name = '"+company+"'";
+    
+    SQLiteDatabase db = this.getReadableDatabase();
+    Cursor cursor = db.rawQuery(selectQuery, null);
+    
+    // looping through all rows and adding to list
+    if (cursor.moveToFirst()) {
+        do {
+            location_name.add(cursor.getString(4));
+        } while (cursor.moveToNext());
+    }
+    System.out.println("location_name = " + location_name);
+    
+//    cursor.close();
+//    db.close();
+    
+    return location_name;
+}
+
 
 public String getsmsURL() {
     
