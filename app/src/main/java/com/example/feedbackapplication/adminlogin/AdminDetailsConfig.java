@@ -44,7 +44,7 @@ private ArrayList<String> wing_names = new ArrayList<String>();
 private ArrayList<String> floor_names = new ArrayList<String>();
 
 int questionscount;
-String str_companyname, str_locationname;
+String str_companyname, str_locationname,str_sitename,str_buildingname;
 String company_id, location_id, site_id, building_id, wing_id, floor_id, area_id;
 
 @Override
@@ -58,21 +58,33 @@ protected void onCreate(Bundle savedInstanceState) {
     questionscount = dbh.admindetails_count();
     
     if (questionscount == 0) {
-        dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Mumbai",
-                "13", "Mira Rd", "14", "Dell-6", "15", "Wing-A", "16",
+        dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Location 1",
+                "13", "Site 1", "14", "Building 1", "15", "Wing-1", "16",
                 "1st Floor", "17", "Washroom");
+        
         dbh.insertAdminDetails("22222", "ISS Feedback", "", "",
-                "24", "Mysore", "25", "HP Tower", "", "", "27",
-                "7-Floor", "28", "Cafeteria");
+                "24", "Site 2", "25", "Building 2", "123456", "Wing extra", "27",
+                "2nd Floor", "28", "Cafeteria");
+        
         dbh.insertAdminDetails("22222", "ISS Feedback", "", "",
-                "24", "Kochi", "25", "HP Tower", "", "", "27",
-                "7-Floor", "28", "Washroom");
-        dbh.insertAdminDetails("11111", "Dell Score Feedback", "21", "Pune",
-                "22", "Pimpri", "23", "Dell-5", "24", "Wing-C", "18",
-                "2nd Floor", "17", "Washroom");
-        dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Mumbai",
-                "13", "Mira Rd", "14", "Dell-6", "15", "Wing-A", "16",
-                "1st Floor", "17", "Washroom");
+                "24", "Site 3", "25", "Building 3", "", "", "27",
+                "3rd Floor", "28", "Washroom");
+        
+        dbh.insertAdminDetails("11111", "Dell Score Feedback", "21", "Location 2",
+                "22", "Site 4", "23", "Building 4", "24", "Wing 2", "18",
+                "4th Floor", "17", "Washroom");
+        
+        dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Location 3",
+                "13", "Site 5", "14", "Building 5", "15", "Wing 3", "16",
+                "5th Floor", "17", "Washroom");
+        
+        dbh.insertAdminDetails("333333", "NTT Feedback", "120", "Location 4",
+                "", "", "17", "Building 6", "15", "Wing 4", "16",
+                "6th Floor", "17", "Washroom");
+        
+        dbh.insertAdminDetails("444444", "E-clerx", "", "",
+                "", "", "157", "Building 7", "15", "Wing 5", "16",
+                "7th Floor", "17", "Washroom");
     }
     
     final LinearLayout main_Layout = (LinearLayout) findViewById(R.id.main_admindetails_layout); //vertical
@@ -87,7 +99,7 @@ protected void onCreate(Bundle savedInstanceState) {
     company_spinner.setBackground(getDrawable(R.drawable.edit_style));
     company_spinner.setLayoutParams(params1);
     
-    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_text, company_names);
+    final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_text, company_names);
     spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     company_spinner.setAdapter(spinnerArrayAdapter);
     
@@ -101,6 +113,15 @@ protected void onCreate(Bundle savedInstanceState) {
     site_spinner.setBackground(getDrawable(R.drawable.edit_style));
     site_spinner.setLayoutParams(params1);
     
+    ////////////BUILDING NAME//////////
+    final Spinner building_spinner = new Spinner(getApplicationContext());
+    building_spinner.setBackground(getDrawable(R.drawable.edit_style));
+    building_spinner.setLayoutParams(params1);
+    
+    ////////////WING NAME//////////
+    final Spinner wing_spinner = new Spinner(getApplicationContext());
+    wing_spinner.setBackground(getDrawable(R.drawable.edit_style));
+    wing_spinner.setLayoutParams(params1);
     
     company_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
         @Override
@@ -153,16 +174,138 @@ protected void onCreate(Bundle savedInstanceState) {
                                 
                             }
                             site_spinner.setAdapter(spinnerArrayAdapter2);
-                            
-                            if (site_spinner.getParent() != null) {
-                                ((ViewGroup) site_spinner.getParent()).removeView(site_spinner); //
-                            }
-                            main_Layout.addView(site_spinner);
     
+                            if (site_names.size() == 0)
+                            {
+                                main_Layout.removeView(site_spinner);
+    
+                            }
+                            else
+                            {
+                                if (site_spinner.getParent() != null) {
+                                    ((ViewGroup) site_spinner.getParent()).removeView(site_spinner); //
+                                }
+                                main_Layout.addView(site_spinner);
+                            }
+                            
+    
+                            site_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                    
+                                    str_sitename = site_spinner.getSelectedItem().toString();
+                                    
+                                    building_names = dbh.getAllBuildings(str_companyname,str_locationname,str_sitename);
+                                    if (!building_names.isEmpty())
+                                    {
+                                        ArrayAdapter<String> spinnerArrayAdapter3 = new ArrayAdapter<String>(getApplicationContext(),
+                                                R.layout.spinner_text, building_names);
+                                        spinnerArrayAdapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                        if (!str_sitename.equals(""))
+                                        {
+                                            site_id = dbh.getSiteId(str_sitename);
+                                            site_spinner.setId(Integer.parseInt(site_id));
+                                        }
+    
+                                        building_spinner.setAdapter(spinnerArrayAdapter3);
+                                        if (building_names.size() == 0)
+                                        {
+                                            main_Layout.removeView(building_spinner);
+        
+                                        }
+                                        else
+                                        {
+                                            if (building_spinner.getParent() != null) {
+                                                ((ViewGroup) building_spinner.getParent()).removeView(building_spinner); //
+                                            }
+                                            main_Layout.addView(building_spinner);
+                                        }
+                                        
+                                        building_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                            @Override
+                                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                                str_buildingname = building_spinner.getSelectedItem().toString();
+                                                System.out.println("str_buildingname ===== " + str_buildingname);
+                                                
+                                                wing_names = dbh.getAllWings(str_companyname,str_locationname,str_sitename,str_buildingname);
+    
+                                                if (!wing_names.isEmpty())
+                                                {
+                                                    ArrayAdapter<String> spinnerArrayAdapter4 = new ArrayAdapter<String>(getApplicationContext(),
+                                                            R.layout.spinner_text, wing_names);
+                                                    spinnerArrayAdapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                    if (!str_buildingname.equals(""))
+                                                    {
+                                                        building_id = dbh.getBuildingId(str_buildingname);
+                                                        building_spinner.setId(Integer.parseInt(building_id));
+                                                    }
+                                                    wing_spinner.setAdapter(spinnerArrayAdapter4);
+                                                    
+                                                    if (wing_names.size() == 0)
+                                                    {
+                                                        main_Layout.removeView(wing_spinner);
+                                                    }
+                                                    else
+                                                    {
+                                                        if (wing_spinner.getParent() != null) {
+                                                            ((ViewGroup) wing_spinner.getParent()).removeView(wing_spinner); //
+                                                        }
+                                                        main_Layout.addView(wing_spinner);
+                                                    }
+    
+                                                }
+                                                else {
+                                                    main_Layout.removeView(wing_spinner);
+                                                }
+                                            }
+    
+                                            @Override
+                                            public void onNothingSelected(AdapterView<?> adapterView) {
+        
+                                            }
+                                        });
+                                    }
+                                    else
+                                    {
+                                        main_Layout.removeView(building_spinner);
+                                    }
+    
+                                }
+    
+                                @Override
+                                public void onNothingSelected(AdapterView<?> adapterView) {
+        
+                                }
+                            });
                         }
                         else
                         {
+                            str_sitename = "";
+    
                             main_Layout.removeView(site_spinner);
+                            System.out.println("When no sites available display next spinner building..");
+    
+                            building_names = dbh.getAllBuildings(str_companyname,str_locationname,str_sitename);
+                            if (!building_names.isEmpty())
+                            {
+                                ArrayAdapter<String> spinnerArrayAdapter3 = new ArrayAdapter<String>(getApplicationContext(),
+                                        R.layout.spinner_text, building_names);
+                                spinnerArrayAdapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                building_spinner.setAdapter(spinnerArrayAdapter3);
+    
+                                if (building_names.size() == 0)
+                                {
+                                    main_Layout.removeView(building_spinner);
+        
+                                }
+                                else
+                                {
+                                    if (building_spinner.getParent() != null) {
+                                        ((ViewGroup) building_spinner.getParent()).removeView(building_spinner); //
+                                    }
+                                    main_Layout.addView(building_spinner);
+                                }
+                            }
                         }
                     }
     
@@ -174,36 +317,203 @@ protected void onCreate(Bundle savedInstanceState) {
             
             }
             
-            else {
+            else
+                {
                 if (location_names.size() == 0)
                 {
                     System.out.println("When Location is blank..add next spinner site name");
+                    str_locationname = "";
     
                     main_Layout.removeView(location_spinner);
-                    site_names = dbh.getAllSites(str_companyname,"");
+                    
+                    site_names = dbh.getAllSites(str_companyname,str_locationname);
                     if (!site_names.isEmpty())
                     {
                         ArrayAdapter<String> spinnerArrayAdapter2 = new ArrayAdapter<String>(getApplicationContext(),
                                 R.layout.spinner_text, site_names);
                         spinnerArrayAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         site_spinner.setAdapter(spinnerArrayAdapter2);
-        
-                        if (site_spinner.getParent() != null) {
-                            ((ViewGroup) site_spinner.getParent()).removeView(site_spinner); //
+    
+                        if (site_names.size() == 0)
+                        {
+                            main_Layout.removeView(site_spinner);
                         }
-                        main_Layout.addView(site_spinner);
+                        else
+                            {
+                            if (site_spinner.getParent() != null) {
+                                ((ViewGroup) site_spinner.getParent()).removeView(site_spinner); //
+                            }
+                            main_Layout.addView(site_spinner);
+                        }
         
+                        site_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                str_sitename = site_spinner.getSelectedItem().toString();
+                                
+                                    building_names = dbh.getAllBuildings(str_companyname,str_locationname,str_sitename);
+                                if (!building_names.isEmpty())
+                                {
+                                    ArrayAdapter<String> spinnerArrayAdapter3 = new ArrayAdapter<String>(getApplicationContext(),
+                                            R.layout.spinner_text, building_names);
+                                    spinnerArrayAdapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    if (!str_sitename.equals(""))
+                                    {
+                                        site_id = dbh.getSiteId(str_sitename);
+                                        site_spinner.setId(Integer.parseInt(site_id));
+                                    }
+                                    building_spinner.setAdapter(spinnerArrayAdapter3);
+    
+                                    if (building_names.size() == 0)
+                                    {
+                                        main_Layout.removeView(building_spinner);
+                                    }
+                                    else
+                                    {
+                                        if (building_spinner.getParent() != null) {
+                                            ((ViewGroup) building_spinner.getParent()).removeView(building_spinner); //
+                                        }
+                                        main_Layout.addView(building_spinner);
+                                    }
+                                    
+                                    building_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                        @Override
+                                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                            str_buildingname = building_spinner.getSelectedItem().toString();
+                                            
+                                            wing_names = dbh.getAllWings(str_companyname,str_locationname,str_sitename,str_buildingname);
+                                            if (!wing_names.isEmpty())
+                                            {
+                                                ArrayAdapter<String> spinnerArrayAdapter4 = new ArrayAdapter<String>(getApplicationContext(),
+                                                        R.layout.spinner_text, wing_names);
+                                                spinnerArrayAdapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                wing_spinner.setAdapter(spinnerArrayAdapter4);
+        
+                                                if (wing_names.size() == 0)
+                                                {
+                                                    main_Layout.removeView(wing_spinner);
+                                                }
+                                                else
+                                                {
+                                                    if (wing_spinner.getParent() != null) {
+                                                        ((ViewGroup) wing_spinner.getParent()).removeView(wing_spinner); //
+                                                    }
+                                                    main_Layout.addView(wing_spinner);
+                                                }
+        
+                                            }
+                                            else
+                                            {
+                                                main_Layout.removeView(wing_spinner);
+                                            }
+                                            
+                                            
+                                        }
+    
+                                        @Override
+                                        public void onNothingSelected(AdapterView<?> adapterView) {
+        
+                                        }
+                                    });
+                                }
+                                else
+                                    {
+                                    main_Layout.removeView(building_spinner);
+                                    main_Layout.removeView(wing_spinner);
+                                }
+                            }
+    
+                            @Override
+                            public void onNothingSelected(AdapterView<?> adapterView) {
+        
+                            }
+                        });
                     }
                     else
                     {
                         main_Layout.removeView(site_spinner);
+                        main_Layout.removeView(building_spinner);
+                        main_Layout.removeView(wing_spinner);
+                        
+                        //Add building data when location, site data is blank
+                        System.out.println("Add building data when location, site data is blank");
+                        str_locationname="";
+                        str_sitename="";
+                        
+                        building_names = dbh.getAllBuildings(str_companyname,str_locationname,str_sitename);
+                        
+                        if (!building_names.isEmpty())
+                        {
+                            ArrayAdapter<String> spinnerArrayAdapter3 = new ArrayAdapter<String>(getApplicationContext(),
+                                    R.layout.spinner_text, building_names);
+                            spinnerArrayAdapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                         
+                            building_spinner.setAdapter(spinnerArrayAdapter3);
+                            if (building_names.size() == 0)
+                            {
+                                main_Layout.removeView(building_spinner);
+                            }
+                            else
+                            {
+                                if (building_spinner.getParent() != null) {
+                                    ((ViewGroup) building_spinner.getParent()).removeView(building_spinner); //
+                                }
+        
+                                main_Layout.addView(building_spinner);
+                            }
+                            
+                            building_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                    
+                                    str_buildingname = building_spinner.getSelectedItem().toString();
+                                    wing_names = dbh.getAllWings(str_companyname,str_locationname,str_sitename,str_buildingname);
+                                    if (!wing_names.isEmpty())
+                                    {
+                                        ArrayAdapter<String> spinnerArrayAdapter4 = new ArrayAdapter<String>(getApplicationContext(),
+                                                R.layout.spinner_text, wing_names);
+                                        spinnerArrayAdapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                        wing_spinner.setAdapter(spinnerArrayAdapter4);
+    
+                                        if (wing_names.size() == 0)
+                                        {
+                                            main_Layout.removeView(wing_spinner);
+                                        }
+                                        else
+                                        {
+                                            if (wing_spinner.getParent() != null) {
+                                                ((ViewGroup) wing_spinner.getParent()).removeView(wing_spinner); //
+                                            }
+                                            main_Layout.addView(wing_spinner);
+                                        }
+                                        
+                                    }
+                                    else
+                                    {
+                                        main_Layout.removeView(wing_spinner);
+                                    }
+    
+                                }
+    
+                                @Override
+                                public void onNothingSelected(AdapterView<?> adapterView) {
+        
+                                }
+                            });
+                        }
+                        else
+                        {
+                            main_Layout.removeView(building_spinner);
+                        }
                     }
                 }
                 else
                 {
-                    System.out.println(" 3 = ");
+                    System.out.println("For Select Company Name Spinner ");
                     main_Layout.removeView(location_spinner);
                     main_Layout.removeView(site_spinner);
+                    main_Layout.removeView(building_spinner);
+                    main_Layout.removeView(wing_spinner);
                 }
                
                 

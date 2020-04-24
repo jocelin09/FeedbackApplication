@@ -90,13 +90,13 @@ public int totalquestions_count() {
 }
 
 //INSERTION///
-public boolean insertLoginDetails(String User_Id, String User_Name, String Password, String Company_Name) {
+public boolean insertLoginDetails(String User_Id, String User_Name, String Password) {
     SQLiteDatabase db = this.getWritableDatabase();
     ContentValues contentValues = new ContentValues();
     contentValues.put("User_Id", User_Id);
     contentValues.put("User_Name", User_Name);
     contentValues.put("Password", Password);
-    contentValues.put("Company_Name", Company_Name);
+   // contentValues.put("Company_Name", Company_Name);
     long result = db.insert("admin_login", null, contentValues);
     
     if (result == -1)
@@ -158,25 +158,25 @@ public boolean insertData(String AutoId, String FeedbackQuestion, String OrderId
 
 //Show data in list///
 public ArrayList<String> getAllCompanyNames(){
-    ArrayList<String> companyname = new ArrayList<String>();
-    companyname.add("Company Name");
-    String selectQuery = "SELECT distinct(Company_Name) FROM admin_details ASC ";
+    ArrayList<String> company_name_lists = new ArrayList<String>();
+    company_name_lists.add("Select Company");
+    String selectQuery = "SELECT distinct(Company_Name) FROM admin_details ORDER BY Company_Name ASC ";
     
     SQLiteDatabase db = this.getReadableDatabase();
     Cursor cursor = db.rawQuery(selectQuery, null);
     if (cursor.moveToFirst()) {
         do {
-            companyname.add(cursor.getString(0));
+            company_name_lists.add(cursor.getString(0));
         } while (cursor.moveToNext());
     }
     cursor.close();
     db.close();
-    return companyname;
+    return company_name_lists;
 }
 
 public ArrayList<String> getAllLocations(String company){
-    ArrayList<String> location_name = new ArrayList<String>();
-    //location_name.add("Site Name");
+    ArrayList<String> location_name_lists = new ArrayList<String>();
+    //location_name_lists.add("Select Location");
     // Select All Query
     String selectQuery = "SELECT distinct(Location_Name) FROM admin_details where Company_Name = '"+company+"'";
     String loc_name="";
@@ -189,21 +189,22 @@ public ArrayList<String> getAllLocations(String company){
             loc_name = cursor.getString(0);
             if (!loc_name.equals(""))
             {
-                location_name.add(loc_name);
+                location_name_lists.add(loc_name);
             }
         } while (cursor.moveToNext());
     }
-    //System.out.println("location_name = " + location_name);
     
     cursor.close();
     db.close();
     
-    return location_name;
+    return location_name_lists;
 }
 
 public ArrayList<String> getAllSites(String companynm,String locationname){
-    ArrayList<String> site_name = new ArrayList<String>();
-    // Select All Query
+    System.out.println(" getAllSites called= " );
+    
+    ArrayList<String> site_name_lists = new ArrayList<String>();
+    //site_name_lists.add("Select Site");
     String selectQuery = "SELECT distinct(Site_Name) FROM admin_details where Company_Name = '"+companynm+"' and Location_Name = '"+locationname+"'";
     
     SQLiteDatabase db = this.getReadableDatabase();
@@ -213,18 +214,73 @@ public ArrayList<String> getAllSites(String companynm,String locationname){
     if (cursor.moveToFirst()) {
         do {
             sitename = cursor.getString(0);
-            if (!site_name.equals(""))
+            if (!sitename.equals(""))
             {
-                site_name.add(sitename);
+                site_name_lists.add(sitename);
             }
         } while (cursor.moveToNext());
     }
-    System.out.println("site_name = " + site_name);
+    System.out.println("site_name_lists = " + site_name_lists);
     
     cursor.close();
     db.close();
     
-    return site_name;
+    return site_name_lists;
+}
+
+public ArrayList<String> getAllBuildings(String companynm,String locationname,String sitenm){
+    System.out.println(" getAllBuildings called= " );
+    ArrayList<String> building_name_lists = new ArrayList<String>();
+    // Select All Query
+    System.out.println("locationname="+locationname+sitenm);
+    String selectQuery = "SELECT distinct(Building_Name) FROM admin_details where Company_Name = '"+companynm+"' and Location_Name = '"+locationname+"' and Site_Name = '"+sitenm+"'";
+    
+    SQLiteDatabase db = this.getReadableDatabase();
+    Cursor cursor = db.rawQuery(selectQuery, null);
+    String buildingname="";
+    // looping through all rows and adding to list
+    if (cursor.moveToFirst()) {
+        do {
+            buildingname = cursor.getString(0);
+            if (!buildingname.equals(""))
+            {
+                building_name_lists.add(buildingname);
+            }
+        } while (cursor.moveToNext());
+    }
+    System.out.println("building_name_lists = " + building_name_lists);
+    
+    cursor.close();
+    db.close();
+    
+    return building_name_lists;
+}
+
+public ArrayList<String> getAllWings(String companynm,String locationname,String sitenm,String buildingnm){
+    System.out.println(" getAllWings called= " );
+    ArrayList<String> wing_name_lists = new ArrayList<String>();
+    // Select All Query
+    String selectQuery = "SELECT distinct(Wing_Name) FROM admin_details where Company_Name = '"+companynm+"' and Location_Name = '"+locationname+"' and Site_Name = '"+sitenm+"' and Building_Name = '"+buildingnm+"'";
+    
+    SQLiteDatabase db = this.getReadableDatabase();
+    Cursor cursor = db.rawQuery(selectQuery, null);
+    String wingname="";
+    // looping through all rows and adding to list
+    if (cursor.moveToFirst()) {
+        do {
+            wingname = cursor.getString(0);
+            if (!wingname.equals(""))
+            {
+                wing_name_lists.add(wingname);
+            }
+        } while (cursor.moveToNext());
+    }
+    System.out.println("wing_name_lists = " + wing_name_lists);
+    
+    cursor.close();
+    db.close();
+    
+    return wing_name_lists;
 }
 
 
@@ -273,6 +329,48 @@ public String getLocationId(String Location_Name) {
     }
     return location_id;
 }
+
+public String getSiteId(String Site_name) {
+    
+    String site_id = "";
+    try {
+        String query = "SELECT Site_Id FROM admin_details Where Site_Name ='" + Site_name + "'";
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor res = db.rawQuery(query, null);
+        if (res.moveToFirst()) {
+            do {
+                site_id = res.getString(0);
+            } while (res.moveToNext());
+        }
+        res.close();
+        db.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return site_id;
+}
+
+public String getBuildingId(String Building_Name) {
+    
+    String building_id = "";
+    try {
+        String query = "SELECT Building_Id FROM admin_details Where Building_Name ='" + Building_Name + "'";
+        
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor res = db.rawQuery(query, null);
+        if (res.moveToFirst()) {
+            do {
+                building_id = res.getString(0);
+            } while (res.moveToNext());
+        }
+        res.close();
+        db.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return building_id;
+}
+
 
 
 public String getsmsURL() {
@@ -397,49 +495,7 @@ public int loginCount() {
 
 
 
-public String getSiteId(String Site_name) {
-    
-    String site_id = "";
-    try {
-        String query = "SELECT Auto_Id FROM site_detail Where Site_Name ='" + Site_name + "'";
-        
-        Log.d("site_query", query);
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor res = db.rawQuery(query, null);
-        if (res.moveToFirst()) {
-            do {
-                site_id = res.getString(res.getColumnIndex("Auto_Id"));
-            } while (res.moveToNext());
-        }
-        res.close();
-        db.close();
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return site_id;
-}
 
-public String getBuildingId(String Building_Name) {
-    
-    String site_id = "";
-    try {
-        String query = "SELECT Auto_Id FROM building_detail Where Building_Name ='" + Building_Name + "'";
-        
-        Log.d("building_query", query);
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor res = db.rawQuery(query, null);
-        if (res.moveToFirst()) {
-            do {
-                site_id = res.getString(res.getColumnIndex("Auto_Id"));
-            } while (res.moveToNext());
-        }
-        res.close();
-        db.close();
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return site_id;
-}
 
 public String getFloorId(String Floor_Name) {
     

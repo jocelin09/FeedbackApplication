@@ -37,7 +37,7 @@ protected void onCreate(Bundle savedInstanceState) {
 //    sqLiteDatabase = databaseHelper.getWritableDatabase();
     
     
-    companyname = (Spinner) findViewById(R.id.s_company_name);
+    //companyname = (Spinner) findViewById(R.id.s_company_name);
     
     edt_username = (EditText) findViewById(R.id.edt_username);
     edt_pwd = (EditText) findViewById(R.id.edt_password);
@@ -46,7 +46,7 @@ protected void onCreate(Bundle savedInstanceState) {
     
     
     // you need to have a list of data that you want the spinner to display
-    List<String> spinnerArray =  new ArrayList<String>();
+    /*List<String> spinnerArray =  new ArrayList<String>();
     //spinnerArray.add("Company Name");
     spinnerArray.add("Dell Score Feedback");
     spinnerArray.add("ISS Feedback");
@@ -55,7 +55,7 @@ protected void onCreate(Bundle savedInstanceState) {
             this, R.layout.spinner_text, spinnerArray);
     
     adapter.setDropDownViewResource(R.layout.spinner_dropdown_text);
-    companyname.setAdapter(adapter);
+    companyname.setAdapter(adapter);*/
     
     btn_login.setOnClickListener(this);
     
@@ -64,7 +64,7 @@ protected void onCreate(Bundle savedInstanceState) {
 @Override
 public void onClick(View view) {
     
-    str_companyname = companyname.getSelectedItem().toString();
+   // str_companyname = companyname.getSelectedItem().toString();
     str_username = edt_username.getText().toString().trim();
     str_pwd = edt_pwd.getText().toString().trim();
     
@@ -80,8 +80,9 @@ public void onClick(View view) {
     else
     {
         uuid = UUID.randomUUID().toString();
-        dbh.insertLoginDetails(uuid,str_username,str_pwd,str_companyname);
-       Toast.makeText(this, str_username + " "+str_pwd + " " +str_companyname+" Succes....", Toast.LENGTH_LONG).show();
+        //dbh.insertLoginDetails(uuid,str_username,str_pwd,str_companyname);
+        dbh.insertLoginDetails(uuid,str_username,str_pwd);
+       Toast.makeText(this, str_username + " "+str_pwd + " "+" Succes....", Toast.LENGTH_LONG).show();
     
        startActivity(new Intent(LoginActivity.this,AdminDetailsConfig.class));
     }
