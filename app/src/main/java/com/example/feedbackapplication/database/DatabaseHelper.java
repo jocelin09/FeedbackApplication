@@ -156,7 +156,7 @@ public boolean insertData(String AutoId, String FeedbackQuestion, String OrderId
 }
 
 
-//Show data in list///
+//Get all data in spinner-dropdown///
 public ArrayList<String> getAllCompanyNames(){
     ArrayList<String> company_name_lists = new ArrayList<String>();
     company_name_lists.add("Select Company");
@@ -283,9 +283,59 @@ public ArrayList<String> getAllWings(String companynm,String locationname,String
     return wing_name_lists;
 }
 
+public ArrayList<String> getAllFloors(String companynm,String locationname,String sitenm,String buildingnm,String wingnm){
+    System.out.println(" getAllFloors called= " );
+    ArrayList<String> floor_name_lists = new ArrayList<String>();
+    // Select All Query
+    String selectQuery = "SELECT distinct(Floor_Name) FROM admin_details where Company_Name = '"+companynm+"' and Location_Name = '"+locationname+"' and Site_Name = '"+sitenm+"' and Building_Name = '"+buildingnm+"' and Wing_Name = '"+wingnm+"'";
+    
+    SQLiteDatabase db = this.getReadableDatabase();
+    Cursor cursor = db.rawQuery(selectQuery, null);
+    String floorname="";
+    if (cursor.moveToFirst()) {
+        do {
+            floorname = cursor.getString(0);
+            if (!floorname.equals(""))
+            {
+                floor_name_lists.add(floorname);
+            }
+        } while (cursor.moveToNext());
+    }
+    System.out.println("floor_name_lists = " + floor_name_lists);
+    
+    cursor.close();
+    db.close();
+    
+    return floor_name_lists;
+}
+
+public ArrayList<String> getAllAreas(String companynm,String locationname,String sitenm,String buildingnm,String wingnm,String floornm){
+    ArrayList<String> area_name_lists = new ArrayList<String>();
+    String selectQuery = "SELECT distinct(Area_Name) FROM admin_details where Company_Name = '"+companynm+"' and Location_Name = '"+locationname+"' and Site_Name = '"+sitenm+"' and Building_Name = '"+buildingnm+"' and Wing_Name = '"+wingnm+"' and Floor_Name = '"+floornm+"'";
+    
+    SQLiteDatabase db = this.getReadableDatabase();
+    Cursor cursor = db.rawQuery(selectQuery, null);
+    String areaname="";
+    if (cursor.moveToFirst()) {
+        do {
+            areaname = cursor.getString(0);
+            if (!areaname.equals(""))
+            {
+                area_name_lists.add(areaname);
+            }
+        } while (cursor.moveToNext());
+    }
+    System.out.println("area_name_lists = " + area_name_lists);
+    
+    cursor.close();
+    db.close();
+    
+    return area_name_lists;
+}
+
+
 
 ///GET ID DATA///
-
 public String getCompanyId(String Company_name) {
     String company_id="" ;
     try {
@@ -303,6 +353,7 @@ public String getCompanyId(String Company_name) {
         db.close();
     } catch (Exception e) {
         e.printStackTrace();
+        System.out.println("e 332 = " + e);
     }
     
    // System.out.println("company_id = " + company_id);
@@ -369,6 +420,69 @@ public String getBuildingId(String Building_Name) {
         e.printStackTrace();
     }
     return building_id;
+}
+
+public String getWingId(String Wing_Name) {
+    
+    String wing_id = "";
+    try {
+        String query = "SELECT Wing_Id FROM admin_details Where Wing_Name ='" + Wing_Name + "'";
+        
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor res = db.rawQuery(query, null);
+        if (res.moveToFirst()) {
+            do {
+                wing_id = res.getString(0);
+            } while (res.moveToNext());
+        }
+        res.close();
+        db.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return wing_id;
+}
+
+public String getFloorId(String Floor_Name) {
+    
+    String floor_id = "";
+    try {
+        String query = "SELECT Floor_Id FROM admin_details Where Floor_Name ='" + Floor_Name + "'";
+        
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor res = db.rawQuery(query, null);
+        if (res.moveToFirst()) {
+            do {
+                floor_id = res.getString(0);
+            } while (res.moveToNext());
+        }
+        res.close();
+        db.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return floor_id;
+}
+
+public String getAreaId(String Area_Name) {
+    
+    String area_id = "";
+    try {
+        String query = "SELECT Area_Id FROM admin_details Where Area_Name ='" + Area_Name + "'";
+        
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor res = db.rawQuery(query, null);
+        if (res.moveToFirst()) {
+            do {
+                area_id = res.getString(0);
+            } while (res.moveToNext());
+        }
+        res.close();
+        db.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return area_id;
 }
 
 
@@ -497,27 +611,7 @@ public int loginCount() {
 
 
 
-public String getFloorId(String Floor_Name) {
-    
-    String floor_id = "";
-    try {
-        String query = "SELECT Auto_Id FROM floor_detail Where Floor_Name ='" + Floor_Name + "'";
-        
-        Log.d("floor_query", query);
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor res = db.rawQuery(query, null);
-        if (res.moveToFirst()) {
-            do {
-                floor_id = res.getString(res.getColumnIndex("Auto_Id"));
-            } while (res.moveToNext());
-        }
-        res.close();
-        db.close();
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return floor_id;
-}
+
 
 public String getBuildingName(String floor_Id) {
     
@@ -541,27 +635,6 @@ public String getBuildingName(String floor_Id) {
     return Building_Name;
 }
 
-public String getAreaId(String Area_Name) {
-    
-    String area_id = "";
-    try {
-        String query = "SELECT Auto_Id FROM area_detail Where Area_Name ='" + Area_Name + "'";
-        
-        Log.d("area_query", query);
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor res = db.rawQuery(query, null);
-        if (res.moveToFirst()) {
-            do {
-                area_id = res.getString(res.getColumnIndex("Auto_Id"));
-            } while (res.moveToNext());
-        }
-        res.close();
-        db.close();
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return area_id;
-}
 
 public String getAreaName(String Area_Id) {
     
