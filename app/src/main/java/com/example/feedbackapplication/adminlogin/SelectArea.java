@@ -134,7 +134,8 @@ public class SelectArea extends BaseActivity {
                    Intent i=new Intent(SelectArea.this,FeedbackActivity.class);
                    startActivity(i);
                 } else if (imgvalue.equalsIgnoreCase("Washroom")) {
-
+                    Intent i=new Intent(SelectArea.this,FeedbackService.class);
+                    startActivity(i);
                 }
             }
         });
