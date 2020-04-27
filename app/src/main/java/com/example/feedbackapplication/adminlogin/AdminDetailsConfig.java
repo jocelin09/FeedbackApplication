@@ -1,27 +1,34 @@
 package com.example.feedbackapplication.adminlogin;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.feedbackapplication.BaseActivity;
+import com.example.feedbackapplication.FeedbackActivity;
 import com.example.feedbackapplication.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
+
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-
+import static android.widget.LinearLayout.HORIZONTAL;
 
 public class AdminDetailsConfig extends BaseActivity {
 
@@ -35,10 +42,9 @@ private ArrayList<String> site_names = new ArrayList<String>();
 private ArrayList<String> building_names = new ArrayList<String>();
 private ArrayList<String> wing_names = new ArrayList<String>();
 private ArrayList<String> floor_names = new ArrayList<String>();
-private ArrayList<String> area_names = new ArrayList<String>();
+private List<String> area_names = new ArrayList<String>();
 
-
-
+Button button;
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -50,14 +56,18 @@ protected void onCreate(Bundle savedInstanceState) {
         dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Location 1",
                 "13", "Site 1", "14", "Building 1", "15", "Wing-1", "16",
                 "1st Floor", "17", "Washroom");
+    
+        dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Location 1",
+                "13", "Site 1", "14", "Building 1", "15", "Wing-1", "16",
+                "1st Floor", "17", "Cafeteria");
         
         dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Location 1",
                 "13", "Site 5", "14", "Building 3", "", "", "16",
-                "5th Floor", "17", "Washroom");
+                "5th Floor", "17", "Cafeteria");
         
         dbh.insertAdminDetails("11111", "Dell Score Feedback", "21", "Location 2",
                 "22", "Site 4", "23", "Building 4", "24", "Wing 2", "18",
-                "4th Floor", "17", "Washroom");
+                "4th Floor", "17", "Pantry");
         
         dbh.insertAdminDetails("22222", "ISS Feedback", "", "",
                 "24", "Site 2", "25", "Building 2", "123456", "Wing extra", "27",
@@ -88,7 +98,7 @@ protected void onCreate(Bundle savedInstanceState) {
         company_names = dbh.getAllCompanyNames();
         
         final Spinner company_spinner = new Spinner(this);
-        final LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(MATCH_PARENT, 60);
+        final LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(MATCH_PARENT, 100);
         params1.setMargins(16, 8, 16, 8);
         company_spinner.setBackground(getDrawable(R.drawable.edit_style));
         company_spinner.setLayoutParams(params1);
@@ -106,6 +116,7 @@ protected void onCreate(Bundle savedInstanceState) {
         }
         ////////////LOCATION NAME//////////
         final Spinner location_spinner = new Spinner(getApplicationContext());
+        
         location_spinner.setBackground(getDrawable(R.drawable.edit_style));
         location_spinner.setLayoutParams(params1);
         
@@ -128,6 +139,25 @@ protected void onCreate(Bundle savedInstanceState) {
         final Spinner floor_spinner = new Spinner(getApplicationContext());
         floor_spinner.setBackground(getDrawable(R.drawable.edit_style));
         floor_spinner.setLayoutParams(params1);
+    
+        ////////////AREA NAME//////////
+        final MultipleSelectionSpinner area_spinner = findViewById(R.id.mSpinner);
+        area_spinner.setBackground(getDrawable(R.drawable.edit_style));
+        area_spinner.setLayoutParams(params1);
+    
+        //ADD BUTTONS
+        final LinearLayout sub1_secondlayout = new LinearLayout(getApplicationContext());
+//        LinearLayout.LayoutParams params_sub1 = new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
+//        params_sub1.setMargins(16,8,16,8);
+        sub1_secondlayout.setLayoutParams(params1);
+        sub1_secondlayout.setWeightSum(2f);
+        sub1_secondlayout.setOrientation(HORIZONTAL);
+    
+        button = new Button(this);
+        LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT,1f);
+        params2.setMargins(16,8,16,8);
+        button.setLayoutParams(params1);
+    
         
         company_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -358,11 +388,50 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                                     floor_spinner.setId(Integer.parseInt(floor_id));
                                                                                     System.out.println("floor_spinner.getId() = " + floor_spinner.getId());
                                                                                 }
-    
                                                                             } catch (NumberFormatException e) {
                                                                                 e.printStackTrace();
                                                                                 System.out.println("Floor Id Exception");
                                                                             }
+                                                                            
+                                                                            area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
+                                                                            System.out.println("area_names = " + area_names);
+                                                                            if (!area_names.isEmpty())
+                                                                            {
+                                                                                //checkbox areas
+                                                                              
+                                                                               area_spinner.setVisibility(View.VISIBLE);
+                                                                               area_spinner.setItems(area_names);
+                                                                               
+                                                                                if (area_spinner.getParent() != null) {
+                                                                                    ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
+                                                                                }
+                                                                                main_Layout.addView(area_spinner);
+                                                                                System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedItemsAsString());
+    
+                                                                                if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                    ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+                                                                                }
+                                                                                
+                                                                                sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
+    
+                                                                                if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                                    ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                                                }
+                                                                                sub1_secondlayout.addView(button(R.id.submit,"Submit"));
+    
+                                                                                if (sub1_secondlayout.getParent() != null) {
+                                                                                    ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+                                                                                }
+                                                                                main_Layout.addView(sub1_secondlayout);
+                                                                                
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                main_Layout.removeView(area_spinner);
+    
+                                                                            }
+    
+    
                                                                         }
                                                                         
                                                                         @Override
@@ -408,14 +477,14 @@ protected void onCreate(Bundle savedInstanceState) {
                                                             spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                             floor_spinner.setAdapter(spinnerArrayAdapter5);
                                                             
-                                                            if (floor_names.size() == 0) {
-                                                                main_Layout.removeView(floor_spinner);
-                                                            } else {
+//                                                            if (floor_names.size() == 0) {
+//                                                                main_Layout.removeView(floor_spinner);
+//                                                            } else {
                                                                 if (floor_spinner.getParent() != null) {
                                                                     ((ViewGroup) floor_spinner.getParent()).removeView(floor_spinner); //
                                                                 }
                                                                 main_Layout.addView(floor_spinner);
-                                                            }
+                                                           // }
                                                             
                                                             floor_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                                 @Override
@@ -489,14 +558,14 @@ protected void onCreate(Bundle savedInstanceState) {
                                     spinnerArrayAdapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                     building_spinner.setAdapter(spinnerArrayAdapter3);
                                     
-                                    if (building_names.size() == 0) { //if it shows blank lists, remove view
-                                        main_Layout.removeView(building_spinner);
-                                    } else {
+//                                    if (building_names.size() == 0) {
+//                                        main_Layout.removeView(building_spinner);
+//                                    } else {
                                         if (building_spinner.getParent() != null) {
                                             ((ViewGroup) building_spinner.getParent()).removeView(building_spinner); //
                                         }
                                         main_Layout.addView(building_spinner);
-                                    }
+                                    //}
                                     
                                     //wing
                                     building_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -533,14 +602,14 @@ protected void onCreate(Bundle savedInstanceState) {
                                                 spinnerArrayAdapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                 wing_spinner.setAdapter(spinnerArrayAdapter4);
                                                 
-                                                if (wing_names.size() == 0) {
-                                                    main_Layout.removeView(wing_spinner);
-                                                } else {
+//                                                if (wing_names.size() == 0) {
+//                                                    main_Layout.removeView(wing_spinner);
+//                                                } else {
                                                     if (wing_spinner.getParent() != null) {
                                                         ((ViewGroup) wing_spinner.getParent()).removeView(wing_spinner); //
                                                     }
                                                     main_Layout.addView(wing_spinner);
-                                                }
+                                               // }
                                                 
                                                 wing_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                     @Override
@@ -575,14 +644,14 @@ protected void onCreate(Bundle savedInstanceState) {
                                                             spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                             floor_spinner.setAdapter(spinnerArrayAdapter5);
                                                             
-                                                            if (floor_names.size() == 0) {
-                                                                main_Layout.removeView(floor_spinner);
-                                                            } else {
+//                                                            if (floor_names.size() == 0) {
+//                                                                main_Layout.removeView(floor_spinner);
+//                                                            } else {
                                                                 if (floor_spinner.getParent() != null) {
                                                                     ((ViewGroup) floor_spinner.getParent()).removeView(floor_spinner); //
                                                                 }
                                                                 main_Layout.addView(floor_spinner);
-                                                            }
+                                                           // }
                                                             
                                                             floor_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                                 @Override
@@ -641,14 +710,14 @@ protected void onCreate(Bundle savedInstanceState) {
                                                     spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                     floor_spinner.setAdapter(spinnerArrayAdapter5);
                                                     
-                                                    if (floor_names.size() == 0) {
-                                                        main_Layout.removeView(floor_spinner);
-                                                    } else {
+//                                                    if (floor_names.size() == 0) {
+//                                                        main_Layout.removeView(floor_spinner);
+//                                                    } else {
                                                         if (floor_spinner.getParent() != null) {
                                                             ((ViewGroup) floor_spinner.getParent()).removeView(floor_spinner); //
                                                         }
                                                         main_Layout.addView(floor_spinner);
-                                                    }
+                                                   // }
                                                     
                                                     floor_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                         @Override
@@ -698,7 +767,7 @@ protected void onCreate(Bundle savedInstanceState) {
                     
                 } else {
                     if (location_names.size() == 0) {
-                        System.out.println("When Location is blank..add next spinner site name");
+                        System.out.println("When Location is empty..add next spinner site");
                         str_locationname = "";
                         
                         main_Layout.removeView(location_spinner);
@@ -721,14 +790,14 @@ protected void onCreate(Bundle savedInstanceState) {
                             spinnerArrayAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             site_spinner.setAdapter(spinnerArrayAdapter2);
                             
-                            if (site_names.size() == 0) {
-                                main_Layout.removeView(site_spinner);
-                            } else {
+//                            if (site_names.size() == 0) {
+//                                main_Layout.removeView(site_spinner);
+//                            } else {
                                 if (site_spinner.getParent() != null) {
                                     ((ViewGroup) site_spinner.getParent()).removeView(site_spinner); //
                                 }
                                 main_Layout.addView(site_spinner);
-                            }
+                            //}
                             
                             site_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                 @Override
@@ -760,14 +829,14 @@ protected void onCreate(Bundle savedInstanceState) {
                                             
                                         }
                                         
-                                        if (building_names.size() == 0) {
-                                            main_Layout.removeView(building_spinner);
-                                        } else {
+//                                        if (building_names.size() == 0) {
+//                                            main_Layout.removeView(building_spinner);
+//                                        } else {
                                             if (building_spinner.getParent() != null) {
                                                 ((ViewGroup) building_spinner.getParent()).removeView(building_spinner); //
                                             }
                                             main_Layout.addView(building_spinner);
-                                        }
+                                       // }
                                         
                                         building_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                             @Override
@@ -802,14 +871,14 @@ protected void onCreate(Bundle savedInstanceState) {
                                                     spinnerArrayAdapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                     wing_spinner.setAdapter(spinnerArrayAdapter4);
                                                     
-                                                    if (wing_names.size() == 0) {
-                                                        main_Layout.removeView(wing_spinner);
-                                                    } else {
+//                                                    if (wing_names.size() == 0) {
+//                                                        main_Layout.removeView(wing_spinner);
+//                                                    } else {
                                                         if (wing_spinner.getParent() != null) {
                                                             ((ViewGroup) wing_spinner.getParent()).removeView(wing_spinner); //
                                                         }
                                                         main_Layout.addView(wing_spinner);
-                                                    }
+                                                   // }
                                                     
                                                     wing_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                         @Override
@@ -843,14 +912,14 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                 spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                                 floor_spinner.setAdapter(spinnerArrayAdapter5);
                                                                 
-                                                                if (floor_names.size() == 0) {
-                                                                    main_Layout.removeView(floor_spinner);
-                                                                } else {
+//                                                                if (floor_names.size() == 0) {
+//                                                                    main_Layout.removeView(floor_spinner);
+//                                                                } else {
                                                                     if (floor_spinner.getParent() != null) {
                                                                         ((ViewGroup) floor_spinner.getParent()).removeView(floor_spinner); //
                                                                     }
                                                                     main_Layout.addView(floor_spinner);
-                                                                }
+                                                               // }
                                                                 
                                                                 floor_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                                     @Override
@@ -909,14 +978,14 @@ protected void onCreate(Bundle savedInstanceState) {
                                                         spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                         floor_spinner.setAdapter(spinnerArrayAdapter5);
                                                         
-                                                        if (floor_names.size() == 0) {
-                                                            main_Layout.removeView(floor_spinner);
-                                                        } else {
+//                                                        if (floor_names.size() == 0) {
+//                                                            main_Layout.removeView(floor_spinner);
+//                                                        } else {
                                                             if (floor_spinner.getParent() != null) {
                                                                 ((ViewGroup) floor_spinner.getParent()).removeView(floor_spinner); //
                                                             }
                                                             main_Layout.addView(floor_spinner);
-                                                        }
+                                                       // }
                                                         
                                                         floor_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                             @Override
@@ -995,15 +1064,15 @@ protected void onCreate(Bundle savedInstanceState) {
                                 spinnerArrayAdapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 building_spinner.setAdapter(spinnerArrayAdapter3);
                                 
-                                if (building_names.size() == 0) {
-                                    main_Layout.removeView(building_spinner);
-                                } else {
+//                                if (building_names.size() == 0) {
+//                                    main_Layout.removeView(building_spinner);
+//                                } else {
                                     if (building_spinner.getParent() != null) {
                                         ((ViewGroup) building_spinner.getParent()).removeView(building_spinner); //
                                     }
                                     
                                     main_Layout.addView(building_spinner);
-                                }
+                               // }
                                 
                                 building_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                     @Override
@@ -1038,14 +1107,14 @@ protected void onCreate(Bundle savedInstanceState) {
                                             spinnerArrayAdapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                             wing_spinner.setAdapter(spinnerArrayAdapter4);
                                             
-                                            if (wing_names.size() == 0) {
-                                                main_Layout.removeView(wing_spinner);
-                                            } else {
+//                                            if (wing_names.size() == 0) {
+//                                                main_Layout.removeView(wing_spinner);
+//                                            } else {
                                                 if (wing_spinner.getParent() != null) {
                                                     ((ViewGroup) wing_spinner.getParent()).removeView(wing_spinner); //
                                                 }
                                                 main_Layout.addView(wing_spinner);
-                                            }
+                                           // }
                                             
                                             //
                                             wing_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1083,14 +1152,14 @@ protected void onCreate(Bundle savedInstanceState) {
                                                         floor_spinner.setAdapter(spinnerArrayAdapter5);
                                                         
                                                         
-                                                        if (floor_names.size() == 0) {
-                                                            main_Layout.removeView(floor_spinner);
-                                                        } else {
+//                                                        if (floor_names.size() == 0) {
+//                                                            main_Layout.removeView(floor_spinner);
+//                                                        } else {
                                                             if (floor_spinner.getParent() != null) {
                                                                 ((ViewGroup) floor_spinner.getParent()).removeView(floor_spinner); //
                                                             }
                                                             main_Layout.addView(floor_spinner);
-                                                        }
+                                                       // }
                                                         
                                                         ///
                                                         
@@ -1152,14 +1221,14 @@ protected void onCreate(Bundle savedInstanceState) {
                                                 spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                 floor_spinner.setAdapter(spinnerArrayAdapter5);
                                                 
-                                                if (floor_names.size() == 0) {
-                                                    main_Layout.removeView(floor_spinner);
-                                                } else {
+//                                                if (floor_names.size() == 0) {
+//                                                    main_Layout.removeView(floor_spinner);
+//                                                } else {
                                                     if (floor_spinner.getParent() != null) {
                                                         ((ViewGroup) floor_spinner.getParent()).removeView(floor_spinner); //
                                                     }
                                                     main_Layout.addView(floor_spinner);
-                                                }
+                                              //  }
                                                 
                                                 
                                                 floor_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1210,6 +1279,7 @@ protected void onCreate(Bundle savedInstanceState) {
                         main_Layout.removeView(building_spinner);
                         main_Layout.removeView(wing_spinner);
                         main_Layout.removeView(floor_spinner);
+                        main_Layout.removeView(area_spinner);
                     }
                     
                     
@@ -1267,5 +1337,39 @@ private TextView textView() {
     return textView;
     
 }
+
+private TextView button(int id, String uname) {
+    
+//    final Button button = new Button(this);
+//    LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT,1f);
+//    params1.setMargins(16,8,16,8);
+//    button.setLayoutParams(params1);
+    
+    button.setId(id);
+    button.setTextSize(1, 18);
+    button.setTextColor(Color.BLACK);
+    button.setBackground(getDrawable(R.drawable.red_style));
+    button.setTypeface(null, Typeface.NORMAL);
+    button.setText(uname);
+    
+    button.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (button.getId() == R.id.submit){
+                Toast.makeText(AdminDetailsConfig.this, "Submitted", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(AdminDetailsConfig.this,SelectArea.class));
+            }
+            else if(button.getId() == R.id.cancel)
+            {
+                Toast.makeText(AdminDetailsConfig.this, "Cancelled", Toast.LENGTH_SHORT).show();
+            }
+        }
+    });
+    
+    return button;
+    
+}
+
+
 
 }
