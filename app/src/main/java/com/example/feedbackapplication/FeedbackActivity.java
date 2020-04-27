@@ -258,7 +258,7 @@ public class FeedbackActivity extends BaseActivity {
 
                 sqLiteDatabase.insert("feedback_admin_icondetails", null, cv1);
 
-                Toast.makeText(this, "inserted successfully", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "inserted successfully", Toast.LENGTH_SHORT).show();
 
                 sqLiteDatabase.close();
             } catch (Exception e) {
@@ -317,12 +317,13 @@ public class FeedbackActivity extends BaseActivity {
                     linearLayout2 = new LinearLayout(this);
                     // new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
                     LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
-                    buttonLayoutParams.setMargins(10, 150, 10, 0);
+                    buttonLayoutParams.setMargins(10, 100, 10, 0);
                     linearLayout2.setLayoutParams(buttonLayoutParams);
                     linearLayout2.setOrientation(LinearLayout.HORIZONTAL);
                     linearLayout2.setGravity(Gravity.CENTER);
 
                     System.out.println("linear layout id = " + id);
+                    
                     linearLayout2.setId(id);
                     SQLiteDatabase db2 = dbh.getWritableDatabase();
                     Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where ID IN(1,2,3,4) ;", null); //
@@ -340,7 +341,7 @@ public class FeedbackActivity extends BaseActivity {
 
                             // ViewGroup.LayoutParams params1 = new ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
                             LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(WRAP_CONTENT, MATCH_PARENT);
-                            params1.setMargins(10, 10, 10, 10);
+                            params1.setMargins(10, 5, 10, 10);
 
                             linearLayout3.setLayoutParams(params1);
                             linearLayout3.setOrientation(VERTICAL);
@@ -412,6 +413,9 @@ public class FeedbackActivity extends BaseActivity {
 
     private TextView textView(int hint, String uname) {
         final TextView textView = new TextView(this);
+        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
+        params1.setMargins(10,60,10,10);
+        textView.setLayoutParams(params1);
         textView.setId(hint);
         textView.setTypeface(null, Typeface.BOLD);
         textView.setTextSize(1, 30);
@@ -474,7 +478,7 @@ public class FeedbackActivity extends BaseActivity {
 
         final String imgvalue = strvalue;
         ImageView imageView = new ImageView(this);
-        imageView.setLayoutParams(new ViewGroup.LayoutParams(200, 200));
+        imageView.setLayoutParams(new ViewGroup.LayoutParams(350, 350));
         final DatabaseHelper dbh = new DatabaseHelper(FeedbackActivity.this);
         Bitmap b = null;
         byte[] image_str = dbh.readDataIcon(strvalue);

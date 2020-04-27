@@ -51,12 +51,12 @@ public class SelectArea extends BaseActivity {
         linearLayout1 = new LinearLayout(this);
         // new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
 
-        LinearLayout.LayoutParams mainLayoutParams = new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
+        LinearLayout.LayoutParams mainLayoutParams = new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
         mainLayoutParams.setMargins(10, 30, 10, 0);
 
         linearLayout1.setLayoutParams(mainLayoutParams);
         linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
-        linearLayout1.setGravity(Gravity.CENTER_HORIZONTAL);
+        linearLayout1.setGravity(Gravity.CENTER);
         areaList = new ArrayList<String>();
        /* try {
             SQLiteDatabase db1 = dbh.getWritableDatabase();

@@ -154,9 +154,8 @@ protected void onCreate(Bundle savedInstanceState) {
     
     LinearLayout third_layout = (LinearLayout) findViewById(R.id.third_layout); //vertical
     
-    third_layout.addView(button(R.id.submit,"Submit"));
     third_layout.addView(button(R.id.cancel,"Cancel"));
-    
+    third_layout.addView(button(R.id.submit,"Submit"));
     
     if (first_layout.getParent() != null) {
         ((ViewGroup) first_layout.getParent()).removeView(first_layout); // <- fix
@@ -177,7 +176,7 @@ private TextView textView(String uname) {
     final TextView textView = new TextView(this);
     LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
     textView.setLayoutParams(params1);
-    textView.setTextSize(1, 30);
+    textView.setTextSize(1, 35);
     textView.setGravity(Gravity.CENTER_HORIZONTAL);
     textView.setTypeface(null, Typeface.BOLD);
     textView.setText(uname);
@@ -189,23 +188,24 @@ private TextView textView(String uname) {
 @SuppressLint("ResourceAsColor")
 private TextView button(int id, String uname) {
     final Button button = new Button(this);
-    LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
-    params1.setMargins(10,0,10,0);
+    LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(250, WRAP_CONTENT);
+    params1.setMargins(16,8,16,8);
     button.setLayoutParams(params1);
     button.setId(id);
-    button.setTextSize(1, 20);
+    button.setTextSize(1, 17);
     button.setTextColor(Color.WHITE);
-    button.setBackgroundColor(R.color.colorPrimary);
-    button.setGravity(Gravity.CENTER_HORIZONTAL);
+    button.setLetterSpacing(0.2f);
+    button.setBackground(getDrawable(R.drawable.red_style));
     button.setTypeface(null, Typeface.NORMAL);
     button.setText(uname);
+ 
     
     button.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
         if (button.getId() == R.id.submit){
             if (negative_lists.size() != 0) {
-                Toast.makeText(WashroomNegativeFB.this, "Submited " +negative_lists, Toast.LENGTH_LONG).show();
+                Toast.makeText(WashroomNegativeFB.this, "Submited ", Toast.LENGTH_LONG).show();
                 if (current_question_id == totalquestionscount)
                 {
                     finish();
@@ -256,15 +256,16 @@ private TextView subtextView(String uname) {
 private LinearLayout linearLayout1(int id,final String strvalue) {
     
     final LinearLayout linearLayout1 = new LinearLayout(this);
-    LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams(200, 200);
+    LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams(350, 350);
     linearLayout1.setLayoutParams(params3);
     // linearLayout1.setBackground(getDrawable(R.drawable.selectbackground_2));
     linearLayout1.setGravity(Gravity.CENTER);
     linearLayout1.setOrientation(HORIZONTAL);
     
+    
     final ImageView imageView = new ImageView(this);
     imageView.setId(id);
-    imageView.setLayoutParams(new android.view.ViewGroup.LayoutParams(150, 150));
+    imageView.setLayoutParams(new android.view.ViewGroup.LayoutParams(300, 300));
     final DatabaseHelper dbh = new DatabaseHelper(WashroomNegativeFB.this);
     Bitmap b = null;
     byte[] image_str = dbh.readDataIcon(strvalue);
@@ -282,7 +283,7 @@ private LinearLayout linearLayout1(int id,final String strvalue) {
             if (strvalue.equals("Food"))
             {
                 if (food == false){
-                    linearLayout1.setBackground(getDrawable(R.drawable.selectbackground_2));
+                    linearLayout1.setBackground(getDrawable(R.drawable.selected_item_green));
                     negative_lists.add(strvalue);
                     food = true;
                 }else {
@@ -294,7 +295,7 @@ private LinearLayout linearLayout1(int id,final String strvalue) {
             else if (strvalue.equals("Seating"))
             {
                 if (seating == false){
-                    linearLayout1.setBackground(getDrawable(R.drawable.selectbackground_2));
+                    linearLayout1.setBackground(getDrawable(R.drawable.selected_item_green));
                     negative_lists.add(strvalue);
                     seating = true;
                 }else {
@@ -306,7 +307,7 @@ private LinearLayout linearLayout1(int id,final String strvalue) {
             if (strvalue.equals("Service"))
             {
                 if (service == false){
-                    linearLayout1.setBackground(getDrawable(R.drawable.selectbackground_2));
+                    linearLayout1.setBackground(getDrawable(R.drawable.selected_item_green));
                     negative_lists.add(strvalue);
                     service = true;
                 }else {
@@ -318,7 +319,7 @@ private LinearLayout linearLayout1(int id,final String strvalue) {
             else if (strvalue.equals("Hygiene"))
             {
                 if (hygiene == false){
-                    linearLayout1.setBackground(getDrawable(R.drawable.selectbackground_2));
+                    linearLayout1.setBackground(getDrawable(R.drawable.selected_item_green));
                     negative_lists.add(strvalue);
                     hygiene = true;
                 }else {
@@ -330,7 +331,7 @@ private LinearLayout linearLayout1(int id,final String strvalue) {
             else if (strvalue.equals("Ambience"))
             {
                 if (ambience == false){
-                    linearLayout1.setBackground(getDrawable(R.drawable.selectbackground_2));
+                    linearLayout1.setBackground(getDrawable(R.drawable.selected_item_green));
                     negative_lists.add(strvalue);
                     ambience = true;
                 }else {
@@ -342,7 +343,7 @@ private LinearLayout linearLayout1(int id,final String strvalue) {
             else if (strvalue.equals("Others"))
             {
                 if (others == false){
-                    linearLayout1.setBackground(getDrawable(R.drawable.selectbackground_2));
+                    linearLayout1.setBackground(getDrawable(R.drawable.selected_item_green));
                     negative_lists.add(strvalue);
                     others = true;
                 }else {

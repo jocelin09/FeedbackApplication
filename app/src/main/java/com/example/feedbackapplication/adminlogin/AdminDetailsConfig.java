@@ -34,7 +34,7 @@ public class AdminDetailsConfig extends BaseActivity {
 
 
 int questionscount;
-String str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname, str_floorname,str_areaname;
+String str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname, str_floorname,str_areaname,str_feedbackservice;
 String company_id, location_id, site_id, building_id, wing_id, floor_id, area_id;
 private ArrayList<String> company_names = new ArrayList<String>();
 private ArrayList<String> location_names = new ArrayList<String>();
@@ -43,7 +43,9 @@ private ArrayList<String> building_names = new ArrayList<String>();
 private ArrayList<String> wing_names = new ArrayList<String>();
 private ArrayList<String> floor_names = new ArrayList<String>();
 private List<String> area_names = new ArrayList<String>();
+private ArrayList<String> feedback_service_name = new ArrayList<String>();
 
+MultipleSelectionSpinner area_spinner;
 Button button;
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,10 @@ protected void onCreate(Bundle savedInstanceState) {
     setContentView(R.layout.admindetailsconfig);
     
     questionscount = dbh.admindetails_count();
+    //FEEDBACK SERVICE SPINNER
+    feedback_service_name.add("Area Specific");
+    feedback_service_name.add("Common Feedback");
+    feedback_service_name.add("Common Feedback with Area Specific");
     
     if (questionscount == 0) {
         dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Location 1",
@@ -82,8 +88,8 @@ protected void onCreate(Bundle savedInstanceState) {
                 "6th Floor", "17", "Washroom");
         
         dbh.insertAdminDetails("333333", "NTT Feedback", "120", "Location 47",
-                "", "", "17", "Building 16", "15", "Wing 4", "",
-                "", "17", "Washroom");
+                "", "", "17", "Building 16", "15", "Wing 4", "4545",
+                "13th Floor", "17", "Washroom");
         
         dbh.insertAdminDetails("444444", "E-clerx", "", "",
                 "", "", "157", "Building 7", "15", "Wing 5", "16",
@@ -141,22 +147,32 @@ protected void onCreate(Bundle savedInstanceState) {
         floor_spinner.setLayoutParams(params1);
     
         ////////////AREA NAME//////////
-        final MultipleSelectionSpinner area_spinner = findViewById(R.id.mSpinner);
+        area_spinner = findViewById(R.id.mSpinner);
         area_spinner.setBackground(getDrawable(R.drawable.edit_style));
         area_spinner.setLayoutParams(params1);
+        
     
-        //ADD BUTTONS
+        ////////////FFEDBACK SERVICE NAME//////////
+        final Spinner feedback_service = new Spinner(getApplicationContext());
+        feedback_service.setBackground(getDrawable(R.drawable.edit_style));
+        feedback_service.setLayoutParams(params1);
+        
+        //BUTTONS LAYOUT
         final LinearLayout sub1_secondlayout = new LinearLayout(getApplicationContext());
-//        LinearLayout.LayoutParams params_sub1 = new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
-//        params_sub1.setMargins(16,8,16,8);
-        sub1_secondlayout.setLayoutParams(params1);
-        sub1_secondlayout.setWeightSum(2f);
+        LinearLayout.LayoutParams params_sub1 = new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
+        params_sub1.setMargins(16,8,16,8);
+        sub1_secondlayout.setLayoutParams(params_sub1);
         sub1_secondlayout.setOrientation(HORIZONTAL);
+       // sub1_secondlayout.setWeightSum(2f);
+        sub1_secondlayout.setGravity(Gravity.CENTER);
+    
     
         button = new Button(this);
-        LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT,1f);
+        LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
         params2.setMargins(16,8,16,8);
-        button.setLayoutParams(params1);
+        button.setLayoutParams(params2);
+        //button.setGravity(Gravity.CENTER_HORIZONTAL);
+        
     
         
         company_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -397,33 +413,66 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                             System.out.println("area_names = " + area_names);
                                                                             if (!area_names.isEmpty())
                                                                             {
-                                                                                //checkbox areas
-                                                                              
+                                                                                //MULTI SELECT SPINNER
                                                                                area_spinner.setVisibility(View.VISIBLE);
                                                                                area_spinner.setItems(area_names);
-                                                                               
+                                                                                System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedStrings());
+    
                                                                                 if (area_spinner.getParent() != null) {
                                                                                     ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
                                                                                 }
                                                                                 main_Layout.addView(area_spinner);
-                                                                                System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedItemsAsString());
-    
-                                                                                if (button(R.id.cancel,"Cancel").getParent() != null) {
-                                                                                    ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
-                                                                                }
+                                                                             
+                                                                                //FEEDBACK SERVICE
+                                                                                ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
+                                                                                        R.layout.spinner_text, feedback_service_name);
+                                                                                spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                                                feedback_service.setAdapter(spinnerArrayAdapter5);
                                                                                 
-                                                                                sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
-    
-                                                                                if (button(R.id.submit,"Submit").getParent() != null) {
-                                                                                    ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                                                if (feedback_service.getParent() != null) {
+                                                                                    ((ViewGroup) feedback_service.getParent()).removeView(feedback_service); //
                                                                                 }
-                                                                                sub1_secondlayout.addView(button(R.id.submit,"Submit"));
-    
-                                                                                if (sub1_secondlayout.getParent() != null) {
-                                                                                    ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
-                                                                                }
-                                                                                main_Layout.addView(sub1_secondlayout);
+                                                                                main_Layout.addView(feedback_service);
                                                                                 
+                                                                                feedback_service.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                                                    @Override
+                                                                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                                                                        str_feedbackservice = feedback_service.getSelectedItem().toString();
+                                                                                        try {
+                                                                                            if (!str_feedbackservice.equals("")) {
+                                                                                                feedback_service.setId(i);
+                                                                                                System.out.println("floor_spinner.getId() = " + feedback_service.getId());
+                                                                                            }
+                                                                                        } catch (NumberFormatException e) {
+                                                                                            e.printStackTrace();
+                                                                                            System.out.println("Feedback Service Id Exception");
+                                                                                        }
+                                                                                    }
+    
+                                                                                    @Override
+                                                                                    public void onNothingSelected(AdapterView<?> adapterView) {
+        
+                                                                                    }
+                                                                                });
+                                                                                
+                                                                                    //BUTTONS
+                                                                                   if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                        ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+                                                                                    }
+                                                                                    sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
+        
+                                                                                    if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                                        ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                                                    }
+                                                                                    sub1_secondlayout.addView(button(R.id.submit,"Submit"));
+        
+        
+                                                                                    if (sub1_secondlayout.getParent() != null) {
+                                                                                        ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+                                                                                    }
+                                                                                    main_Layout.addView(sub1_secondlayout);
+                                                                              
+    
                                                                             }
                                                                             else
                                                                             {
@@ -500,6 +549,78 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                         e.printStackTrace();
                                                                         System.out.println("Floor Id Exception");
                                                                     }
+    
+                                                                    area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
+                                                                    System.out.println("area_names = " + area_names);
+                                                                    if (!area_names.isEmpty())
+                                                                    {
+                                                                        //MULTI SELECT SPINNER
+                                                                        area_spinner.setVisibility(View.VISIBLE);
+                                                                        area_spinner.setItems(area_names);
+                                                                        System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedStrings());
+        
+                                                                        if (area_spinner.getParent() != null) {
+                                                                            ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
+                                                                        }
+                                                                        main_Layout.addView(area_spinner);
+        
+                                                                        //FEEDBACK SERVICE
+                                                                        ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
+                                                                                R.layout.spinner_text, feedback_service_name);
+                                                                        spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                                        feedback_service.setAdapter(spinnerArrayAdapter5);
+        
+                                                                        if (feedback_service.getParent() != null) {
+                                                                            ((ViewGroup) feedback_service.getParent()).removeView(feedback_service); //
+                                                                        }
+                                                                        main_Layout.addView(feedback_service);
+        
+                                                                        feedback_service.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                                            @Override
+                                                                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                                                                str_feedbackservice = feedback_service.getSelectedItem().toString();
+                                                                                try {
+                                                                                    if (!str_feedbackservice.equals("")) {
+                                                                                        feedback_service.setId(i);
+                                                                                        System.out.println("floor_spinner.getId() = " + feedback_service.getId());
+                                                                                    }
+                                                                                } catch (NumberFormatException e) {
+                                                                                    e.printStackTrace();
+                                                                                    System.out.println("Feedback Service Id Exception");
+                                                                                }
+                                                                            }
+            
+                                                                            @Override
+                                                                            public void onNothingSelected(AdapterView<?> adapterView) {
+                
+                                                                            }
+                                                                        });
+        
+                                                                        //BUTTONS
+                                                                                  /*  if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                        ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+                                                                                    }
+                                                                                    sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));*/
+        
+                                                                        if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                            ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                                        }
+                                                                        sub1_secondlayout.addView(button(R.id.submit,"Submit"));
+        
+        
+                                                                        if (sub1_secondlayout.getParent() != null) {
+                                                                            ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+                                                                        }
+                                                                        main_Layout.addView(sub1_secondlayout);
+        
+        
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        main_Layout.removeView(area_spinner);
+        
+                                                                    }
+                                                                    
                                                                 }
                                                                 
                                                                 @Override
@@ -667,6 +788,77 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                         e.printStackTrace();
                                                                         System.out.println("Floor Id Exception");
                                                                     }
+    
+                                                                    area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
+                                                                    System.out.println("area_names = " + area_names);
+                                                                    if (!area_names.isEmpty())
+                                                                    {
+                                                                        //MULTI SELECT SPINNER
+                                                                        area_spinner.setVisibility(View.VISIBLE);
+                                                                        area_spinner.setItems(area_names);
+                                                                        System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedStrings());
+        
+                                                                        if (area_spinner.getParent() != null) {
+                                                                            ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
+                                                                        }
+                                                                        main_Layout.addView(area_spinner);
+        
+                                                                        //FEEDBACK SERVICE
+                                                                        ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
+                                                                                R.layout.spinner_text, feedback_service_name);
+                                                                        spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                                        feedback_service.setAdapter(spinnerArrayAdapter5);
+        
+                                                                        if (feedback_service.getParent() != null) {
+                                                                            ((ViewGroup) feedback_service.getParent()).removeView(feedback_service); //
+                                                                        }
+                                                                        main_Layout.addView(feedback_service);
+        
+                                                                        feedback_service.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                                            @Override
+                                                                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                                                                str_feedbackservice = feedback_service.getSelectedItem().toString();
+                                                                                try {
+                                                                                    if (!str_feedbackservice.equals("")) {
+                                                                                        feedback_service.setId(i);
+                                                                                        System.out.println("floor_spinner.getId() = " + feedback_service.getId());
+                                                                                    }
+                                                                                } catch (NumberFormatException e) {
+                                                                                    e.printStackTrace();
+                                                                                    System.out.println("Feedback Service Id Exception");
+                                                                                }
+                                                                            }
+            
+                                                                            @Override
+                                                                            public void onNothingSelected(AdapterView<?> adapterView) {
+                
+                                                                            }
+                                                                        });
+        
+                                                                        //BUTTONS
+                                                                                  /*  if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                        ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+                                                                                    }
+                                                                                    sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));*/
+        
+                                                                        if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                            ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                                        }
+                                                                        sub1_secondlayout.addView(button(R.id.submit,"Submit"));
+        
+        
+                                                                        if (sub1_secondlayout.getParent() != null) {
+                                                                            ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+                                                                        }
+                                                                        main_Layout.addView(sub1_secondlayout);
+        
+        
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        main_Layout.removeView(area_spinner);
+        
+                                                                    }
                                                                 }
                                                                 
                                                                 @Override
@@ -674,8 +866,11 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                 
                                                                 }
                                                             });
-                                                        } else {
+                                                        }
+                                                        
+                                                        else {
                                                             main_Layout.removeView(floor_spinner);
+                                                            
                                                         }
                                                     }
                                                     
@@ -733,6 +928,78 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                 e.printStackTrace();
                                                                 System.out.println("Floor Id Exception");
                                                             }
+    
+                                                            area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
+                                                            System.out.println("area_names = " + area_names);
+                                                            if (!area_names.isEmpty())
+                                                            {
+                                                                //MULTI SELECT SPINNER
+                                                                area_spinner.setVisibility(View.VISIBLE);
+                                                                area_spinner.setItems(area_names);
+                                                                System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedStrings());
+        
+                                                                if (area_spinner.getParent() != null) {
+                                                                    ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
+                                                                }
+                                                                main_Layout.addView(area_spinner);
+        
+                                                                //FEEDBACK SERVICE
+                                                                ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
+                                                                        R.layout.spinner_text, feedback_service_name);
+                                                                spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                                feedback_service.setAdapter(spinnerArrayAdapter5);
+        
+                                                                if (feedback_service.getParent() != null) {
+                                                                    ((ViewGroup) feedback_service.getParent()).removeView(feedback_service); //
+                                                                }
+                                                                main_Layout.addView(feedback_service);
+        
+                                                                feedback_service.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                                    @Override
+                                                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                                                        str_feedbackservice = feedback_service.getSelectedItem().toString();
+                                                                        try {
+                                                                            if (!str_feedbackservice.equals("")) {
+                                                                                feedback_service.setId(i);
+                                                                                System.out.println("floor_spinner.getId() = " + feedback_service.getId());
+                                                                            }
+                                                                        } catch (NumberFormatException e) {
+                                                                            e.printStackTrace();
+                                                                            System.out.println("Feedback Service Id Exception");
+                                                                        }
+                                                                    }
+            
+                                                                    @Override
+                                                                    public void onNothingSelected(AdapterView<?> adapterView) {
+                
+                                                                    }
+                                                                });
+        
+                                                                //BUTTONS
+                                                                                  /*  if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                        ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+                                                                                    }
+                                                                                    sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));*/
+        
+                                                                if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                    ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                                }
+                                                                sub1_secondlayout.addView(button(R.id.submit,"Submit"));
+        
+        
+                                                                if (sub1_secondlayout.getParent() != null) {
+                                                                    ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+                                                                }
+                                                                main_Layout.addView(sub1_secondlayout);
+        
+        
+                                                            }
+                                                            else
+                                                            {
+                                                                main_Layout.removeView(area_spinner);
+        
+                                                            }
+                                                            
                                                         }
                                                         
                                                         @Override
@@ -935,6 +1202,80 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                             e.printStackTrace();
                                                                             System.out.println("Floor Exception");
                                                                         }
+    
+                                                                        area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
+                                                                        System.out.println("area_names = " + area_names);
+                                                                        if (!area_names.isEmpty())
+                                                                        {
+                                                                            //MULTI SELECT SPINNER
+                                                                            area_spinner.setVisibility(View.VISIBLE);
+                                                                            area_spinner.setItems(area_names);
+                                                                            System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedStrings());
+        
+                                                                            if (area_spinner.getParent() != null) {
+                                                                                ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
+                                                                            }
+                                                                            main_Layout.addView(area_spinner);
+        
+                                                                            //FEEDBACK SERVICE
+                                                                            ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
+                                                                                    R.layout.spinner_text, feedback_service_name);
+                                                                            spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                                            feedback_service.setAdapter(spinnerArrayAdapter5);
+        
+                                                                            if (feedback_service.getParent() != null) {
+                                                                                ((ViewGroup) feedback_service.getParent()).removeView(feedback_service); //
+                                                                            }
+                                                                            main_Layout.addView(feedback_service);
+        
+                                                                            feedback_service.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                                                @Override
+                                                                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                                                                    str_feedbackservice = feedback_service.getSelectedItem().toString();
+                                                                                    try {
+                                                                                        if (!str_feedbackservice.equals("")) {
+                                                                                            feedback_service.setId(i);
+                                                                                            System.out.println("floor_spinner.getId() = " + feedback_service.getId());
+                                                                                        }
+                                                                                    } catch (NumberFormatException e) {
+                                                                                        e.printStackTrace();
+                                                                                        System.out.println("Feedback Service Id Exception");
+                                                                                    }
+                                                                                }
+            
+                                                                                @Override
+                                                                                public void onNothingSelected(AdapterView<?> adapterView) {
+                
+                                                                                }
+                                                                            });
+        
+                                                                            //BUTTONS
+                                                                                  /*  if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                        ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+                                                                                    }
+                                                                                    sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));*/
+        
+                                                                            if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                                ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                                            }
+                                                                            sub1_secondlayout.addView(button(R.id.submit,"Submit"));
+        
+        
+                                                                            if (sub1_secondlayout.getParent() != null) {
+                                                                                ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+                                                                            }
+                                                                            main_Layout.addView(sub1_secondlayout);
+        
+        
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            main_Layout.removeView(area_spinner);
+        
+                                                                        }
+                                                                        
+                                                                        
+                                                                        
                                                                     }
                                                                     
                                                                     @Override
@@ -1001,6 +1342,79 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                     e.printStackTrace();
                                                                     System.out.println("Floor Exception");
                                                                 }
+    
+                                                                area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
+                                                                System.out.println("area_names = " + area_names);
+                                                                if (!area_names.isEmpty())
+                                                                {
+                                                                    //MULTI SELECT SPINNER
+                                                                    area_spinner.setVisibility(View.VISIBLE);
+                                                                    area_spinner.setItems(area_names);
+                                                                    System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedStrings());
+        
+                                                                    if (area_spinner.getParent() != null) {
+                                                                        ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
+                                                                    }
+                                                                    main_Layout.addView(area_spinner);
+        
+                                                                    //FEEDBACK SERVICE
+                                                                    ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
+                                                                            R.layout.spinner_text, feedback_service_name);
+                                                                    spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                                    feedback_service.setAdapter(spinnerArrayAdapter5);
+        
+                                                                    if (feedback_service.getParent() != null) {
+                                                                        ((ViewGroup) feedback_service.getParent()).removeView(feedback_service); //
+                                                                    }
+                                                                    main_Layout.addView(feedback_service);
+        
+                                                                    feedback_service.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                                        @Override
+                                                                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                                                            str_feedbackservice = feedback_service.getSelectedItem().toString();
+                                                                            try {
+                                                                                if (!str_feedbackservice.equals("")) {
+                                                                                    feedback_service.setId(i);
+                                                                                    System.out.println("floor_spinner.getId() = " + feedback_service.getId());
+                                                                                }
+                                                                            } catch (NumberFormatException e) {
+                                                                                e.printStackTrace();
+                                                                                System.out.println("Feedback Service Id Exception");
+                                                                            }
+                                                                        }
+            
+                                                                        @Override
+                                                                        public void onNothingSelected(AdapterView<?> adapterView) {
+                
+                                                                        }
+                                                                    });
+        
+                                                                    //BUTTONS
+                                                                                  /*  if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                        ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+                                                                                    }
+                                                                                    sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));*/
+        
+                                                                    if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                        ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                                    }
+                                                                    sub1_secondlayout.addView(button(R.id.submit,"Submit"));
+        
+        
+                                                                    if (sub1_secondlayout.getParent() != null) {
+                                                                        ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+                                                                    }
+                                                                    main_Layout.addView(sub1_secondlayout);
+        
+        
+                                                                }
+                                                                else
+                                                                {
+                                                                    main_Layout.removeView(area_spinner);
+        
+                                                                }
+                                                                
+                                                                
                                                             }
                                                             
                                                             @Override
@@ -1177,6 +1591,79 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                     e.printStackTrace();
                                                                     System.out.println("Floor Id Exception");
                                                                 }
+    
+                                                                area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
+                                                                System.out.println("area_names = " + area_names);
+                                                                if (!area_names.isEmpty())
+                                                                {
+                                                                    //MULTI SELECT SPINNER
+                                                                    area_spinner.setVisibility(View.VISIBLE);
+                                                                    area_spinner.setItems(area_names);
+                                                                    System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedStrings());
+        
+                                                                    if (area_spinner.getParent() != null) {
+                                                                        ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
+                                                                    }
+                                                                    main_Layout.addView(area_spinner);
+        
+                                                                    //FEEDBACK SERVICE
+                                                                    ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
+                                                                            R.layout.spinner_text, feedback_service_name);
+                                                                    spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                                    feedback_service.setAdapter(spinnerArrayAdapter5);
+        
+                                                                    if (feedback_service.getParent() != null) {
+                                                                        ((ViewGroup) feedback_service.getParent()).removeView(feedback_service); //
+                                                                    }
+                                                                    main_Layout.addView(feedback_service);
+        
+                                                                    feedback_service.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                                        @Override
+                                                                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                                                            str_feedbackservice = feedback_service.getSelectedItem().toString();
+                                                                            try {
+                                                                                if (!str_feedbackservice.equals("")) {
+                                                                                    feedback_service.setId(i);
+                                                                                    System.out.println("floor_spinner.getId() = " + feedback_service.getId());
+                                                                                }
+                                                                            } catch (NumberFormatException e) {
+                                                                                e.printStackTrace();
+                                                                                System.out.println("Feedback Service Id Exception");
+                                                                            }
+                                                                        }
+            
+                                                                        @Override
+                                                                        public void onNothingSelected(AdapterView<?> adapterView) {
+                
+                                                                        }
+                                                                    });
+        
+                                                                    //BUTTONS
+                                                                                  /*  if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                        ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+                                                                                    }
+                                                                                    sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));*/
+        
+                                                                    if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                        ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                                    }
+                                                                    sub1_secondlayout.addView(button(R.id.submit,"Submit"));
+        
+        
+                                                                    if (sub1_secondlayout.getParent() != null) {
+                                                                        ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+                                                                    }
+                                                                    main_Layout.addView(sub1_secondlayout);
+        
+        
+                                                                }
+                                                                else
+                                                                {
+                                                                    main_Layout.removeView(area_spinner);
+        
+                                                                }
+                                                                
+                                                                
                                                             }
                                                             
                                                             @Override
@@ -1245,6 +1732,79 @@ protected void onCreate(Bundle savedInstanceState) {
                                                             e.printStackTrace();
                                                             System.out.println("Floor Id Exception");
                                                         }
+    
+                                                        area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
+                                                        System.out.println("area_names = " + area_names);
+                                                        if (!area_names.isEmpty())
+                                                        {
+                                                            //MULTI SELECT SPINNER
+                                                            area_spinner.setVisibility(View.VISIBLE);
+                                                            area_spinner.setItems(area_names);
+                                                            System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedStrings());
+        
+                                                            if (area_spinner.getParent() != null) {
+                                                                ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
+                                                            }
+                                                            main_Layout.addView(area_spinner);
+        
+                                                            //FEEDBACK SERVICE
+                                                            ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
+                                                                    R.layout.spinner_text, feedback_service_name);
+                                                            spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                            feedback_service.setAdapter(spinnerArrayAdapter5);
+        
+                                                            if (feedback_service.getParent() != null) {
+                                                                ((ViewGroup) feedback_service.getParent()).removeView(feedback_service); //
+                                                            }
+                                                            main_Layout.addView(feedback_service);
+        
+                                                            feedback_service.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                                @Override
+                                                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                                                    str_feedbackservice = feedback_service.getSelectedItem().toString();
+                                                                    try {
+                                                                        if (!str_feedbackservice.equals("")) {
+                                                                            feedback_service.setId(i);
+                                                                            System.out.println("floor_spinner.getId() = " + feedback_service.getId());
+                                                                        }
+                                                                    } catch (NumberFormatException e) {
+                                                                        e.printStackTrace();
+                                                                        System.out.println("Feedback Service Id Exception");
+                                                                    }
+                                                                }
+            
+                                                                @Override
+                                                                public void onNothingSelected(AdapterView<?> adapterView) {
+                
+                                                                }
+                                                            });
+        
+                                                            //BUTTONS
+                                                                                  /*  if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                        ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+                                                                                    }
+                                                                                    sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));*/
+        
+                                                            if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                            }
+                                                            sub1_secondlayout.addView(button(R.id.submit,"Submit"));
+        
+        
+                                                            if (sub1_secondlayout.getParent() != null) {
+                                                                ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+                                                            }
+                                                            main_Layout.addView(sub1_secondlayout);
+        
+        
+                                                        }
+                                                        else
+                                                        {
+                                                            main_Layout.removeView(area_spinner);
+        
+                                                        }
+                                                        
+                                                        
                                                     }
                                                     
                                                     @Override
@@ -1280,6 +1840,8 @@ protected void onCreate(Bundle savedInstanceState) {
                         main_Layout.removeView(wing_spinner);
                         main_Layout.removeView(floor_spinner);
                         main_Layout.removeView(area_spinner);
+                        main_Layout.removeView(feedback_service);
+                        main_Layout.removeView(sub1_secondlayout);
                     }
                     
                     
@@ -1346,17 +1908,18 @@ private TextView button(int id, String uname) {
 //    button.setLayoutParams(params1);
     
     button.setId(id);
-    button.setTextSize(1, 18);
-    button.setTextColor(Color.BLACK);
+    button.setTextSize(1, 17);
+    button.setTextColor(Color.WHITE);
+    button.setLetterSpacing(0.2f);
     button.setBackground(getDrawable(R.drawable.red_style));
-    button.setTypeface(null, Typeface.NORMAL);
+    button.setTypeface(null, Typeface.BOLD);
     button.setText(uname);
     
     button.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             if (button.getId() == R.id.submit){
-                Toast.makeText(AdminDetailsConfig.this, "Submitted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminDetailsConfig.this, "Submitted"+area_spinner.getSelectedItemsAsString(), Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(AdminDetailsConfig.this,SelectArea.class));
             }
             else if(button.getId() == R.id.cancel)

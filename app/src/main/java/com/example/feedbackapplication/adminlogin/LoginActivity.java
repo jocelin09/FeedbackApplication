@@ -82,7 +82,7 @@ public void onClick(View view) {
         uuid = UUID.randomUUID().toString();
         //dbh.insertLoginDetails(uuid,str_username,str_pwd,str_companyname);
         dbh.insertLoginDetails(uuid,str_username,str_pwd);
-       Toast.makeText(this, str_username + " "+str_pwd + " "+" Succes....", Toast.LENGTH_LONG).show();
+      // Toast.makeText(this, str_username + " "+str_pwd + " "+" Succes....", Toast.LENGTH_LONG).show();
     
        startActivity(new Intent(LoginActivity.this,AdminDetailsConfig.class));
     }
