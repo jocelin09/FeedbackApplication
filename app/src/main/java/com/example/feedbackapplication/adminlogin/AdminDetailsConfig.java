@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
@@ -48,6 +49,8 @@ private ArrayList<String> feedback_service_name = new ArrayList<String>();
 
 MultipleSelectionSpinner area_spinner;
 Button button;
+String uuid="";
+
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -75,6 +78,10 @@ protected void onCreate(Bundle savedInstanceState) {
         dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Location 1",
                 "13", "Site 1", "14", "Building 1", "15", "Wing-1", "16",
                 "1st Floor", "17", "Ladies Washroom");
+        
+        dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Location 1",
+                "13", "Site 1", "14", "Building 1", "15", "Wing-1", "16",
+                "1st Floor", "17", "Handicapped Washroom");
         
         dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Location 1",
                 "13", "Site 5", "14", "Building 3", "", "", "16",
@@ -113,7 +120,7 @@ protected void onCreate(Bundle savedInstanceState) {
         company_names = dbh.getAllCompanyNames();
         
         final Spinner company_spinner = new Spinner(this);
-        final LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(MATCH_PARENT, 100);
+        final LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(MATCH_PARENT, 70);
         params1.setMargins(16, 8, 16, 8);
         company_spinner.setBackground(getDrawable(R.drawable.edit_style));
         company_spinner.setLayoutParams(params1);
@@ -2271,9 +2278,36 @@ private TextView button(int id, String uname) {
     button.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (button.getId() == R.id.submit){
-                Toast.makeText(AdminDetailsConfig.this, "Submitted"+area_spinner.getSelectedItemsAsString(), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(AdminDetailsConfig.this,SelectArea.class));
+            if (button.getId() == R.id.submit)
+            {
+                if (str_virtualareaname.equalsIgnoreCase("Select Virtual Name") || str_feedbackservice.equalsIgnoreCase("Select Feedback Service Type"))
+                {
+                    Toast.makeText(AdminDetailsConfig.this, "Please Enter all details", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    uuid = UUID.randomUUID().toString();
+                   /* String area_name = area_spinner.getSelectedItemsAsString();
+                    area_name = area_name.replace(", ","|");
+                    System.out.println("area_name = " + area_name.trim());*/
+                    
+                    boolean isInserted = dbh.insertStoreSettings(uuid,str_companyname,str_locationname,str_sitename,str_buildingname,str_wingname,str_floorname,str_virtualareaname,area_spinner.getSelectedItemsAsString(),str_feedbackservice);
+                    System.out.println("isInserted = " + isInserted);
+    
+                    if (isInserted == true)
+                    {
+                        Toast.makeText(AdminDetailsConfig.this, "Submitted", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(AdminDetailsConfig.this,SelectArea.class));
+                    }
+                    else
+                    {
+                        Toast.makeText(AdminDetailsConfig.this, "Some error occured, Please try again", Toast.LENGTH_SHORT).show();
+                    }
+                    
+
+                }
+                
+                
             }
             else if(button.getId() == R.id.cancel)
             {
@@ -2285,6 +2319,7 @@ private TextView button(int id, String uname) {
     return button;
     
 }
+
 
 
 

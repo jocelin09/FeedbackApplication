@@ -24,4 +24,10 @@ public class BaseActivity extends AppCompatActivity {
         dbh = new DatabaseHelper(BaseActivity.this);
         sqLiteDatabase = dbh.getWritableDatabase();
     }
+
+@Override
+public void onBackPressed() {
+    //super.onBackPressed();
+}
+
 }
