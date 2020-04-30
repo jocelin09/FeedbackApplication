@@ -47,7 +47,7 @@ public class FeedbackActivity extends BaseActivity {
 
     String uuid1, uuid2, uuid3, uuid4;
     String uuid5, uuid6, uuid7, uuid8, uuid9, uuid10;
-//    DatabaseHelper dbh;
+    //    DatabaseHelper dbh;
 //    SQLiteDatabase sqLiteDatabase;
 //    SharedPreferences prefs;
     int questionscount1;
@@ -323,10 +323,10 @@ public class FeedbackActivity extends BaseActivity {
                     linearLayout2.setGravity(Gravity.CENTER);
 
                     System.out.println("linear layout id = " + id);
-                    
+
                     linearLayout2.setId(id);
                     SQLiteDatabase db2 = dbh.getWritableDatabase();
-                    Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where ID IN(1,2,3,4) ;", null); //
+                    Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where ID IN(3,4,5,6) ;", null); //
                     String icon_name, icon_value;
                     int icon_id;
                     if (cursor2.moveToFirst()) {
@@ -347,7 +347,7 @@ public class FeedbackActivity extends BaseActivity {
                             linearLayout3.setOrientation(VERTICAL);
                             linearLayout3.setGravity(Gravity.CENTER);
 
-                            linearLayout3.addView(imageView(id, icon_name));
+                            linearLayout3.addView(imageView(id, icon_name, icon_id));
                             linearLayout3.addView(subtextView(icon_id, icon_name));
                             linearLayout2.addView(linearLayout3);
 //                   icon_type = cursor.getString(4);
@@ -414,7 +414,7 @@ public class FeedbackActivity extends BaseActivity {
     private TextView textView(int hint, String uname) {
         final TextView textView = new TextView(this);
         LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
-        params1.setMargins(10,60,10,10);
+        params1.setMargins(10, 60, 10, 10);
         textView.setLayoutParams(params1);
         textView.setId(hint);
         textView.setTypeface(null, Typeface.BOLD);
@@ -474,7 +474,7 @@ public class FeedbackActivity extends BaseActivity {
     }
 
 
-    private ImageView imageView(final int id, final String strvalue) {
+    private ImageView imageView(final int id, final String strvalue, final int icon_id) {
 
         final String imgvalue = strvalue;
         ImageView imageView = new ImageView(this);
@@ -500,9 +500,11 @@ public class FeedbackActivity extends BaseActivity {
                 System.out.println("imgvalue = " + imgvalue);
 
                 updateRating(linearLayout2.getId());
+
                 int count = dbh.feedback_count();
                 int totalquestionscount = dbh.totalquestions_count();
-
+                dbh.insertFeedbackData(String.valueOf(dbh.totalfeedbackcount() + 1), String.valueOf(id), String.valueOf(icon_id));
+               System.out.print("********rec_count "+(dbh.totalfeedbackcount() )+"quest_id"+id+"icon_id"+icon_id);/**/
                 //Last Question
                 if (count == totalquestionscount) {
                     if (strvalue.equals("Poor") || strvalue.equals("Average")) {

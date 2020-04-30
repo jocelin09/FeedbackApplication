@@ -89,6 +89,35 @@ public int totalquestions_count() {
     return count;
 }
 
+    public int totalimage_count() {
+        SQLiteDatabase db1 = this.getWritableDatabase();
+        Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_admin_icondetails ;", null);
+        cursor1.moveToFirst();
+        int count = cursor1.getInt(0);
+        cursor1.close();
+        // db1.close();
+        return count;
+    }
+
+    public int totalfeedbackcount() {
+        SQLiteDatabase db1 = this.getWritableDatabase();
+        Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_userquestiondata ;", null);
+        cursor1.moveToFirst();
+        int count = cursor1.getInt(0);
+        cursor1.close();
+        // db1.close();
+        return count;
+    }
+
+    public int totalsubfeedbackcount() {
+        SQLiteDatabase db1 = this.getWritableDatabase();
+        Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_userquestiondata ;", null);
+        cursor1.moveToFirst();
+        int count = cursor1.getInt(0);
+        cursor1.close();
+        // db1.close();
+        return count;
+    }
 //INSERTION///
 public boolean insertLoginDetails(String User_Id, String User_Name, String Password) {
     SQLiteDatabase db = this.getWritableDatabase();
@@ -165,6 +194,22 @@ public boolean insertStoreSettings(String Auto_Id, String Company_Name, String L
         return true;
     
 }
+
+    public boolean insertFeedbackData(String Rec_Id, String Question_ID, String Feedback_Icon_Id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("Rec_Id", Rec_Id);
+        contentValues.put("Question_ID", Question_ID);
+        contentValues.put("Feedback_Icon_Id", Feedback_Icon_Id);
+        //contentValues.put("Icon_Type",IconType);
+        //    sqLiteDatabase.execSQL(" CREATE TABLE feedback_usersubquestiondata (ID INTEGER PRIMARY KEY ,Rec_Id TEXT,Question_ID TEXT,Sub_Question_ID TEXT,Response TEXT)");
+        long result = db.insert("feedback_userquestiondata", null, contentValues);
+        if (result == -1)
+            return false;
+        else
+            return true;
+
+    }
 
 
 
