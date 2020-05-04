@@ -181,7 +181,7 @@ public class FeedbackActivity extends BaseActivity {
                 ContentValues cv8 = new ContentValues();
                 cv8.put("Icon_Name", "Hygiene");
                 cv8.put("Icon_value", img8);
-                cv8.put("Icon_Type", "Smiley");
+                cv8.put("Icon_Type", "neg_feedback");
                 //cv8.put("Area_Name", "Cafeteria");
 
                 sqLiteDatabase.insert("feedback_admin_icondetails", null, cv8);
@@ -195,7 +195,7 @@ public class FeedbackActivity extends BaseActivity {
                 ContentValues cv9 = new ContentValues();
                 cv9.put("Icon_Name", "Food");
                 cv9.put("Icon_value", img9);
-                cv9.put("Icon_Type", "Smiley");
+                cv9.put("Icon_Type", "neg_feedback");
                 //cv9.put("Area_Name", "Cafeteria");
 
                 sqLiteDatabase.insert("feedback_admin_icondetails", null, cv9);
@@ -209,7 +209,7 @@ public class FeedbackActivity extends BaseActivity {
                 ContentValues cv2 = new ContentValues();
                 cv2.put("Icon_Name", "Seating");
                 cv2.put("Icon_value", img2);
-                cv2.put("Icon_Type", "Smiley");
+                cv2.put("Icon_Type", "neg_feedback");
 //            cv2.put("Area_Name", "Cafeteria");
 
                 sqLiteDatabase.insert("feedback_admin_icondetails", null, cv2);
@@ -223,7 +223,7 @@ public class FeedbackActivity extends BaseActivity {
                 ContentValues cv3 = new ContentValues();
                 cv3.put("Icon_Name", "Service");
                 cv3.put("Icon_value", img3);
-                cv3.put("Icon_Type", "Smiley");
+                cv3.put("Icon_Type", "neg_feedback");
 //            cv3.put("Area_Name", "Cafeteria");
 
                 sqLiteDatabase.insert("feedback_admin_icondetails", null, cv3);
@@ -238,7 +238,7 @@ public class FeedbackActivity extends BaseActivity {
                 ContentValues cv = new ContentValues();
                 cv.put("Icon_Name", "Ambience");
                 cv.put("Icon_value", img);
-                cv.put("Icon_Type", "Smiley");
+                cv.put("Icon_Type", "neg_feedback");
 //            cv.put("Area_Name", "Cafeteria");
 
                 sqLiteDatabase.insert("feedback_admin_icondetails", null, cv);
@@ -253,7 +253,7 @@ public class FeedbackActivity extends BaseActivity {
                 ContentValues cv1 = new ContentValues();
                 cv1.put("Icon_Name", "Others");
                 cv1.put("Icon_value", img1);
-                cv1.put("Icon_Type", "Smiley");
+                cv1.put("Icon_Type", "neg_feedback");
 //            cv1.put("Area_Name", "Cafeteria");
 
                 sqLiteDatabase.insert("feedback_admin_icondetails", null, cv1);
@@ -326,7 +326,8 @@ public class FeedbackActivity extends BaseActivity {
 
                     linearLayout2.setId(id);
                     SQLiteDatabase db2 = dbh.getWritableDatabase();
-                    Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where ID IN(3,4,5,6) ;", null); //
+//                    Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where ID IN(3,4,5,6) ;", null); //
+                    Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where Icon_Type ='Smiley';", null);
                     String icon_name, icon_value;
                     int icon_id;
                     if (cursor2.moveToFirst()) {

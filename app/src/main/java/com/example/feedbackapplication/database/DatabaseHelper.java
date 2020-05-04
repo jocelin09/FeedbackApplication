@@ -111,7 +111,7 @@ public int totalquestions_count() {
 
     public int totalsubfeedbackcount() {
         SQLiteDatabase db1 = this.getWritableDatabase();
-        Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_userquestiondata ;", null);
+        Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_usersubquestiondata ;", null);
         cursor1.moveToFirst();
         int count = cursor1.getInt(0);
         cursor1.close();
@@ -210,7 +210,21 @@ public boolean insertStoreSettings(String Auto_Id, String Company_Name, String L
             return true;
 
     }
+    public boolean insertsubFeedbackData(String Rec_Id ,String Question_ID ,String Sub_Question_ID ,String Response) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("Rec_Id", Rec_Id);
+        contentValues.put("Question_ID", Question_ID);
+        contentValues.put("Sub_Question_ID", Sub_Question_ID);
+        contentValues.put("Response",Response);
+        //    sqLiteDatabase.execSQL(" CREATE TABLE feedback_usersubquestiondata (ID INTEGER PRIMARY KEY ,Rec_Id TEXT,Question_ID TEXT,Sub_Question_ID TEXT,Response TEXT)");
+        long result = db.insert("feedback_usersubquestiondata", null, contentValues);
+        if (result == -1)
+            return false;
+        else
+            return true;
 
+    }
 
 
 public boolean insertData(String AutoId, String FeedbackQuestion, String OrderId, String IconType) {
