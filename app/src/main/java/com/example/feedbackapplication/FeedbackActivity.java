@@ -14,6 +14,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.Menu;
@@ -27,6 +29,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.feedbackapplication.adminlogin.SelectArea;
 import com.example.feedbackapplication.database.DatabaseHelper;
 
 import java.io.ByteArrayOutputStream;
@@ -42,7 +45,7 @@ public class FeedbackActivity extends BaseActivity {
     String rbid = "";
     int r_id = 0;
     ScrollView s;
-    int totalfeedback;
+    int totalfeedback,rec_id;
     LinearLayout linearLayout, linearLayout1, linearLayout2, linearLayout3, linearLayout4;
 
     String uuid1, uuid2, uuid3, uuid4;
@@ -64,6 +67,7 @@ public class FeedbackActivity extends BaseActivity {
     private byte[] img7 = null;
     private byte[] img8 = null;
     private byte[] img9 = null;
+    final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,7 @@ public class FeedbackActivity extends BaseActivity {
 //        dbh = new DatabaseHelper(FeedbackActivity.this);
 //        sqLiteDatabase = dbh.getWritableDatabase();
 //        prefs = PreferenceManager.getDefaultSharedPreferences(FeedbackActivity.this);
+        rec_id = getIntent().getIntExtra("rec_id", 0);
         SharedPreferences.Editor editor = prefs.edit();
         if (!prefs.contains("QuestNo")) {
             editor.putInt("QuestNo", 1);
@@ -396,7 +401,32 @@ public class FeedbackActivity extends BaseActivity {
             e.printStackTrace();
         }
 
+
+        handler.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+
+                handler.removeCallbacks(this);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putInt("QuestNo", 1);
+                editor.commit();
+
+//                sqLiteDatabase = dbh.getWritableDatabase();
+//                sqLiteDatabase.delete("feedback_userquestiondata", "rec_id='"+String.valueOf(rec_id)+"'", null);
+//                sqLiteDatabase.close();
+
+                Intent intent = new Intent(getApplicationContext(), SelectArea.class);
+                startActivity(intent);
+                finish();
+
+            }
+        },20000);
+
+
+
     }
+
 
     private void updateRating(int id) {
 
@@ -501,22 +531,25 @@ public class FeedbackActivity extends BaseActivity {
                 System.out.println("imgvalue = " + imgvalue);
 
                 updateRating(linearLayout2.getId());
+                handler.removeMessages(0);
 
                 int count = dbh.feedback_count();
                 int totalquestionscount = dbh.totalquestions_count();
-                dbh.insertFeedbackData(String.valueOf(dbh.totalfeedbackcount() + 1), String.valueOf(id), String.valueOf(icon_id));
-               System.out.print("********rec_count "+(dbh.totalfeedbackcount() )+"quest_id"+id+"icon_id"+icon_id);/**/
+                dbh.insertFeedbackData(String.valueOf(rec_id), String.valueOf(id), String.valueOf(icon_id));
+               System.out.print("********rec_count "+(rec_id)+"quest_id"+id+"icon_id"+icon_id);/**/
                 //Last Question
                 if (count == totalquestionscount) {
                     if (strvalue.equals("Poor") || strvalue.equals("Average")) {
                         // Toast.makeText(FeedbackActivity.this, "Negative", Toast.LENGTH_SHORT).show();
-                        finish();
+
 
                         Intent intent = new Intent(FeedbackActivity.this, WashroomNegativeFB.class);
                         intent.putExtra("area_name", "Cafeteria");
                         intent.putExtra("totalquestionscount", totalquestionscount);
                         intent.putExtra("current_question_id", id);
+                        intent.putExtra("rec_id", rec_id);
                         startActivity(intent);
+                        finish();
                     } else {
                         finish();
                         //Toast.makeText(FeedbackActivity.this, "Else " + count, Toast.LENGTH_SHORT).show();
@@ -527,7 +560,7 @@ public class FeedbackActivity extends BaseActivity {
                 } else {
                     if (strvalue.equals("Poor") || strvalue.equals("Average")) {
                         // Toast.makeText(FeedbackActivity.this, "Negative", Toast.LENGTH_SHORT).show();
-                        finish();
+
 
                         Intent intent = new Intent(FeedbackActivity.this, WashroomNegativeFB.class);
                         intent.putExtra("area_name", "Cafeteria");
@@ -535,6 +568,7 @@ public class FeedbackActivity extends BaseActivity {
                         intent.putExtra("current_question_id", id);
 
                         startActivity(intent);
+                        finish();
                     } else {
                         finish();
                         startActivity(new Intent(FeedbackActivity.this, FeedbackActivity.class));
@@ -603,4 +637,6 @@ public class FeedbackActivity extends BaseActivity {
 
         }
     }
+
+
 }

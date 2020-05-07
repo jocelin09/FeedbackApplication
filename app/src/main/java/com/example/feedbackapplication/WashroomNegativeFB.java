@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.feedbackapplication.adminlogin.SelectArea;
 import com.example.feedbackapplication.database.DatabaseHelper;
 
 import java.util.ArrayList;
@@ -31,7 +34,7 @@ import static android.widget.LinearLayout.HORIZONTAL;
 public class WashroomNegativeFB extends BaseActivity {
 
     String area_name = "Cafeteria";
-    int totalquestionscount, current_question_id;
+    int totalquestionscount, current_question_id,rec_id;
 
     //DatabaseHelper dbh;
 //SQLiteDatabase sqLiteDatabase;
@@ -47,6 +50,7 @@ public class WashroomNegativeFB extends BaseActivity {
         // area_name = getIntent().getStringExtra("area_name");
         totalquestionscount = getIntent().getIntExtra("totalquestionscount", 0);
         current_question_id = getIntent().getIntExtra("current_question_id", 0);
+        rec_id = getIntent().getIntExtra("rec_id", 0);
 
 //    dbh = new DatabaseHelper(this);
 //    sqLiteDatabase = dbh.getWritableDatabase();
@@ -166,6 +170,20 @@ public class WashroomNegativeFB extends BaseActivity {
         main_Layout.addView(first_layout);
         main_Layout.addView(second_layout);
         main_Layout.addView(third_layout);
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                handler.removeCallbacks(this);
+                Intent intent = new Intent(getApplicationContext(), FeedbackActivity.class);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putInt("QuestNo", current_question_id);
+                editor.commit();
+                startActivity(intent);
+                finish();
+            }
+        },20000);
     }
 
     private TextView textView(String uname) {
@@ -214,8 +232,8 @@ public class WashroomNegativeFB extends BaseActivity {
                         }
 
 
-                        dbh.insertsubFeedbackData(String.valueOf(dbh.totalsubfeedbackcount() + 1), String.valueOf(current_question_id), String.valueOf(current_question_id), neg_feedback);
-                        System.out.println("totalquestionscount = " + dbh.totalsubfeedbackcount() + "," + String.valueOf(current_question_id) + "," + String.valueOf(current_question_id) + "," + neg_feedback);
+                        dbh.insertsubFeedbackData(String.valueOf(rec_id), String.valueOf(current_question_id), String.valueOf(current_question_id), neg_feedback);
+                        System.out.println("totalquestionscount = " + rec_id + "," + String.valueOf(current_question_id) + "," + String.valueOf(current_question_id) + "," + neg_feedback);
 
                         if (current_question_id == totalquestionscount) {
                             finish();

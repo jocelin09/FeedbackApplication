@@ -49,7 +49,7 @@ public void onCreate(SQLiteDatabase sqLiteDatabase) {
     sqLiteDatabase.execSQL(" CREATE TABLE emp_neg_ratings(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,Emp_Feedback_Id TEXT,Name TEXT,Email TEXT,Contact TEXT,Comment TEXT,UpdatedStatus TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE EmailSMSList (Id INTEGER PRIMARY KEY, Auto_Id TEXT,Building_Id TEXT, Employee_Email TEXT, Recipient_Type TEXT,Mobile_Number TEXT, Record_Status TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE sms_master(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,UserName TEXT, Password TEXT, Type TEXT, Source TEXT, URL TEXT)");
-    sqLiteDatabase.execSQL(" CREATE TABLE store_setting(Admin_Id INTEGER PRIMARY KEY , Auto_Id TEXT,Company_Name TEXT,Location_Name TEXT, Site_Name TEXT, Building_Name TEXT,Wing_Name TEXT, Floor_Name TEXT, Virtual_Area_Name TXET, Area_Name TEXT, Feedback_Service_Name TEXT, Display_Name TEXT, Checked_Display_Name TEXT,Active_Setting Text,Icon_Type TEXT)");
+    sqLiteDatabase.execSQL(" CREATE TABLE store_setting(Admin_Id INTEGER PRIMARY KEY , Auto_Id TEXT,Company_Name TEXT,Location_Name TEXT, Site_Name TEXT, Building_Name TEXT,Wing_Name TEXT, Floor_Name TEXT, Virtual_Area_Name TXET, Area_Name TEXT, Feedback_Service_Name TEXT, Display_Name TEXT, Checked_Display_Name TEXT,Active_Setting Text,Icon_Type TEXT,Timeout TEXT,ShowLogo TEXT)");
     
 }
 
@@ -171,7 +171,7 @@ public boolean insertAdminDetails(String Company_ID, String Company_Name, String
 
 
 public boolean insertStoreSettings(String Auto_Id, String Company_Name, String Location_Name, String Site_Name, String Building_Name,
-                                  String Wing_Name,String Floor_Name,String Virtual_Area,String Area_Name,String Feedback_Service_Name) {
+                                  String Wing_Name,String Floor_Name,String Virtual_Area,String Area_Name,String Feedback_Service_Name,String Timeout,String ShowLogo) {
     SQLiteDatabase db = this.getWritableDatabase();
     ContentValues contentValues = new ContentValues();
     
@@ -185,7 +185,8 @@ public boolean insertStoreSettings(String Auto_Id, String Company_Name, String L
     contentValues.put("Virtual_Area_Name", Virtual_Area);
     contentValues.put("Area_Name", Area_Name);
     contentValues.put("Feedback_Service_Name", Feedback_Service_Name);
-    
+    contentValues.put("Timeout",Timeout);
+    contentValues.put("ShowLogo",ShowLogo);
     long result = db.insert("store_setting", null, contentValues);
     
     if (result == -1)
@@ -227,7 +228,7 @@ public boolean insertStoreSettings(String Auto_Id, String Company_Name, String L
     }
 
 
-public boolean insertData(String AutoId, String FeedbackQuestion, String OrderId, String IconType) {
+public boolean insertData(String AutoId, String FeedbackQuestion, String OrderId, String IconType) {//,String AreaId
     SQLiteDatabase db = this.getWritableDatabase();
     ContentValues contentValues = new ContentValues();
     contentValues.put("Auto_Id", AutoId);

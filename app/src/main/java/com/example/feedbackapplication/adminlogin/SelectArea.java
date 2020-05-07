@@ -33,12 +33,12 @@ public class SelectArea extends BaseActivity {
 
     //    DatabaseHelper databaseHelper;
 //    SQLiteDatabase sqLiteDatabase;
-    String AreaName ;//= "Cafeteria|Washroom";
+    String AreaName  ;//= "Cafeteria|Washroom";
     ArrayList<String> areaList;
     LinearLayout linearLayout, linearLayout1;
     private byte[] img = null;
     private byte[] img1 = null;
-    int imagecount;
+    int imagecount,rec_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class SelectArea extends BaseActivity {
                 ContentValues cv = new ContentValues();
                 cv.put("Icon_Name", "Cafeteria");
                 cv.put("Icon_value", img);
-                cv.put("Icon_Type", "image");
+                cv.put("Icon_Type", "area");
 //            cv.put("Area_Name", "Cafeteria");
 
                 sqLiteDatabase.insert("feedback_admin_icondetails", null, cv);
@@ -73,7 +73,7 @@ public class SelectArea extends BaseActivity {
                 ContentValues cv1 = new ContentValues();
                 cv1.put("Icon_Name", "Washroom");
                 cv1.put("Icon_value", img1);
-                cv1.put("Icon_Type", "image");
+                cv1.put("Icon_Type", "area");
 //            cv1.put("Area_Name", "Cafeteria");
 
                 sqLiteDatabase.insert("feedback_admin_icondetails", null, cv1);
@@ -102,12 +102,13 @@ public class SelectArea extends BaseActivity {
         try {
             SQLiteDatabase db1 = dbh.getWritableDatabase();
 
-            Cursor cursor1 = db1.rawQuery("Select Area_Name from store_setting ;", null);
+            Cursor cursor1 = db1.rawQuery("Select Admin_Id,Area_Name from store_setting ;", null);
 
 
             if (cursor1.moveToFirst()) {
                 do {
-                    AreaName = cursor1.getString(0);
+                    rec_id= cursor1.getInt(0);
+                    AreaName = cursor1.getString(1);
 
                 } while (cursor1.moveToNext());
                 db1.close();
@@ -173,6 +174,7 @@ public class SelectArea extends BaseActivity {
             public void onClick(View v) {
                 if (imgvalue.equalsIgnoreCase("Cafeteria")) {
                     Intent i = new Intent(SelectArea.this, FeedbackActivity.class);
+                    i.putExtra("rec_id",rec_id);
                     startActivity(i);
                 } else if (imgvalue.equalsIgnoreCase("Washroom")) {
                     Intent i = new Intent(SelectArea.this, FeedbackService.class);

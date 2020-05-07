@@ -2291,7 +2291,7 @@ private TextView button(int id, String uname) {
                     area_name = area_name.replace(", ","|");
                     System.out.println("area_name = " + area_name.trim());*/
                     
-                    boolean isInserted = dbh.insertStoreSettings(uuid,str_companyname,str_locationname,str_sitename,str_buildingname,str_wingname,str_floorname,str_virtualareaname,area_spinner.getSelectedItemsAsString(),str_feedbackservice);
+                    boolean isInserted = dbh.insertStoreSettings(uuid,str_companyname,str_locationname,str_sitename,str_buildingname,str_wingname,str_floorname,str_virtualareaname,area_spinner.getSelectedItemsAsString(),str_feedbackservice,"20000","yes");
                     System.out.println("isInserted = " + isInserted);
     
                     if (isInserted == true)
