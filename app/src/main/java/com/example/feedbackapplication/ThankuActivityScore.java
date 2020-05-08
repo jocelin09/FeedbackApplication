@@ -71,7 +71,7 @@ public class ThankuActivityScore extends BaseActivity {
 //                startActivity(intent);
 //            }
 //        },Integer.parseInt(Timeout));
-            new CountDownTimer(20000, 1000) {
+            countDownTimer = new CountDownTimer(20000, 1000) {
 
                 public void onTick(long millisUntilFinished) {
                     Log.i("********", "seconds remaining: " + millisUntilFinished / 1000);
@@ -80,6 +80,7 @@ public class ThankuActivityScore extends BaseActivity {
 
                 public void onFinish() {
                     Log.i("********", "Timer Finished");
+                    countDownTimer.cancel();
                     Intent intent = new Intent(getApplicationContext(), FeedbackActivity.class);
                     startActivity(intent);
                 }

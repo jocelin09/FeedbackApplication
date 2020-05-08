@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,9 +46,9 @@ public class FeedbackActivity extends BaseActivity {
     String rbid = "";
     int r_id = 0;
     ScrollView s;
-    int totalfeedback,rec_id;
+    int totalfeedback, rec_id;
     LinearLayout linearLayout, linearLayout1, linearLayout2, linearLayout3, linearLayout4;
-
+    Runnable runnable;
     String uuid1, uuid2, uuid3, uuid4;
     String uuid5, uuid6, uuid7, uuid8, uuid9, uuid10;
     //    DatabaseHelper dbh;
@@ -78,6 +79,7 @@ public class FeedbackActivity extends BaseActivity {
 //        prefs = PreferenceManager.getDefaultSharedPreferences(FeedbackActivity.this);
         rec_id = getIntent().getIntExtra("rec_id", 0);
         SharedPreferences.Editor editor = prefs.edit();
+
         if (!prefs.contains("QuestNo")) {
             editor.putInt("QuestNo", 1);
             editor.commit();
@@ -401,8 +403,12 @@ public class FeedbackActivity extends BaseActivity {
             e.printStackTrace();
         }
 
+        timer();
+    }
 
-        handler.postDelayed(new Runnable() {
+    public void timer() {
+
+       /* runnable=new Runnable() {
 
             @Override
             public void run() {
@@ -421,10 +427,28 @@ public class FeedbackActivity extends BaseActivity {
                 finish();
 
             }
-        },20000);
+        };
+        handler.postDelayed(runnable,20000);*/
 
+        countDownTimer=new CountDownTimer(20000, 1000) {
 
+            public void onTick(long millisUntilFinished) {
+                Log.i("********feedback", "seconds remaining: " + millisUntilFinished / 1000);
+                toast=Toast.makeText(FeedbackActivity.this, "seconds remaining for timeout: " + millisUntilFinished / 1000, Toast.LENGTH_SHORT);
+                toast.show();
+            }
 
+            public void onFinish() {
+                countDownTimer.cancel();
+                Log.i("********feedbackfinish", "Timer Finished");
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putInt("QuestNo", 1);
+                editor.commit();
+                Intent intent = new Intent(getApplicationContext(), SelectArea.class);
+                startActivity(intent);
+                finish();
+            }
+        }.start();
     }
 
 
@@ -531,12 +555,14 @@ public class FeedbackActivity extends BaseActivity {
                 System.out.println("imgvalue = " + imgvalue);
 
                 updateRating(linearLayout2.getId());
-                handler.removeMessages(0);
-
+//                handler.removeMessages(0);
+//                handler.removeCallbacks(runnable);
+                countDownTimer.cancel();
+                toast.cancel();
                 int count = dbh.feedback_count();
                 int totalquestionscount = dbh.totalquestions_count();
                 dbh.insertFeedbackData(String.valueOf(rec_id), String.valueOf(id), String.valueOf(icon_id));
-               System.out.print("********rec_count "+(rec_id)+"quest_id"+id+"icon_id"+icon_id);/**/
+                System.out.print("********rec_count " + (rec_id) + "quest_id" + id + "icon_id" + icon_id);/**/
                 //Last Question
                 if (count == totalquestionscount) {
                     if (strvalue.equals("Poor") || strvalue.equals("Average")) {
