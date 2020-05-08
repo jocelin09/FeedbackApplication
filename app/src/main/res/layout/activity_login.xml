@@ -60,6 +60,26 @@
                     android:textSize="18sp" />-->
 
                 <EditText
+                    android:id="@+id/edt_clientid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edit_style"
+                    android:drawableLeft="@drawable/ic_business"
+                    android:drawablePadding="16dp"
+                    android:hint="Client Id"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:maxLength="30"
+                    android:maxLines="1"
+                    android:padding="16dp"
+                    android:inputType="text"
+                    android:textColor="#000"
+                    android:textColorHint="#000"
+                    android:textSize="18sp" />
+
+                <EditText
                     android:id="@+id/edt_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -38,7 +38,7 @@ public void onCreate(SQLiteDatabase sqLiteDatabase) {
     
     sqLiteDatabase.execSQL(" CREATE TABLE SyncInfo (Id INTEGER PRIMARY KEY, Auto_Id TEXT, Mac_Address TEXT, Apk_Version TEXT, Sync_Date_Time TEXT, Device_Name TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE admin_login (ID INTEGER PRIMARY KEY,User_Id TEXT, User_Name TEXT, Password TEXT,Company_Name TEXT)");
-    sqLiteDatabase.execSQL(" CREATE TABLE admin_details(ID INTEGER PRIMARY KEY,Company_ID TEXT,Company_Name TEXT,Location_Id TEXT,Location_Name TEXT,Site_Id TEXT, Site_Name TEXT,Building_Id TEXT, Building_Name TEXT,Wing_Id TEXT,Wing_Name TEXT,Floor_Id TEXT, Floor_Name TEXT,Area_Id TEXT, Area_Name TEXT,RecordStatus TEXT)");
+    sqLiteDatabase.execSQL(" CREATE TABLE admin_details(ID INTEGER PRIMARY KEY,Company_ID TEXT,Company_Name TEXT,Location_Id TEXT,Location_Name TEXT,Site_Id TEXT, Site_Name TEXT,Building_Id TEXT, Building_Name TEXT,Wing_Id TEXT,Wing_Name TEXT,Floor_Id TEXT, Floor_Name TEXT,Area_Id TEXT, Area_Name TEXT,Feedback_Service_Type text, RecordStatus TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE feedback_adminquestions (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Feedback_Question TEXT,Order_Id TEXT, Area_Id TEXT, Weightage TEXT,EmailSMS TEXT,RecordStatus TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE feedback_adminsubquestions (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Feedback_Id TEXT, Feedback_Sub_Question TEXT,Icon Blob, Order_Id TEXT,Weightage TEXT,RecordStatus TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE feedback_admin_icondetails (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Icon_Name TEXT, Icon_value BLOB,Icon_Type TEXT, Status TEXT)");
@@ -49,7 +49,7 @@ public void onCreate(SQLiteDatabase sqLiteDatabase) {
     sqLiteDatabase.execSQL(" CREATE TABLE emp_neg_ratings(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,Emp_Feedback_Id TEXT,Name TEXT,Email TEXT,Contact TEXT,Comment TEXT,UpdatedStatus TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE EmailSMSList (Id INTEGER PRIMARY KEY, Auto_Id TEXT,Building_Id TEXT, Employee_Email TEXT, Recipient_Type TEXT,Mobile_Number TEXT, Record_Status TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE sms_master(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,UserName TEXT, Password TEXT, Type TEXT, Source TEXT, URL TEXT)");
-    sqLiteDatabase.execSQL(" CREATE TABLE store_setting(Admin_Id INTEGER PRIMARY KEY , Auto_Id TEXT,Company_Name TEXT,Location_Name TEXT, Site_Name TEXT, Building_Name TEXT,Wing_Name TEXT, Floor_Name TEXT, Virtual_Area_Name TXET, Area_Name TEXT, Feedback_Service_Name TEXT, Display_Name TEXT, Checked_Display_Name TEXT,Active_Setting Text,Icon_Type TEXT,Timeout TEXT,ShowLogo TEXT)");
+    sqLiteDatabase.execSQL(" CREATE TABLE store_setting(Admin_Id INTEGER PRIMARY KEY , Auto_Id TEXT,Company_Name TEXT,Location_Name TEXT, Site_Name TEXT, Building_Name TEXT,Wing_Name TEXT, Floor_Name TEXT, Virtual_Area_Name TXET, Area_Name TEXT, Feedback_Service_Name TEXT, Display_Name TEXT, Checked_Display_Name TEXT,Active_Setting Text,Icon_Type TEXT,Question_Timeout TEXT,Thankyou_Timeout TEXT,ShowLogo TEXT)");
     
 }
 
@@ -119,13 +119,15 @@ public int totalquestions_count() {
         return count;
     }
 //INSERTION///
-public boolean insertLoginDetails(String User_Id, String User_Name, String Password) {
+public boolean insertLoginDetails(String User_Id,String Client_Id, String User_Name, String Password) {
     SQLiteDatabase db = this.getWritableDatabase();
     ContentValues contentValues = new ContentValues();
+    
     contentValues.put("User_Id", User_Id);
+    contentValues.put("Client_Id", Client_Id);
     contentValues.put("User_Name", User_Name);
     contentValues.put("Password", Password);
-   // contentValues.put("Company_Name", Company_Name);
+    
     long result = db.insert("admin_login", null, contentValues);
     
     if (result == -1)
@@ -138,7 +140,7 @@ public boolean insertLoginDetails(String User_Id, String User_Name, String Passw
 
 public boolean insertAdminDetails(String Company_ID, String Company_Name, String Location_Id, String Location_Name,
                                   String Site_Id, String Site_Name, String Building_Id, String Building_Name,
-                                  String Wing_Id,String Wing_Name,String Floor_Id,String Floor_Name,String Area_Id,String Area_Name) {
+                                  String Wing_Id,String Wing_Name,String Floor_Id,String Floor_Name,String Area_Id,String Area_Name,String Feedback_Service_Type) {
     SQLiteDatabase db = this.getWritableDatabase();
     ContentValues contentValues = new ContentValues();
     
@@ -159,6 +161,7 @@ public boolean insertAdminDetails(String Company_ID, String Company_Name, String
     
     contentValues.put("Area_Id", Area_Id);
     contentValues.put("Area_Name", Area_Name);
+    contentValues.put("Feedback_Service_Type", Feedback_Service_Type);
     
     long result = db.insert("admin_details", null, contentValues);
     
@@ -185,7 +188,7 @@ public boolean insertStoreSettings(String Auto_Id, String Company_Name, String L
     contentValues.put("Virtual_Area_Name", Virtual_Area);
     contentValues.put("Area_Name", Area_Name);
     contentValues.put("Feedback_Service_Name", Feedback_Service_Name);
-    contentValues.put("Timeout",Timeout);
+    contentValues.put("Question_Timeout",Timeout);
     contentValues.put("ShowLogo",ShowLogo);
     long result = db.insert("store_setting", null, contentValues);
     
