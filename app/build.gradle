@@ -35,9 +35,11 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.2'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    // implementation files('libs/itextpdf-5.3.4.jar')
+    //material design
     implementation 'com.google.android.material:material:1.0.0'
-
+    //work manager
+    def work_version = "1.0.0-beta02"
+    implementation "android.arch.work:work-runtime-ktx:$work_version"
 
 
 }
