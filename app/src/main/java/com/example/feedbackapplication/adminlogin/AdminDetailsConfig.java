@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.feedbackapplication.BaseActivity;
-import com.example.feedbackapplication.FeedbackActivity;
 import com.example.feedbackapplication.R;
 
 import java.util.ArrayList;
@@ -26,6 +25,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import androidx.work.WorkManager;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -35,7 +35,7 @@ public class AdminDetailsConfig extends BaseActivity {
 
 
 int questionscount;
-String str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname, str_floorname,str_virtualareaname,str_feedbackservice;
+String str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname, str_floorname,str_virtualareaname,str_feedbackservice,client_id;
 String company_id, location_id, site_id, building_id, wing_id, floor_id, area_id;
 private ArrayList<String> company_names = new ArrayList<String>();
 private ArrayList<String> location_names = new ArrayList<String>();
@@ -51,12 +51,20 @@ MultipleSelectionSpinner area_spinner;
 Button button;
 String uuid="";
 
+private WorkManager mWorkManager;
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.admindetailsconfig);
     
-    questionscount = dbh.admindetails_count();
+    //mWorkManager = WorkManager.getInstance();
+   // startWorkManager();
+    str_feedbackservice = getIntent().getStringExtra("feedbackservicename");
+    feedback_service_name.add(str_feedbackservice);
+    client_id = getIntent().getStringExtra("client_id");
+    
+    System.out.println("AdminDetailsConfig feedbackservicename = " + str_feedbackservice);
+   // questionscount = dbh.admindetails_count();
     
     //VIRTUAL AREA SPINNER
     virtualarea_names.add("Select Virtual Area");
@@ -65,62 +73,22 @@ protected void onCreate(Bundle savedInstanceState) {
     
     
     //FEEDBACK SERVICE SPINNER
-    feedback_service_name.add("Select Feedback Service Type");
-    feedback_service_name.add("Area Specific");
-    feedback_service_name.add("Common Feedback");
-    feedback_service_name.add("Common Feedback with Area Specific");
-    
-    if (questionscount == 0) {
-        dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Location 1",
-                "13", "Site 1", "14", "Building 1", "15", "Wing-1", "16",
-                "1st Floor", "17", "Gents Washroom");
-    
-        dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Location 1",
-                "13", "Site 1", "14", "Building 1", "15", "Wing-1", "16",
-                "1st Floor", "17", "Ladies Washroom");
-        
-        dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Location 1",
-                "13", "Site 1", "14", "Building 1", "15", "Wing-1", "16",
-                "1st Floor", "17", "Handicapped Washroom");
-        
-        dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Location 1",
-                "13", "Site 5", "14", "Building 3", "", "", "16",
-                "5th Floor", "17", "Cafeteria");
-        
-        dbh.insertAdminDetails("11111", "Dell Score Feedback", "21", "Location 2",
-                "22", "Site 4", "23", "Building 4", "24", "Wing 2", "18",
-                "4th Floor", "17", "Pantry");
-        
-        dbh.insertAdminDetails("22222", "ISS Feedback", "", "",
-                "24", "Site 2", "25", "Building 2", "123456", "Wing extra", "27",
-                "2nd Floor", "28", "Cafeteria");
-        
-        dbh.insertAdminDetails("22222", "ISS Feedback", "", "",
-                "24", "Site 3", "25", "Building 3", "", "", "27",
-                "3rd Floor", "28", "Washroom");
-        
-        dbh.insertAdminDetails("333333", "NTT Feedback", "120", "Location 4",
-                "", "", "17", "Building 6", "15", "Wing 4", "16",
-                "6th Floor", "17", "Washroom");
-        
-        dbh.insertAdminDetails("333333", "NTT Feedback", "120", "Location 47",
-                "", "", "17", "Building 16", "15", "Wing 4", "4545",
-                "13th Floor", "17", "Washroom");
-        
-        dbh.insertAdminDetails("444444", "E-clerx", "", "",
-                "", "", "157", "Building 7", "15", "Wing 5", "16",
-                "7th Floor", "17", "Washroom");
-    }
+//    feedback_service_name.add("Select Feedback Service Type");
+//    feedback_service_name.add("Area Specific");
+//    feedback_service_name.add("Common Feedback");
+//    feedback_service_name.add("Common Feedback with Area Specific");
+ 
     
     try {
         final LinearLayout main_Layout = (LinearLayout) findViewById(R.id.main_admindetails_layout); //vertical
         main_Layout.addView(textView());
         
+        
         //////////COMPANY NAME/////////
-        company_names = dbh.getAllCompanyNames();
+        company_names = dbh.getAllCompanyNames(client_id);
         
         final Spinner company_spinner = new Spinner(this);
-        final LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(MATCH_PARENT, 70);
+        final LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(MATCH_PARENT, 100);
         params1.setMargins(16, 8, 16, 8);
         company_spinner.setBackground(getDrawable(R.drawable.edit_style));
         company_spinner.setLayoutParams(params1);
@@ -172,10 +140,7 @@ protected void onCreate(Bundle savedInstanceState) {
         area_spinner.setBackground(getDrawable(R.drawable.edit_style));
         area_spinner.setLayoutParams(params1);
         
-        ////////////FFEDBACK SERVICE NAME//////////
-        final Spinner feedback_service = new Spinner(getApplicationContext());
-        feedback_service.setBackground(getDrawable(R.drawable.edit_style));
-        feedback_service.setLayoutParams(params1);
+       
         
         //BUTTONS LAYOUT
         final LinearLayout sub1_secondlayout = new LinearLayout(getApplicationContext());
@@ -192,8 +157,6 @@ protected void onCreate(Bundle savedInstanceState) {
         params2.setMargins(16,8,16,8);
         button.setLayoutParams(params2);
         //button.setGravity(Gravity.CENTER_HORIZONTAL);
-        
-    
         
         company_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -468,7 +431,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                                             }
                                                                                             main_Layout.addView(area_spinner);
         
-                                                                                            //FEEDBACK SERVICE
+                                                                                           /* //FEEDBACK SERVICE
                                                                                             ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                                     R.layout.spinner_text, feedback_service_name);
                                                                                             spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -498,7 +461,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                                                 public void onNothingSelected(AdapterView<?> adapterView) {
                 
                                                                                                 }
-                                                                                            });
+                                                                                            });*/
         
                                                                                             //BUTTONS
                                                                                             if (button(R.id.cancel,"Cancel").getParent() != null) {
@@ -654,7 +617,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                                     }
                                                                                     main_Layout.addView(area_spinner);
                     
-                                                                                    //FEEDBACK SERVICE
+                                                                                    /*//FEEDBACK SERVICE
                                                                                     ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                             R.layout.spinner_text, feedback_service_name);
                                                                                     spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -684,7 +647,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                                         public void onNothingSelected(AdapterView<?> adapterView) {
                             
                                                                                         }
-                                                                                    });
+                                                                                    });*/
                     
                                                                                     //BUTTONS
                                                                                     if (button(R.id.cancel,"Cancel").getParent() != null) {
@@ -937,7 +900,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                                     main_Layout.addView(area_spinner);
                     
                                                                                     //FEEDBACK SERVICE
-                                                                                    ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
+                                                                                   /* ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                             R.layout.spinner_text, feedback_service_name);
                                                                                     spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                                                     feedback_service.setAdapter(spinnerArrayAdapter5);
@@ -966,7 +929,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                                         public void onNothingSelected(AdapterView<?> adapterView) {
                             
                                                                                         }
-                                                                                    });
+                                                                                    });*/
                     
                                                                                     //BUTTONS
                                                                                     if (button(R.id.cancel,"Cancel").getParent() != null) {
@@ -1118,7 +1081,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                             }
                                                                             main_Layout.addView(area_spinner);
                     
-                                                                            //FEEDBACK SERVICE
+                                                                            /*//FEEDBACK SERVICE
                                                                             ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                     R.layout.spinner_text, feedback_service_name);
                                                                             spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -1148,7 +1111,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                                 public void onNothingSelected(AdapterView<?> adapterView) {
                             
                                                                                 }
-                                                                            });
+                                                                            });*/
                     
                                                                             //BUTTONS
                                                                             if (button(R.id.cancel,"Cancel").getParent() != null) {
@@ -1435,7 +1398,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                                         main_Layout.addView(area_spinner);
                     
                                                                                         //FEEDBACK SERVICE
-                                                                                        ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
+                                                                                        /*ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                                 R.layout.spinner_text, feedback_service_name);
                                                                                         spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                                                         feedback_service.setAdapter(spinnerArrayAdapter5);
@@ -1464,7 +1427,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                                             public void onNothingSelected(AdapterView<?> adapterView) {
                             
                                                                                             }
-                                                                                        });
+                                                                                        });*/
                     
                                                                                         //BUTTONS
                                                                                         if (button(R.id.cancel,"Cancel").getParent() != null) {
@@ -1615,7 +1578,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                                 main_Layout.addView(area_spinner);
                     
                                                                                 //FEEDBACK SERVICE
-                                                                                ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
+                                                                               /* ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                         R.layout.spinner_text, feedback_service_name);
                                                                                 spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                                                 feedback_service.setAdapter(spinnerArrayAdapter5);
@@ -1644,7 +1607,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                                     public void onNothingSelected(AdapterView<?> adapterView) {
                             
                                                                                     }
-                                                                                });
+                                                                                });*/
                     
                                                                                 //BUTTONS
                                                                                 if (button(R.id.cancel,"Cancel").getParent() != null) {
@@ -1907,7 +1870,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                                 main_Layout.addView(area_spinner);
                     
                                                                                 //FEEDBACK SERVICE
-                                                                                ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
+                                                                                /*ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                         R.layout.spinner_text, feedback_service_name);
                                                                                 spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                                                 feedback_service.setAdapter(spinnerArrayAdapter5);
@@ -1936,7 +1899,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                                     public void onNothingSelected(AdapterView<?> adapterView) {
                             
                                                                                     }
-                                                                                });
+                                                                                });*/
                     
                                                                                 //BUTTONS
                                                                                 if (button(R.id.cancel,"Cancel").getParent() != null) {
@@ -2091,7 +2054,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                         main_Layout.addView(area_spinner);
                     
                                                                         //FEEDBACK SERVICE
-                                                                        ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
+                                                                      /*  ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                 R.layout.spinner_text, feedback_service_name);
                                                                         spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                                         feedback_service.setAdapter(spinnerArrayAdapter5);
@@ -2120,7 +2083,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                             public void onNothingSelected(AdapterView<?> adapterView) {
                             
                                                                             }
-                                                                        });
+                                                                        });*/
                     
                                                                         //BUTTONS
                                                                         if (button(R.id.cancel,"Cancel").getParent() != null) {
@@ -2200,7 +2163,7 @@ protected void onCreate(Bundle savedInstanceState) {
                         main_Layout.removeView(floor_spinner);
                         main_Layout.removeView(virtualarea_spinner);
                         main_Layout.removeView(area_spinner);
-                        main_Layout.removeView(feedback_service);
+                       // main_Layout.removeView(feedback_service);
                         main_Layout.removeView(sub1_secondlayout);
                     }
                     
@@ -2213,7 +2176,18 @@ protected void onCreate(Bundle savedInstanceState) {
                 System.out.println(" Nothing selected...... ");
             }
         });
+    
+    
+        ////////////FFEDBACK SERVICE NAME//////////
+      /*  Spinner feedback_service = new Spinner(getApplicationContext());
+        feedback_service.setBackground(getDrawable(R.drawable.edit_style));
+        feedback_service.setLayoutParams(params1);
         
+        final ArrayAdapter<String> spinnerArrayAdapter11 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, feedback_service_name);
+        feedback_service.setAdapter(spinnerArrayAdapter11);
+        feedback_service.setEnabled(false);*/
+      
+        main_Layout.addView(textView(str_feedbackservice));
         main_Layout.addView(company_spinner);
         
     } catch (Exception e) {
@@ -2221,8 +2195,52 @@ protected void onCreate(Bundle savedInstanceState) {
         System.out.println("e = " + e);
         
     }
+  /*  Data source = new Data.Builder()
+                          .putString("workType", "OneTime")
+                          .build();
+    
+    OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(MyDownloadWorker.class)
+                                                    .setConstraints(constraints())
+                                                    .setInputData(source)
+                                                    .build();
+    WorkManager.getInstance().enqueue(oneTimeWorkRequest);
+    
+    
+    WorkManager.getInstance().getWorkInfoByIdLiveData(oneTimeWorkRequest.getId())
+            .observe(this, new Observer<WorkInfo>() {
+                @Override
+                public void onChanged(@Nullable WorkInfo workInfo) {
+                    System.out.println("workInfo = " + workInfo.getOutputData());
+                }
+            });*/
+
+
+
+}
+
+/*private void startWorkManager() {
+    
+    //Passing Arguments to Worker
+    Data source = new Data.Builder()
+                          .putString("workType", "OneTime")
+                          .build();
+    
+    OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(MyDownloadWorker.class)
+                                                    .setConstraints(constraints())
+                                                    .setInputData(source)
+                                                    .build();
+    WorkManager.getInstance().enqueue(oneTimeWorkRequest);
+    
     
 }
+
+private Constraints constraints() {
+    Constraints constraints = new Constraints.Builder()
+                                      .setRequiredNetworkType(NetworkType.CONNECTED)
+                                      .setRequiresBatteryNotLow(true)
+                                      .build();
+    return constraints;
+}*/
 
 private String greetingMessage() {
     
@@ -2234,11 +2252,8 @@ private String greetingMessage() {
         daytime = "Good Morning";
     } else if (timeOfDay >= 12 && timeOfDay < 16) {
         daytime = "Good Afternoon";
-    } else if (timeOfDay >= 16 && timeOfDay < 21) {
+    } else if (timeOfDay >= 16 && timeOfDay < 24) {
         daytime = "Good Evening";
-    } else if (timeOfDay >= 21 && timeOfDay < 24) {
-        daytime = "Good Night";
-        
     }
     return daytime;
 }
@@ -2260,12 +2275,24 @@ private TextView textView() {
     
 }
 
-private TextView button(int id, String uname) {
+private TextView textView(String service) {
+    final TextView textView = new TextView(this);
+    final LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(MATCH_PARENT, 100);
+    params1.setMargins(16, 8, 16, 10);
+    textView.setLayoutParams(params1);
+    textView.setCompoundDrawablePadding(16);
+    textView.setGravity(Gravity.CENTER);
+    textView.setPadding(16, 16, 16, 16);
+    textView.setTextColor(Color.BLACK);
+    textView.setHintTextColor(Color.BLACK);
+    textView.setBackground(getDrawable(R.drawable.edit_style));
+    textView.setTextSize(1, 20);
+    textView.setText(service);
     
-//    final Button button = new Button(this);
-//    LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT,1f);
-//    params1.setMargins(16,8,16,8);
-//    button.setLayoutParams(params1);
+    return textView;
+    
+}
+private TextView button(int id, String uname) {
     
     button.setId(id);
     button.setTextSize(1, 17);
@@ -2280,21 +2307,18 @@ private TextView button(int id, String uname) {
         public void onClick(View view) {
             if (button.getId() == R.id.submit)
             {
-                if (str_virtualareaname.equalsIgnoreCase("Select Virtual Name") || str_feedbackservice.equalsIgnoreCase("Select Feedback Service Type"))
+                if (str_virtualareaname.equalsIgnoreCase("Select Virtual Name"))
                 {
                     Toast.makeText(AdminDetailsConfig.this, "Please Enter all details", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
                     uuid = UUID.randomUUID().toString();
-                   /* String area_name = area_spinner.getSelectedItemsAsString();
-                    area_name = area_name.replace(", ","|");
-                    System.out.println("area_name = " + area_name.trim());*/
-                    
+                  
                     boolean isInserted = dbh.insertStoreSettings(uuid,str_companyname,str_locationname,str_sitename,str_buildingname,str_wingname,str_floorname,str_virtualareaname,area_spinner.getSelectedItemsAsString(),str_feedbackservice,"20000","yes");
                     System.out.println("isInserted = " + isInserted);
     
-                    if (isInserted == true)
+                    if (isInserted)
                     {
                         Toast.makeText(AdminDetailsConfig.this, "Submitted", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(AdminDetailsConfig.this,SelectArea.class));

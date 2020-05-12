@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.feedbackapplication.BaseActivity;
 import com.example.feedbackapplication.R;
@@ -16,7 +17,7 @@ import java.util.UUID;
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     String str_clientid,str_username,str_pwd,uuid="";
-    Spinner companyname;
+    String feedbackservicename="";
     EditText edt_username,edt_pwd,edt_clientid;
     Button btn_login;
     
@@ -30,43 +31,39 @@ protected void onCreate(Bundle savedInstanceState) {
     try {
         questionscount = dbh.admindetails_count();
         if (questionscount == 0) {
-            dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Location 1",
+            dbh.insertAdminDetails("1", "Dell Score Feedback", "12", "Location 1",
                     "13", "Site 1", "14", "Building 1", "15", "Wing-1", "16",
                     "1st Floor", "17", "Gents Washroom","Area specific|Common Feedback|Common Feedback with Area Specific");
             
-            dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Location 1",
+            dbh.insertAdminDetails("1", "Dell Score Feedback", "12", "Location 1",
                     "13", "Site 1", "14", "Building 1", "15", "Wing-1", "16",
                     "1st Floor", "17", "Ladies Washroom","Common Feedback|Common Feedback with Area Specific");
-            
-            dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Location 1",
-                    "13", "Site 1", "14", "Building 1", "15", "Wing-1", "16",
-                    "1st Floor", "17", "Handicapped Washroom","Area specific|Common Feedback with Area Specific");
-            
-            dbh.insertAdminDetails("11111", "Dell Score Feedback", "12", "Location 1",
+          
+           dbh.insertAdminDetails("1", "Dell Score Feedback", "12", "Location 1",
                     "13", "Site 5", "14", "Building 3", "", "", "16",
                     "5th Floor", "17", "Cafeteria","Area specific");
             
-            dbh.insertAdminDetails("11111", "Dell Score Feedback", "21", "Location 2",
+            dbh.insertAdminDetails("1", "Dell Score Feedback", "21", "Location 2",
                     "22", "Site 4", "23", "Building 4", "24", "Wing 2", "18",
                     "4th Floor", "17", "Pantry","Common Feedback with Area Specific");
             
-            dbh.insertAdminDetails("22222", "ISS Feedback", "", "",
+            dbh.insertAdminDetails("2", "ISS Feedback", "", "",
                     "24", "Site 2", "25", "Building 2", "123456", "Wing extra", "27",
                     "2nd Floor", "28", "Cafeteria","Common Feedback");
             
-            dbh.insertAdminDetails("22222", "ISS Feedback", "", "",
+            dbh.insertAdminDetails("2", "ISS Feedback", "", "",
                     "24", "Site 3", "25", "Building 3", "", "", "27",
                     "3rd Floor", "28", "Washroom","Area specific|Common Feedback with Area Specific");
             
-            dbh.insertAdminDetails("333333", "NTT Feedback", "120", "Location 4",
+            dbh.insertAdminDetails("3", "NTT Feedback", "120", "Location 4",
                     "", "", "17", "Building 6", "15", "Wing 4", "16",
                     "6th Floor", "17", "Washroom","Area specific|Common Feedback|Common Feedback with Area Specific");
             
-            dbh.insertAdminDetails("333333", "NTT Feedback", "120", "Location 47",
+            dbh.insertAdminDetails("3", "NTT Feedback", "120", "Location 47",
                     "", "", "17", "Building 16", "15", "Wing 4", "4545",
-                    "13th Floor", "17", "Washroom","Area specific|Common Feedback|Common Feedback with Area Specific");
+                    "13th Floor", "17", "Washroom","Area specific");
             
-            dbh.insertAdminDetails("444444", "E-clerx", "", "",
+            dbh.insertAdminDetails("4", "E-clerx", "", "",
                     "", "", "157", "Building 7", "15", "Wing 5", "16",
                     "7th Floor", "17", "Washroom","Area specific|Common Feedback|Common Feedback with Area Specific");
         }
@@ -117,9 +114,31 @@ public void onClick(View view) {
         {
             uuid = UUID.randomUUID().toString();
             //dbh.insertLoginDetails(uuid,str_username,str_pwd,str_companyname);
-            dbh.insertLoginDetails(uuid,str_clientid,str_username,str_pwd);
+            boolean isInserted = dbh.insertLoginDetails(uuid,str_clientid,str_username,str_pwd);
+            System.out.println("isInserted = " + isInserted);
             
-          // startActivity(new Intent(LoginActivity.this,AdminDetailsConfig.class));
+            if (isInserted)
+            {
+                Toast.makeText(LoginActivity.this, "Successfully Logged In", Toast.LENGTH_SHORT).show();
+                feedbackservicename = dbh.getFeedbackServiceType(str_clientid);
+                if (!feedbackservicename.contains("|"))
+                {
+                    Intent intent = new Intent(LoginActivity.this,AdminDetailsConfig.class);
+                    intent.putExtra("feedbackservicename",feedbackservicename);
+                    intent.putExtra("client_id",str_clientid);
+                    startActivity(intent);
+                }
+                else{
+                    Intent intent = new Intent(LoginActivity.this,FeedbackServiceAct.class);
+                    intent.putExtra("client_id",str_clientid);
+                    startActivity(intent);
+                }
+                
+            }
+            else
+            {
+                Toast.makeText(LoginActivity.this, "Some error occured, Please try again", Toast.LENGTH_SHORT).show();
+            }
         }
     } catch (Exception e) {
         e.printStackTrace();

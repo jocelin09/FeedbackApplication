@@ -37,7 +37,7 @@ public static DatabaseHelper getInstance(Context ctx) {
 public void onCreate(SQLiteDatabase sqLiteDatabase) {
     
     sqLiteDatabase.execSQL(" CREATE TABLE SyncInfo (Id INTEGER PRIMARY KEY, Auto_Id TEXT, Mac_Address TEXT, Apk_Version TEXT, Sync_Date_Time TEXT, Device_Name TEXT)");
-    sqLiteDatabase.execSQL(" CREATE TABLE admin_login (ID INTEGER PRIMARY KEY,User_Id TEXT, User_Name TEXT, Password TEXT,Company_Name TEXT)");
+    sqLiteDatabase.execSQL(" CREATE TABLE admin_login (ID INTEGER PRIMARY KEY,User_Id TEXT,Client_Id TEXT, User_Name TEXT, Password TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE admin_details(ID INTEGER PRIMARY KEY,Company_ID TEXT,Company_Name TEXT,Location_Id TEXT,Location_Name TEXT,Site_Id TEXT, Site_Name TEXT,Building_Id TEXT, Building_Name TEXT,Wing_Id TEXT,Wing_Name TEXT,Floor_Id TEXT, Floor_Name TEXT,Area_Id TEXT, Area_Name TEXT,Feedback_Service_Type text, RecordStatus TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE feedback_adminquestions (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Feedback_Question TEXT,Order_Id TEXT, Area_Id TEXT, Weightage TEXT,EmailSMS TEXT,RecordStatus TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE feedback_adminsubquestions (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Feedback_Id TEXT, Feedback_Sub_Question TEXT,Icon Blob, Order_Id TEXT,Weightage TEXT,RecordStatus TEXT)");
@@ -118,6 +118,7 @@ public int totalquestions_count() {
         // db1.close();
         return count;
     }
+    
 //INSERTION///
 public boolean insertLoginDetails(String User_Id,String Client_Id, String User_Name, String Password) {
     SQLiteDatabase db = this.getWritableDatabase();
@@ -252,6 +253,23 @@ public ArrayList<String> getAllCompanyNames(){
     ArrayList<String> company_name_lists = new ArrayList<String>();
     company_name_lists.add("Select Company");
     String selectQuery = "SELECT distinct(Company_Name) FROM admin_details ORDER BY Company_Name ASC ";
+    
+    SQLiteDatabase db = this.getReadableDatabase();
+    Cursor cursor = db.rawQuery(selectQuery, null);
+    if (cursor.moveToFirst()) {
+        do {
+            company_name_lists.add(cursor.getString(0));
+        } while (cursor.moveToNext());
+    }
+    cursor.close();
+    db.close();
+    return company_name_lists;
+}
+
+public ArrayList<String> getAllCompanyNames(String client_id){
+    ArrayList<String> company_name_lists = new ArrayList<String>();
+    //company_name_lists.add("Select Company");
+    String selectQuery = "SELECT distinct(Company_Name) FROM admin_details where Company_ID = '"+client_id+"' ORDER BY Company_Name ASC ";
     
     SQLiteDatabase db = this.getReadableDatabase();
     Cursor cursor = db.rawQuery(selectQuery, null);
@@ -576,6 +594,26 @@ public String getAreaId(String Area_Name) {
     return area_id;
 }
 
+public String getFeedbackServiceType(String Client_ID) {
+    
+    String feedbackservice_type = "";
+    try {
+        String query = "SELECT Feedback_Service_Type FROM admin_details Where Company_ID ='" + Client_ID + "'";
+        
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor res = db.rawQuery(query, null);
+        if (res.moveToFirst()) {
+            do {
+                feedbackservice_type = res.getString(0);
+            } while (res.moveToNext());
+        }
+        res.close();
+        db.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return feedbackservice_type;
+}
 
 
 public String getsmsURL() {
