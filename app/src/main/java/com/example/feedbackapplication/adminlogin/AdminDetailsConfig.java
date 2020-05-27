@@ -1,6 +1,7 @@
 package com.example.feedbackapplication.adminlogin;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.feedbackapplication.BaseActivity;
+import com.example.feedbackapplication.FeedbackActivity;
 import com.example.feedbackapplication.R;
 
 import java.util.ArrayList;
@@ -165,7 +167,7 @@ protected void onCreate(Bundle savedInstanceState) {
                 try {
                     if (!str_companyname.equals("")) {
                         company_id = dbh.getCompanyId(str_companyname);
-                        company_spinner.setId(Integer.parseInt(company_id));
+//                        company_spinner.setId(Integer.parseInt(company_id));
                         System.out.println("company_spinner.getId() = " + company_spinner.getId());
                     }
                 } catch (NumberFormatException e) {
@@ -208,7 +210,7 @@ protected void onCreate(Bundle savedInstanceState) {
                             try {
                                 if (!str_locationname.equals("")) {
                                     location_id = dbh.getLocationId(str_locationname);
-                                    location_spinner.setId(Integer.parseInt(location_id));
+//                                    location_spinner.setId(Integer.parseInt(location_id));
                                     System.out.println("location_spinner.getId() = " + location_spinner.getId());
                                 }
                             } catch (NumberFormatException e) {
@@ -252,7 +254,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                         try {
                                             if (!str_sitename.equals("")) {
                                                 site_id = dbh.getSiteId(str_sitename);
-                                                site_spinner.setId(Integer.parseInt(site_id));
+//                                                site_spinner.setId(Integer.parseInt(site_id));
                                                 System.out.println("site_spinner.getId() = " + site_spinner.getId());
                                             }
                                         } catch (NumberFormatException e) {
@@ -294,7 +296,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                     try {
                                                         if (!str_buildingname.equals("")) {
                                                             building_id = dbh.getBuildingId(str_buildingname);
-                                                            building_spinner.setId(Integer.parseInt(building_id));
+//                                                            building_spinner.setId(Integer.parseInt(building_id));
                                                             System.out.println("building_spinner.getId() = " + building_spinner.getId());
                                                             
                                                         }
@@ -338,7 +340,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                 try {
                                                                     if (!str_wingname.equals("")) {
                                                                         wing_id = dbh.getWingId(str_wingname);
-                                                                        wing_spinner.setId(Integer.parseInt(wing_id));
+//                                                                        wing_spinner.setId(Integer.parseInt(wing_id));
                                                                         System.out.println("wing_spinner.getId() = " + wing_spinner.getId());
                                                                     }
                                                                 } catch (NumberFormatException e) {
@@ -382,7 +384,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                             try {
                                                                                 if (!str_floorname.equals("")) {
                                                                                     floor_id = dbh.getFloorId(str_floorname);
-                                                                                    floor_spinner.setId(Integer.parseInt(floor_id));
+//                                                                                    floor_spinner.setId(Integer.parseInt(floor_id));
                                                                                     System.out.println("floor_spinner.getId() = " + floor_spinner.getId());
                                                                                 }
                                                                             } catch (NumberFormatException e) {
@@ -463,22 +465,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                                                 }
                                                                                             });*/
         
-                                                                                            //BUTTONS
-                                                                                            if (button(R.id.cancel,"Cancel").getParent() != null) {
-                                                                                                ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
-                                                                                            }
-                                                                                            sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
-        
-                                                                                            if (button(R.id.submit,"Submit").getParent() != null) {
-                                                                                                ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
-                                                                                            }
-                                                                                            sub1_secondlayout.addView(button(R.id.submit,"Submit"));
-        
-        
-                                                                                            if (sub1_secondlayout.getParent() != null) {
-                                                                                                ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
-                                                                                            }
-                                                                                            main_Layout.addView(sub1_secondlayout);
+
         
         
                                                                                         }
@@ -487,7 +474,22 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                                             main_Layout.removeView(area_spinner);
         
                                                                                         }
-                                                                                        
+                                                                                        //BUTTONS
+                                                                                        if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                            ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+                                                                                        }
+                                                                                        sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
+
+                                                                                        if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                                            ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                                                        }
+                                                                                        sub1_secondlayout.addView(button(R.id.submit,"Submit"));
+
+
+                                                                                        if (sub1_secondlayout.getParent() != null) {
+                                                                                            ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+                                                                                        }
+                                                                                        main_Layout.addView(sub1_secondlayout);
                                                                                     }
     
                                                                                     @Override
@@ -567,7 +569,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                     try {
                                                                         if (!str_floorname.equals("")) {
                                                                             floor_id = dbh.getFloorId(str_floorname);
-                                                                            floor_spinner.setId(Integer.parseInt(floor_id));
+//                                                                            floor_spinner.setId(Integer.parseInt(floor_id));
                                                                             System.out.println("floor_spinner.getId() = " + floor_spinner.getId());
                                                                         }
                                                                     } catch (NumberFormatException e) {
@@ -765,7 +767,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                             try {
                                                 if (!str_buildingname.equals("")) {
                                                     building_id = dbh.getBuildingId(str_buildingname);
-                                                    building_spinner.setId(Integer.parseInt(building_id));
+//                                                    building_spinner.setId(Integer.parseInt(building_id));
                                                     System.out.println("building_spinner.getId() = " + building_spinner.getId());
                                                     
                                                 }
@@ -808,7 +810,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                         try {
                                                             if (!str_wingname.equals("")) {
                                                                 wing_id = dbh.getWingId(str_wingname);
-                                                                wing_spinner.setId(Integer.parseInt(wing_id));
+//                                                                wing_spinner.setId(Integer.parseInt(wing_id));
                                                                 System.out.println("wing_spinner.getId() = " + wing_spinner.getId());
                                                             }
                                                         } catch (NumberFormatException e) {
@@ -850,7 +852,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                     try {
                                                                         if (!str_floorname.equals("")) {
                                                                             floor_id = dbh.getFloorId(str_floorname);
-                                                                            floor_spinner.setId(Integer.parseInt(floor_id));
+//                                                                            floor_spinner.setId(Integer.parseInt(floor_id));
                                                                             System.out.println("floor_spinner.getId() = " + floor_spinner.getId());
                                                                         }
                                                                     } catch (NumberFormatException e) {
@@ -1033,7 +1035,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                             try {
                                                                 if (!str_floorname.equals("")) {
                                                                     floor_id = dbh.getFloorId(str_floorname);
-                                                                    floor_spinner.setId(Integer.parseInt(floor_id));
+//                                                                    floor_spinner.setId(Integer.parseInt(floor_id));
                                                                     System.out.println("floor_spinner.getId() = " + floor_spinner.getId());
                                                                 }
                                                             } catch (NumberFormatException e) {
@@ -1245,7 +1247,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                         
                                         if (!str_sitename.equals("")) {
                                             site_id = dbh.getSiteId(str_sitename);
-                                            site_spinner.setId(Integer.parseInt(site_id));
+//                                            site_spinner.setId(Integer.parseInt(site_id));
                                             System.out.println("site_spinner.getId() = " + site_spinner.getId());
                                             
                                         }
@@ -1266,7 +1268,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                 try {
                                                     if (!str_buildingname.equals("")) {
                                                         building_id = dbh.getBuildingId(str_buildingname);
-                                                        building_spinner.setId(Integer.parseInt(building_id));
+//                                                        building_spinner.setId(Integer.parseInt(building_id));
                                                         System.out.println("building_spinner.getId() = " + building_spinner.getId());
                                                     }
                                                 } catch (NumberFormatException e) {
@@ -1308,7 +1310,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                             try {
                                                                 if (!str_wingname.equals("")) {
                                                                     wing_id = dbh.getWingId(str_wingname);
-                                                                    wing_spinner.setId(Integer.parseInt(wing_id));
+//                                                                    wing_spinner.setId(Integer.parseInt(wing_id));
                                                                     System.out.println("wing_spinner.getId() = " + wing_spinner.getId());
                                                                 }
                                                             } catch (NumberFormatException e) {
@@ -1349,7 +1351,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                         try {
                                                                             if (!str_floorname.equals("")) {
                                                                                 floor_id = dbh.getFloorId(str_floorname);
-                                                                                floor_spinner.setId(Integer.parseInt(floor_id));
+//                                                                                floor_spinner.setId(Integer.parseInt(floor_id));
                                                                                 System.out.println("floor_spinner.getId() = " + floor_spinner.getId());
                                                                             }
                                                                         } catch (NumberFormatException e) {
@@ -1528,7 +1530,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                 try {
                                                                     if (!str_floorname.equals("")) {
                                                                         floor_id = dbh.getFloorId(str_floorname);
-                                                                        floor_spinner.setId(Integer.parseInt(floor_id));
+//                                                                        floor_spinner.setId(Integer.parseInt(floor_id));
                                                                         System.out.println("floor_spinner.getId() = " + floor_spinner.getId());
                                                                     }
                                                                 } catch (NumberFormatException e) {
@@ -1731,7 +1733,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                         try {
                                             if (!str_buildingname.equals("")) {
                                                 building_id = dbh.getBuildingId(str_buildingname);
-                                                building_spinner.setId(Integer.parseInt(building_id));
+//                                                building_spinner.setId(Integer.parseInt(building_id));
                                                 System.out.println("building_spinner.getId() = " + building_spinner.getId());
                                             }
                                         } catch (NumberFormatException e) {
@@ -1774,7 +1776,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                     try {
                                                         if (!str_wingname.equals("")) {
                                                             wing_id = dbh.getWingId(str_wingname);
-                                                            wing_spinner.setId(Integer.parseInt(wing_id));
+//                                                            wing_spinner.setId(Integer.parseInt(wing_id));
                                                             System.out.println("wing_spinner.getId() = " + wing_spinner.getId());
                                                         }
                                                         
@@ -1820,7 +1822,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                 try {
                                                                     if (!str_floorname.equals("")) {
                                                                         floor_id = dbh.getFloorId(str_floorname);
-                                                                        floor_spinner.setId(Integer.parseInt(floor_id));
+//                                                                        floor_spinner.setId(Integer.parseInt(floor_id));
                                                                         System.out.println("floor_spinner.getId() = " + floor_spinner.getId());
                                                                     }
                                                                 } catch (NumberFormatException e) {
@@ -1906,13 +1908,13 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                                     ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
                                                                                 }
                                                                                 sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
-                    
+
                                                                                 if (button(R.id.submit,"Submit").getParent() != null) {
                                                                                     ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
                                                                                 }
                                                                                 sub1_secondlayout.addView(button(R.id.submit,"Submit"));
-                    
-                    
+
+
                                                                                 if (sub1_secondlayout.getParent() != null) {
                                                                                     ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
                                                                                 }
@@ -2004,7 +2006,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                         try {
                                                             if (!str_floorname.equals("")) {
                                                                 floor_id = dbh.getFloorId(str_floorname);
-                                                                floor_spinner.setId(Integer.parseInt(floor_id));
+//                                                                floor_spinner.setId(Integer.parseInt(floor_id));
                                                                 System.out.println("floor_spinner.getId() = " + floor_spinner.getId());
                                                             }
                                                         } catch (NumberFormatException e) {
@@ -2107,6 +2109,7 @@ protected void onCreate(Bundle savedInstanceState) {
                                                                     else
                                                                     {
                                                                         main_Layout.removeView(area_spinner);
+
                     
                                                                     }
                 
@@ -2176,8 +2179,8 @@ protected void onCreate(Bundle savedInstanceState) {
                 System.out.println(" Nothing selected...... ");
             }
         });
-    
-    
+
+
         ////////////FFEDBACK SERVICE NAME//////////
       /*  Spinner feedback_service = new Spinner(getApplicationContext());
         feedback_service.setBackground(getDrawable(R.drawable.edit_style));
@@ -2189,6 +2192,22 @@ protected void onCreate(Bundle savedInstanceState) {
       
         main_Layout.addView(textView(str_feedbackservice));
         main_Layout.addView(company_spinner);
+        //BUTTONS
+        if (button(R.id.cancel,"Cancel").getParent() != null) {
+            ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+        }
+        sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
+
+        if (button(R.id.submit,"Submit").getParent() != null) {
+            ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+        }
+        sub1_secondlayout.addView(button(R.id.submit,"Submit"));
+
+
+        if (sub1_secondlayout.getParent() != null) {
+            ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+        }
+        main_Layout.addView(sub1_secondlayout);
         
     } catch (Exception e) {
         e.printStackTrace();
@@ -2314,14 +2333,27 @@ private TextView button(int id, String uname) {
                 else
                 {
                     uuid = UUID.randomUUID().toString();
-                  
-                    boolean isInserted = dbh.insertStoreSettings(uuid,str_companyname,str_locationname,str_sitename,str_buildingname,str_wingname,str_floorname,str_virtualareaname,area_spinner.getSelectedItemsAsString(),str_feedbackservice,"20000","yes");
+                    String areaName=area_spinner.getSelectedItemsAsString();
+                    if(!areaName.equalsIgnoreCase(str_virtualareaname)){
+                        areaName=areaName+"|"+str_virtualareaname;
+                    }
+                    boolean isInserted = dbh.insertStoreSettings(uuid,str_companyname,str_locationname,str_sitename,str_buildingname,str_wingname,str_floorname,str_virtualareaname,areaName,str_feedbackservice,"20000","yes","Excellent|Very Good|Average|Poor");//area_spinner.getSelectedItemsAsString()
                     System.out.println("isInserted = " + isInserted);
     
                     if (isInserted)
                     {
                         Toast.makeText(AdminDetailsConfig.this, "Submitted", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(AdminDetailsConfig.this,SelectArea.class));
+//                        if(areaName.contains("|")) {
+//                            startActivity(new Intent(AdminDetailsConfig.this, SelectArea.class));
+//                        }else{
+//                        SharedPreferences.Editor editor = prefs.edit();
+//                        editor.putString("area", areaName);
+//                        editor.commit();
+//                            Intent i=new Intent(AdminDetailsConfig.this, FeedbackActivity.class);
+//                            i.putExtra("area",areaName);
+//                            startActivity(i);
+//                        }
+                        startActivity(new Intent(AdminDetailsConfig.this, SelectArea.class));
                     }
                     else
                     {

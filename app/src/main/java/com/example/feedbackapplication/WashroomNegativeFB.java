@@ -21,11 +21,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.feedbackapplication.adminlogin.SelectArea;
 import com.example.feedbackapplication.database.DatabaseHelper;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -38,12 +40,14 @@ public class WashroomNegativeFB extends BaseActivity {
     Runnable runnable;
     String area_name = "Cafeteria";
     int totalquestionscount, current_question_id, rec_id;
-
+    LinearLayout main_Layout;
+    ScrollView scrollView;
     //DatabaseHelper dbh;
 //SQLiteDatabase sqLiteDatabase;
     ArrayList<String> negative_lists = new ArrayList<String>();
     boolean food = false, seating = false, service = false, hygiene = false, ambience = false, others = false;
     boolean overallratingdone = false;
+    Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +65,8 @@ public class WashroomNegativeFB extends BaseActivity {
 
         System.out.println("totalquestionscount = " + totalquestionscount + " current_question_id = " + current_question_id);
 
-        LinearLayout main_Layout = (LinearLayout) findViewById(R.id.main_layout); //vertical
+        scrollView=(ScrollView) findViewById(R.id.scroll);
+        main_Layout = (LinearLayout) findViewById(R.id.main_layout); //vertical
         LinearLayout first_layout = (LinearLayout) findViewById(R.id.first_layout); //vertical
         //TextViews
         first_layout.addView(textView(area_name));
@@ -197,8 +202,27 @@ public class WashroomNegativeFB extends BaseActivity {
 
             public void onTick(long millisUntilFinished) {
                 Log.i("********negfeedback", "seconds remaining: " + millisUntilFinished / 1000);
-                toast=Toast.makeText(WashroomNegativeFB.this, "seconds remaining for timeout: " + millisUntilFinished / 1000, Toast.LENGTH_SHORT);
-                toast.show();
+//                toast=Toast.makeText(WashroomNegativeFB.this, "seconds remaining for timeout: " + millisUntilFinished / 1000, Toast.LENGTH_SHORT);
+//                toast.show();
+
+                if (millisUntilFinished / 1000 == 5) {
+                    snackbar = Snackbar
+                            .make(scrollView, "", snackbar.LENGTH_INDEFINITE)
+                            .setAction("Wait", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snackbar.dismiss();
+                                    countDownTimer.cancel();
+                                    timer();
+                                }
+                            });
+                    (snackbar.getView()).getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    snackbar.show();
+
+                }
+                if (millisUntilFinished / 1000 < 6) {
+                    snackbar.setText("seconds remaining for timeout: " + millisUntilFinished / 1000);
+                }
             }
 
             public void onFinish() {
@@ -247,7 +271,7 @@ public class WashroomNegativeFB extends BaseActivity {
             public void onClick(View view) {
                 if (button.getId() == R.id.submit) {
                     countDownTimer.cancel();
-                    toast.cancel();
+//                    toast.cancel();
 //                    handler.removeCallbacks(runnable);
                     if (negative_lists.size() != 0) {
                         Toast.makeText(WashroomNegativeFB.this, "Submited ", Toast.LENGTH_LONG).show();
@@ -277,7 +301,7 @@ public class WashroomNegativeFB extends BaseActivity {
                     }
                 } else if (button.getId() == R.id.cancel) {
                     countDownTimer.cancel();
-                    toast.cancel();
+//                    toast.cancel();
                     if (current_question_id == totalquestionscount) {
                         finish();
                         startActivity(new Intent(WashroomNegativeFB.this, ThankuActivityScore.class));
@@ -410,7 +434,7 @@ public class WashroomNegativeFB extends BaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         countDownTimer.cancel();
-        toast.cancel();
+//        toast.cancel();
         if (current_question_id == totalquestionscount) {
             finish();
             startActivity(new Intent(WashroomNegativeFB.this, ThankuActivityScore.class));

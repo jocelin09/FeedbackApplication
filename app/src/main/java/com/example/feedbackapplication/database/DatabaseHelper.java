@@ -49,8 +49,8 @@ public void onCreate(SQLiteDatabase sqLiteDatabase) {
     sqLiteDatabase.execSQL(" CREATE TABLE emp_neg_ratings(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,Emp_Feedback_Id TEXT,Name TEXT,Email TEXT,Contact TEXT,Comment TEXT,UpdatedStatus TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE EmailSMSList (Id INTEGER PRIMARY KEY, Auto_Id TEXT,Building_Id TEXT, Employee_Email TEXT, Recipient_Type TEXT,Mobile_Number TEXT, Record_Status TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE sms_master(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,UserName TEXT, Password TEXT, Type TEXT, Source TEXT, URL TEXT)");
-    sqLiteDatabase.execSQL(" CREATE TABLE store_setting(Admin_Id INTEGER PRIMARY KEY , Auto_Id TEXT,Company_Name TEXT,Location_Name TEXT, Site_Name TEXT, Building_Name TEXT,Wing_Name TEXT, Floor_Name TEXT, Virtual_Area_Name TXET, Area_Name TEXT, Feedback_Service_Name TEXT, Display_Name TEXT, Checked_Display_Name TEXT,Active_Setting Text,Icon_Type TEXT,Question_Timeout TEXT,Thankyou_Timeout TEXT,ShowLogo TEXT)");
-    
+    sqLiteDatabase.execSQL(" CREATE TABLE store_setting(Admin_Id INTEGER PRIMARY KEY , Auto_Id TEXT,Company_Name TEXT,Location_Name TEXT, Site_Name TEXT, Building_Name TEXT,Wing_Name TEXT, Floor_Name TEXT, Virtual_Area_Name TXET, Area_Name TEXT, Feedback_Service_Name TEXT, Display_Name TEXT, Checked_Display_Name TEXT,Active_Setting Text,Icon_Type TEXT,Question_Timeout TEXT,Thankyou_Timeout TEXT,ShowLogo TEXT,Icon_List TEXT)");
+
 }
 
 @Override
@@ -144,17 +144,17 @@ public boolean insertAdminDetails(String Company_ID, String Company_Name, String
                                   String Wing_Id,String Wing_Name,String Floor_Id,String Floor_Name,String Area_Id,String Area_Name,String Feedback_Service_Type) {
     SQLiteDatabase db = this.getWritableDatabase();
     ContentValues contentValues = new ContentValues();
-    
+
     contentValues.put("Company_ID", Company_ID);
     contentValues.put("Company_Name", Company_Name);
     contentValues.put("Location_Id", Location_Id);
     contentValues.put("Location_Name", Location_Name);
-    
+
     contentValues.put("Site_Id", Site_Id);
     contentValues.put("Site_Name", Site_Name);
     contentValues.put("Building_Id", Building_Id);
     contentValues.put("Building_Name", Building_Name);
-    
+
     contentValues.put("Wing_Id", Wing_Id);
     contentValues.put("Wing_Name", Wing_Name);
     contentValues.put("Floor_Id", Floor_Id);
@@ -175,7 +175,7 @@ public boolean insertAdminDetails(String Company_ID, String Company_Name, String
 
 
 public boolean insertStoreSettings(String Auto_Id, String Company_Name, String Location_Name, String Site_Name, String Building_Name,
-                                  String Wing_Name,String Floor_Name,String Virtual_Area,String Area_Name,String Feedback_Service_Name,String Timeout,String ShowLogo) {
+                                  String Wing_Name,String Floor_Name,String Virtual_Area,String Area_Name,String Feedback_Service_Name,String Timeout,String ShowLogo,String Icon_List) {
     SQLiteDatabase db = this.getWritableDatabase();
     ContentValues contentValues = new ContentValues();
     
@@ -191,6 +191,7 @@ public boolean insertStoreSettings(String Auto_Id, String Company_Name, String L
     contentValues.put("Feedback_Service_Name", Feedback_Service_Name);
     contentValues.put("Question_Timeout",Timeout);
     contentValues.put("ShowLogo",ShowLogo);
+    contentValues.put("Icon_List",Icon_List);
     long result = db.insert("store_setting", null, contentValues);
     
     if (result == -1)
@@ -247,6 +248,21 @@ public boolean insertData(String AutoId, String FeedbackQuestion, String OrderId
     
 }
 
+public boolean store_EmpRating(String AutoId,String Emp_Id,String Ratings,String UpdatedStatus){
+    SQLiteDatabase db = this.getWritableDatabase();
+    ContentValues contentValues = new ContentValues();
+    contentValues.put("Auto_Id", AutoId);
+    contentValues.put("Emp_Id", Emp_Id);
+    contentValues.put("Ratings", Ratings);
+    contentValues.put("UpdatedStatus",UpdatedStatus);
+    long result = db.insert("emp_ratings", null, contentValues);
+    if (result == -1)
+        return false;
+    else
+        return true;
+    //emp_ratings
+}
+
 
 //Get all data in spinner-dropdown///
 public ArrayList<String> getAllCompanyNames(){
@@ -269,8 +285,8 @@ public ArrayList<String> getAllCompanyNames(){
 public ArrayList<String> getAllCompanyNames(String client_id){
     ArrayList<String> company_name_lists = new ArrayList<String>();
     //company_name_lists.add("Select Company");
-    String selectQuery = "SELECT distinct(Company_Name) FROM admin_details where Company_ID = '"+client_id+"' ORDER BY Company_Name ASC ";
-    
+//    String selectQuery = "SELECT distinct(Company_Name) FROM admin_details where Company_ID = '"+client_id+"' ORDER BY Company_Name ASC ";
+    String selectQuery = "SELECT Company_Name FROM admin_details"; // where Company_ID = '"+client_id+"' ORDER BY Company_Name ASC ";
     SQLiteDatabase db = this.getReadableDatabase();
     Cursor cursor = db.rawQuery(selectQuery, null);
     if (cursor.moveToFirst()) {

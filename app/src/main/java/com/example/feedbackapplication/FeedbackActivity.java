@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.example.feedbackapplication.adminlogin.SelectArea;
 import com.example.feedbackapplication.database.DatabaseHelper;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ import static android.widget.LinearLayout.VERTICAL;
 
 public class FeedbackActivity extends BaseActivity {
 
-    String rbid = "";
+    String rbid = "", Icon_List;
     int r_id = 0;
     ScrollView s;
     int totalfeedback, rec_id;
@@ -57,6 +58,8 @@ public class FeedbackActivity extends BaseActivity {
     int questionscount1;
     private ArrayList<TextView> textViewList = new ArrayList<TextView>();
     private ArrayList<String> questions = new ArrayList<>();
+    String area;
+    ArrayList<String> iconList = new ArrayList<>();
     //    private byte[] img = null;
     private byte[] img = null;
     private byte[] img1 = null;
@@ -69,6 +72,7 @@ public class FeedbackActivity extends BaseActivity {
     private byte[] img8 = null;
     private byte[] img9 = null;
     final Handler handler = new Handler();
+    Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,43 +81,46 @@ public class FeedbackActivity extends BaseActivity {
 //        dbh = new DatabaseHelper(FeedbackActivity.this);
 //        sqLiteDatabase = dbh.getWritableDatabase();
 //        prefs = PreferenceManager.getDefaultSharedPreferences(FeedbackActivity.this);
-        rec_id = getIntent().getIntExtra("rec_id", 0);
-        SharedPreferences.Editor editor = prefs.edit();
+        try {
+            rec_id = getIntent().getIntExtra("rec_id", 0);
+//        area = getIntent().getStringExtra("area");
+            SharedPreferences.Editor editor = prefs.edit();
+            area = prefs.getString("area", "");
+            if (!prefs.contains("QuestNo")) {
+                editor.putInt("QuestNo", 1);
+                editor.commit();
+            } else {
+                totalfeedback = prefs.getInt("QuestNo", 1);
+            }
+            if (!prefs.contains("isVisible")) {
+                editor.putBoolean("isVisible", true);
+                editor.commit();
+            }
 
-        if (!prefs.contains("QuestNo")) {
-            editor.putInt("QuestNo", 1);
-            editor.commit();
-        } else {
-            totalfeedback = prefs.getInt("QuestNo", 1);
-        }
-        if (!prefs.contains("isVisible")) {
-            editor.putBoolean("isVisible", true);
-            editor.commit();
-        }
-
-        //sqLiteDatabase.delete("feedback_admin_icondetails", "ID" + "=" + 10, null);
-
-
-        questionscount1 = dbh.totalquestions_count();
-        if (questionscount1 == 0) {
-            uuid1 = UUID.randomUUID().toString();
-            dbh.insertData(uuid1, "How is your experience using cafeteria?", "1", "Smiley");
+            //sqLiteDatabase.delete("feedback_admin_icondetails", "ID" + "=" + 10, null);
 
 
-            uuid2 = UUID.randomUUID().toString();
-            dbh.insertData(uuid2, "Do you really like the ambience of whole facility? How is it for you", "2", "Smiley");
 
-            uuid3 = UUID.randomUUID().toString();
-            dbh.insertData(uuid3, "Food Quality & Flavor", "3", "Smiley");
+            questionscount1 = dbh.totalquestions_count();
+            if (questionscount1 == 0) {
+                uuid1 = UUID.randomUUID().toString();
+                dbh.insertData(uuid1, "How is your experience using cafeteria?", "1", "Smiley");
 
-            uuid4 = UUID.randomUUID().toString();
-            dbh.insertData(uuid4, "Service Personnel", "4", "Smiley");
 
-            uuid7 = UUID.randomUUID().toString();
-            dbh.insertData(uuid7, "Cafe Ambience", "5", "Smiley");
+                uuid2 = UUID.randomUUID().toString();
+                dbh.insertData(uuid2, "Do you really like the ambience of whole facility? How is it for you", "2", "Smiley");
 
-            uuid8 = UUID.randomUUID().toString();
-            dbh.insertData(uuid8, "Food Hygiene", "6", "Smiley");
+                uuid3 = UUID.randomUUID().toString();
+                dbh.insertData(uuid3, "Food Quality & Flavor", "3", "Smiley");
+
+                uuid4 = UUID.randomUUID().toString();
+                dbh.insertData(uuid4, "Service Personnel", "4", "Smiley");
+
+                uuid7 = UUID.randomUUID().toString();
+                dbh.insertData(uuid7, "Cafe Ambience", "5", "Smiley");
+
+                uuid8 = UUID.randomUUID().toString();
+                dbh.insertData(uuid8, "Food Hygiene", "6", "Smiley");
         
         
        /* uuid5 = UUID.randomUUID().toString();
@@ -123,319 +130,363 @@ public class FeedbackActivity extends BaseActivity {
         dbh.insertAreaDetails(uuid6, "456", "Cafeteria");*/
 
 
-            try {
+                try {
 
-                Bitmap b6 = BitmapFactory.decodeResource(getResources(), R.drawable.exellent);
-                ByteArrayOutputStream bos6 = new ByteArrayOutputStream();
-                b6.compress(Bitmap.CompressFormat.PNG, 100, bos6);
-                img6 = bos6.toByteArray();
-                //myDB = new DatabaseHelper(this);
+                    Bitmap b6 = BitmapFactory.decodeResource(getResources(), R.drawable.exellent);
+                    ByteArrayOutputStream bos6 = new ByteArrayOutputStream();
+                    b6.compress(Bitmap.CompressFormat.PNG, 100, bos6);
+                    img6 = bos6.toByteArray();
+                    //myDB = new DatabaseHelper(this);
 
-                ContentValues cv6 = new ContentValues();
-                cv6.put("Icon_Name", "Excellent");
-                cv6.put("Icon_value", img6);
-                cv6.put("Icon_Type", "Smiley");
-                // cv6.put("Area_Name", "");
-                sqLiteDatabase.insert("feedback_admin_icondetails", null, cv6);
+                    ContentValues cv6 = new ContentValues();
+                    cv6.put("Icon_Name", "Excellent");
+                    cv6.put("Icon_value", img6);
+                    cv6.put("Icon_Type", "Smiley");
+                    // cv6.put("Area_Name", "");
+                    sqLiteDatabase.insert("feedback_admin_icondetails", null, cv6);
 
 
-                Bitmap b5 = BitmapFactory.decodeResource(getResources(), R.drawable.verygood);
-                ByteArrayOutputStream bos5 = new ByteArrayOutputStream();
-                b5.compress(Bitmap.CompressFormat.PNG, 100, bos5);
-                img5 = bos5.toByteArray();
-                //myDB = new DatabaseHelper(this);
+                    Bitmap b5 = BitmapFactory.decodeResource(getResources(), R.drawable.verygood);
+                    ByteArrayOutputStream bos5 = new ByteArrayOutputStream();
+                    b5.compress(Bitmap.CompressFormat.PNG, 100, bos5);
+                    img5 = bos5.toByteArray();
+                    //myDB = new DatabaseHelper(this);
 
-                ContentValues cv5 = new ContentValues();
-                cv5.put("Icon_Name", "Very Good");
-                cv5.put("Icon_value", img5);
-                cv5.put("Icon_Type", "Smiley");
-                //  cv5.put("Area_Name", "");
-                sqLiteDatabase.insert("feedback_admin_icondetails", null, cv5);
+                    ContentValues cv5 = new ContentValues();
+                    cv5.put("Icon_Name", "Very Good");
+                    cv5.put("Icon_value", img5);
+                    cv5.put("Icon_Type", "Smiley");
+                    //  cv5.put("Area_Name", "");
+                    sqLiteDatabase.insert("feedback_admin_icondetails", null, cv5);
 
-                Bitmap b7 = BitmapFactory.decodeResource(getResources(), R.drawable.average);
-                ByteArrayOutputStream bos7 = new ByteArrayOutputStream();
-                b7.compress(Bitmap.CompressFormat.PNG, 100, bos7);
-                img7 = bos7.toByteArray();
-                //myDB = new DatabaseHelper(this);
+                    Bitmap b7 = BitmapFactory.decodeResource(getResources(), R.drawable.average);
+                    ByteArrayOutputStream bos7 = new ByteArrayOutputStream();
+                    b7.compress(Bitmap.CompressFormat.PNG, 100, bos7);
+                    img7 = bos7.toByteArray();
+                    //myDB = new DatabaseHelper(this);
 
-                ContentValues cv7 = new ContentValues();
-                cv7.put("Icon_Name", "Average");
-                cv7.put("Icon_value", img7);
-                cv7.put("Icon_Type", "Smiley");
-                // cv7.put("Area_Name", "");
-                sqLiteDatabase.insert("feedback_admin_icondetails", null, cv7);
+                    ContentValues cv7 = new ContentValues();
+                    cv7.put("Icon_Name", "Average");
+                    cv7.put("Icon_value", img7);
+                    cv7.put("Icon_Type", "Smiley");
+                    // cv7.put("Area_Name", "");
+                    sqLiteDatabase.insert("feedback_admin_icondetails", null, cv7);
 
-                Bitmap b4 = BitmapFactory.decodeResource(getResources(), R.drawable.poor);
-                ByteArrayOutputStream bos4 = new ByteArrayOutputStream();
-                b4.compress(Bitmap.CompressFormat.PNG, 100, bos4);
-                img4 = bos4.toByteArray();
-                //myDB = new DatabaseHelper(this);
+                    Bitmap b4 = BitmapFactory.decodeResource(getResources(), R.drawable.poor);
+                    ByteArrayOutputStream bos4 = new ByteArrayOutputStream();
+                    b4.compress(Bitmap.CompressFormat.PNG, 100, bos4);
+                    img4 = bos4.toByteArray();
+                    //myDB = new DatabaseHelper(this);
 
-                ContentValues cv4 = new ContentValues();
-                cv4.put("Icon_Name", "Poor");
-                cv4.put("Icon_value", img4);
-                cv4.put("Icon_Type", "Smiley");
-                //cv4.put("Area_Name", "");
+                    ContentValues cv4 = new ContentValues();
+                    cv4.put("Icon_Name", "Poor");
+                    cv4.put("Icon_value", img4);
+                    cv4.put("Icon_Type", "Smiley");
+                    //cv4.put("Area_Name", "");
 
-                sqLiteDatabase.insert("feedback_admin_icondetails", null, cv4);
+                    sqLiteDatabase.insert("feedback_admin_icondetails", null, cv4);
 
-                Bitmap b8 = BitmapFactory.decodeResource(getResources(), R.drawable.hygeine);
-                ByteArrayOutputStream bos8 = new ByteArrayOutputStream();
-                b8.compress(Bitmap.CompressFormat.PNG, 100, bos8);
-                img8 = bos8.toByteArray();
-                //myDB = new DatabaseHelper(this);
+                    Bitmap b8 = BitmapFactory.decodeResource(getResources(), R.drawable.hygeine);
+                    ByteArrayOutputStream bos8 = new ByteArrayOutputStream();
+                    b8.compress(Bitmap.CompressFormat.PNG, 100, bos8);
+                    img8 = bos8.toByteArray();
+                    //myDB = new DatabaseHelper(this);
 
-                ContentValues cv8 = new ContentValues();
-                cv8.put("Icon_Name", "Hygiene");
-                cv8.put("Icon_value", img8);
-                cv8.put("Icon_Type", "neg_feedback");
-                //cv8.put("Area_Name", "Cafeteria");
+                    ContentValues cv8 = new ContentValues();
+                    cv8.put("Icon_Name", "Hygiene");
+                    cv8.put("Icon_value", img8);
+                    cv8.put("Icon_Type", "neg_feedback");
+                    //cv8.put("Area_Name", "Cafeteria");
 
-                sqLiteDatabase.insert("feedback_admin_icondetails", null, cv8);
+                    sqLiteDatabase.insert("feedback_admin_icondetails", null, cv8);
 
-                Bitmap b9 = BitmapFactory.decodeResource(getResources(), R.drawable.food);
-                ByteArrayOutputStream bos9 = new ByteArrayOutputStream();
-                b9.compress(Bitmap.CompressFormat.PNG, 100, bos9);
-                img9 = bos9.toByteArray();
-                //myDB = new DatabaseHelper(this);
+                    Bitmap b9 = BitmapFactory.decodeResource(getResources(), R.drawable.food);
+                    ByteArrayOutputStream bos9 = new ByteArrayOutputStream();
+                    b9.compress(Bitmap.CompressFormat.PNG, 100, bos9);
+                    img9 = bos9.toByteArray();
+                    //myDB = new DatabaseHelper(this);
 
-                ContentValues cv9 = new ContentValues();
-                cv9.put("Icon_Name", "Food");
-                cv9.put("Icon_value", img9);
-                cv9.put("Icon_Type", "neg_feedback");
-                //cv9.put("Area_Name", "Cafeteria");
+                    ContentValues cv9 = new ContentValues();
+                    cv9.put("Icon_Name", "Food");
+                    cv9.put("Icon_value", img9);
+                    cv9.put("Icon_Type", "neg_feedback");
+                    //cv9.put("Area_Name", "Cafeteria");
 
-                sqLiteDatabase.insert("feedback_admin_icondetails", null, cv9);
+                    sqLiteDatabase.insert("feedback_admin_icondetails", null, cv9);
 
-                Bitmap b2 = BitmapFactory.decodeResource(getResources(), R.drawable.seating);
-                ByteArrayOutputStream bos2 = new ByteArrayOutputStream();
-                b2.compress(Bitmap.CompressFormat.PNG, 100, bos2);
-                img2 = bos2.toByteArray();
-                //myDB = new DatabaseHelper(this);
+                    Bitmap b2 = BitmapFactory.decodeResource(getResources(), R.drawable.seating);
+                    ByteArrayOutputStream bos2 = new ByteArrayOutputStream();
+                    b2.compress(Bitmap.CompressFormat.PNG, 100, bos2);
+                    img2 = bos2.toByteArray();
+                    //myDB = new DatabaseHelper(this);
 
-                ContentValues cv2 = new ContentValues();
-                cv2.put("Icon_Name", "Seating");
-                cv2.put("Icon_value", img2);
-                cv2.put("Icon_Type", "neg_feedback");
+                    ContentValues cv2 = new ContentValues();
+                    cv2.put("Icon_Name", "Seating");
+                    cv2.put("Icon_value", img2);
+                    cv2.put("Icon_Type", "neg_feedback");
 //            cv2.put("Area_Name", "Cafeteria");
 
-                sqLiteDatabase.insert("feedback_admin_icondetails", null, cv2);
+                    sqLiteDatabase.insert("feedback_admin_icondetails", null, cv2);
 
-                Bitmap b3 = BitmapFactory.decodeResource(getResources(), R.drawable.service);
-                ByteArrayOutputStream bos3 = new ByteArrayOutputStream();
-                b3.compress(Bitmap.CompressFormat.PNG, 100, bos3);
-                img3 = bos3.toByteArray();
-                //myDB = new DatabaseHelper(this);
+                    Bitmap b3 = BitmapFactory.decodeResource(getResources(), R.drawable.service);
+                    ByteArrayOutputStream bos3 = new ByteArrayOutputStream();
+                    b3.compress(Bitmap.CompressFormat.PNG, 100, bos3);
+                    img3 = bos3.toByteArray();
+                    //myDB = new DatabaseHelper(this);
 
-                ContentValues cv3 = new ContentValues();
-                cv3.put("Icon_Name", "Service");
-                cv3.put("Icon_value", img3);
-                cv3.put("Icon_Type", "neg_feedback");
+                    ContentValues cv3 = new ContentValues();
+                    cv3.put("Icon_Name", "Service");
+                    cv3.put("Icon_value", img3);
+                    cv3.put("Icon_Type", "neg_feedback");
 //            cv3.put("Area_Name", "Cafeteria");
 
-                sqLiteDatabase.insert("feedback_admin_icondetails", null, cv3);
+                    sqLiteDatabase.insert("feedback_admin_icondetails", null, cv3);
 
 
-                Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.ambience);
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                b.compress(Bitmap.CompressFormat.PNG, 100, bos);
-                img = bos.toByteArray();
-                //myDB = new DatabaseHelper(this);
+                    Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.ambience);
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    b.compress(Bitmap.CompressFormat.PNG, 100, bos);
+                    img = bos.toByteArray();
+                    //myDB = new DatabaseHelper(this);
 
-                ContentValues cv = new ContentValues();
-                cv.put("Icon_Name", "Ambience");
-                cv.put("Icon_value", img);
-                cv.put("Icon_Type", "neg_feedback");
+                    ContentValues cv = new ContentValues();
+                    cv.put("Icon_Name", "Ambience");
+                    cv.put("Icon_value", img);
+                    cv.put("Icon_Type", "neg_feedback");
 //            cv.put("Area_Name", "Cafeteria");
 
-                sqLiteDatabase.insert("feedback_admin_icondetails", null, cv);
+                    sqLiteDatabase.insert("feedback_admin_icondetails", null, cv);
 
 
-                Bitmap b1 = BitmapFactory.decodeResource(getResources(), R.drawable.others);
-                ByteArrayOutputStream bos1 = new ByteArrayOutputStream();
-                b1.compress(Bitmap.CompressFormat.PNG, 100, bos1);
-                img1 = bos1.toByteArray();
-                //myDB = new DatabaseHelper(this);
+                    Bitmap b1 = BitmapFactory.decodeResource(getResources(), R.drawable.others);
+                    ByteArrayOutputStream bos1 = new ByteArrayOutputStream();
+                    b1.compress(Bitmap.CompressFormat.PNG, 100, bos1);
+                    img1 = bos1.toByteArray();
+                    //myDB = new DatabaseHelper(this);
 
-                ContentValues cv1 = new ContentValues();
-                cv1.put("Icon_Name", "Others");
-                cv1.put("Icon_value", img1);
-                cv1.put("Icon_Type", "neg_feedback");
+                    ContentValues cv1 = new ContentValues();
+                    cv1.put("Icon_Name", "Others");
+                    cv1.put("Icon_value", img1);
+                    cv1.put("Icon_Type", "neg_feedback");
 //            cv1.put("Area_Name", "Cafeteria");
 
-                sqLiteDatabase.insert("feedback_admin_icondetails", null, cv1);
+                    sqLiteDatabase.insert("feedback_admin_icondetails", null, cv1);
 
-                //Toast.makeText(this, "inserted successfully", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "inserted successfully", Toast.LENGTH_SHORT).show();
 
-                sqLiteDatabase.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("e = " + e);
+                    sqLiteDatabase.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("e = " + e);
+                }
+
             }
 
-        }
+            try {
+                SQLiteDatabase db2 = dbh.getWritableDatabase();
+                Cursor cursor1 = db2.rawQuery("Select Icon_List from store_setting ;", null);
+                if (cursor1.moveToFirst()) {
+                    do {
+                        Icon_List = cursor1.getString(0);
+                    } while (cursor1.moveToNext());
+                    db2.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("Icon_List = " + Icon_List);
+            String[] icon = Icon_List.split("\\|");
+            for (int i = 0; i < icon.length; i++) {
+                iconList.add(icon[i]);
+            }
 
 
-        linearLayout = new LinearLayout(this);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT);
-        linearLayout.setLayoutParams(params);
-        linearLayout.setOrientation(VERTICAL);
-        //  linearLayout.setBackgroundColor(R.color.colorAccent);
+            linearLayout = new LinearLayout(this);
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT);
+            linearLayout.setLayoutParams(params);
+            linearLayout.setOrientation(VERTICAL);
+            //  linearLayout.setBackgroundColor(R.color.colorAccent);
 
 
-        linearLayout1 = new LinearLayout(this);
-        // new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
+            linearLayout1 = new LinearLayout(this);
+            // new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
 
-        LinearLayout.LayoutParams mainLayoutParams = new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
-        mainLayoutParams.setMargins(10, 30, 10, 0);
+            LinearLayout.LayoutParams mainLayoutParams = new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
+            mainLayoutParams.setMargins(10, 30, 10, 0);
 
-        linearLayout1.setLayoutParams(mainLayoutParams);
-        linearLayout1.setOrientation(VERTICAL);
-        linearLayout1.setGravity(Gravity.CENTER_HORIZONTAL);
+            linearLayout1.setLayoutParams(mainLayoutParams);
+            linearLayout1.setOrientation(VERTICAL);
+            linearLayout1.setGravity(Gravity.CENTER_HORIZONTAL);
 //        linearLayout1.setPadding(10, 5, 2, 5);
 //    totalfeedback = dbh.feedback_count();
 
-        for (int i = 0; i < dbh.totalquestions_count(); i++) {
-            if (dbh.isOrderIdpresent(totalfeedback)) {
-                break;
-            } else {
-                totalfeedback++;
+            for (int i = 0; i < dbh.totalquestions_count(); i++) {
+                if (dbh.isOrderIdpresent(totalfeedback)) {
+                    break;
+                } else {
+                    totalfeedback++;
+                }
             }
-        }
-        try {
+            try {
 
-            SQLiteDatabase db1 = dbh.getWritableDatabase();
-            // Cursor cursor1 = db1.rawQuery("Select * from feedback_adminquestions where ID =" + (totalfeedback + 1) + ";", null); //
-            Cursor cursor1 = db1.rawQuery("Select * from feedback_adminquestions where Order_Id= '" + String.valueOf(totalfeedback) + "' ;", null);
-            String feedback_question = "", order_id, a_id, icon_type;
-            int id;
-            if (cursor1.moveToFirst()) {
+                SQLiteDatabase db1 = dbh.getWritableDatabase();
+                // Cursor cursor1 = db1.rawQuery("Select * from feedback_adminquestions where ID =" + (totalfeedback + 1) + ";", null); //
+                Cursor cursor1 = db1.rawQuery("Select * from feedback_adminquestions where Order_Id= '" + String.valueOf(totalfeedback) + "' ;", null);
+                String feedback_question = "", order_id, a_id, icon_type;
+                int id;
+                if (cursor1.moveToFirst()) {
 
-                do {
-                    id = cursor1.getInt(0);
-                    a_id = cursor1.getString(1);
-                    feedback_question = cursor1.getString(2);
+                    do {
+                        id = cursor1.getInt(0);
+                        a_id = cursor1.getString(1);
+                        feedback_question = cursor1.getString(2);
 //                    questions.add(feedback_question);
 
-                    order_id = cursor1.getString(3);
+                        order_id = cursor1.getString(3);
 //                   icon_type = cursor.getString(4);
+                        linearLayout1.addView(textView(1, "Please Rate " + area));
+                        linearLayout1.addView(textView(id, feedback_question));
+                        linearLayout2 = new LinearLayout(this);
+                        // new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
+                        LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
+                        buttonLayoutParams.setMargins(10, 100, 10, 0);
+                        linearLayout2.setLayoutParams(buttonLayoutParams);
+                        linearLayout2.setOrientation(LinearLayout.HORIZONTAL);
+                        linearLayout2.setGravity(Gravity.CENTER);
 
-                    linearLayout1.addView(textView(id, feedback_question));
-                    linearLayout2 = new LinearLayout(this);
-                    // new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
-                    LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
-                    buttonLayoutParams.setMargins(10, 100, 10, 0);
-                    linearLayout2.setLayoutParams(buttonLayoutParams);
-                    linearLayout2.setOrientation(LinearLayout.HORIZONTAL);
-                    linearLayout2.setGravity(Gravity.CENTER);
+                        System.out.println("linear layout id = " + id);
 
-                    System.out.println("linear layout id = " + id);
-
-                    linearLayout2.setId(id);
-                    SQLiteDatabase db2 = dbh.getWritableDatabase();
+                        linearLayout2.setId(id);
+//
+                            SQLiteDatabase db2 = dbh.getWritableDatabase();
 //                    Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where ID IN(3,4,5,6) ;", null); //
                     Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where Icon_Type ='Smiley';", null);
-                    String icon_name, icon_value;
-                    int icon_id;
-                    if (cursor2.moveToFirst()) {
 
-                        do {
-                            icon_id = cursor2.getInt(0);
-                            icon_name = cursor2.getString(2);
+                            String icon_name, icon_value;
+                            int icon_id;
+                            if (cursor2.moveToFirst()) {
+
+                                do {
+                                    icon_id = cursor2.getInt(0);
+                                    icon_name = cursor2.getString(2);
 //                            icon_value = cursor2.getString(3);
-                            linearLayout3 = new LinearLayout(this);
+                                    linearLayout3 = new LinearLayout(this);
 //                            new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
 //                            linearLayout3.setLayoutParams(params);
 
-                            // ViewGroup.LayoutParams params1 = new ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
-                            LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(WRAP_CONTENT, MATCH_PARENT);
-                            params1.setMargins(10, 5, 10, 10);
+                                    // ViewGroup.LayoutParams params1 = new ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+                                    LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(WRAP_CONTENT, MATCH_PARENT);
+                                    params1.setMargins(10, 5, 10, 10);
 
-                            linearLayout3.setLayoutParams(params1);
-                            linearLayout3.setOrientation(VERTICAL);
-                            linearLayout3.setGravity(Gravity.CENTER);
-
-                            linearLayout3.addView(imageView(id, icon_name, icon_id));
-                            linearLayout3.addView(subtextView(icon_id, icon_name));
-                            linearLayout2.addView(linearLayout3);
+                                    linearLayout3.setLayoutParams(params1);
+                                    linearLayout3.setOrientation(VERTICAL);
+                                    linearLayout3.setGravity(Gravity.CENTER);
+//                                    for (int i = 0; i < iconList.size(); i++) {
+//                                        System.out.print(iconList.get(i)+ i);
+//                                        if (iconList.get(i).equals(icon_name)) {
+                                    if (iconList.contains(icon_name)) {
+                                            linearLayout3.addView(imageView(id, icon_name, icon_id));
+                                            linearLayout3.addView(subtextView(icon_id, icon_name));
+                                            linearLayout2.addView(linearLayout3);
+                                        }
+//                                    }
 //                   icon_type = cursor.getString(4);
-                        } while (cursor2.moveToNext());
-                        db2.close();
-                    }
-
-                    int questionscount = dbh.totalquestions_count();
-                    System.out.println("questionscount = " + questionscount);
-
-                    linearLayout4 = new LinearLayout(this);
-                    new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
-                    linearLayout4.setLayoutParams(params);
+                                } while (cursor2.moveToNext());
+                                db2.close();
+                            }
 
 
-                    linearLayout4.setOrientation(LinearLayout.HORIZONTAL);
-                    if (totalfeedback != 1) {
-                        linearLayout4.addView(button("Prev"));
-                    }
-                    if (totalfeedback != questionscount) {
-                        linearLayout4.addView(button("Next"));
-                    }
+                        int questionscount = dbh.totalquestions_count();
+                        System.out.println("questionscount = " + questionscount);
 
-                    linearLayout1.addView(linearLayout2);
-                    linearLayout1.addView(linearLayout4);
-                    boolean isvisible = prefs.getBoolean("isVisible", true);
-                    if (!isvisible) {
-                        linearLayout4.setVisibility(View.GONE);
-                    }
+                        linearLayout4 = new LinearLayout(this);
+                        new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
+                        linearLayout4.setLayoutParams(params);
 
-                } while (cursor1.moveToNext());
-                db1.close();
 
+                        linearLayout4.setOrientation(LinearLayout.HORIZONTAL);
+                        if (totalfeedback != 1) {
+                            linearLayout4.addView(button("Prev"));
+                        }
+//                    if (totalfeedback != questionscount) {
+//                        linearLayout4.addView(button("Next"));
+//                    }
+
+                        linearLayout1.addView(linearLayout2);
+                        linearLayout1.addView(linearLayout4);
+                        boolean isvisible = prefs.getBoolean("isVisible", true);
+                        if (!isvisible) {
+                            linearLayout4.setVisibility(View.GONE);
+                        }
+                        linearLayout4.setVisibility(View.GONE);//TODO comment later
+                    } while (cursor1.moveToNext());
+                    db1.close();
+
+                }
+
+                //
+
+
+                linearLayout.addView(linearLayout1);
+
+                setContentView(linearLayout);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
-            //
-
-
-            linearLayout.addView(linearLayout1);
-
-            setContentView(linearLayout);
-
-
+            timer();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        timer();
     }
 
     public void timer() {
 
-       /* runnable=new Runnable() {
-
-            @Override
-            public void run() {
-
-                handler.removeCallbacks(this);
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putInt("QuestNo", 1);
-                editor.commit();
-
-//                sqLiteDatabase = dbh.getWritableDatabase();
-//                sqLiteDatabase.delete("feedback_userquestiondata", "rec_id='"+String.valueOf(rec_id)+"'", null);
-//                sqLiteDatabase.close();
-
-                Intent intent = new Intent(getApplicationContext(), SelectArea.class);
-                startActivity(intent);
-                finish();
-
-            }
-        };
-        handler.postDelayed(runnable,20000);*/
-
-        countDownTimer=new CountDownTimer(20000, 1000) {
+        countDownTimer = new CountDownTimer(20000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 Log.i("********feedback", "seconds remaining: " + millisUntilFinished / 1000);
-                toast=Toast.makeText(FeedbackActivity.this, "seconds remaining for timeout: " + millisUntilFinished / 1000, Toast.LENGTH_SHORT);
-                toast.show();
+//
+                if (millisUntilFinished / 1000 == 5) {
+                    snackbar = Snackbar
+                            .make(linearLayout, "", snackbar.LENGTH_INDEFINITE)
+                            .setAction("Wait", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snackbar.dismiss();
+                                    countDownTimer.cancel();
+                                    timer();
+                                }
+
+                            });
+                    (snackbar.getView()).getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    snackbar.show();
+
+
+                   /* Snackbar snackbar = Snackbar.make(linearLayout, "", Snackbar.LENGTH_LONG);
+                    Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout)
+                            snackbar.getView();
+                    TextView textView = (TextView)
+                            layout.findViewById(android.support.design.R.id.snackbarText);
+                    textView.setVisibility(View.INVISIBLE);
+
+                    View snackView = mInflater.inflate(R.layout.snckBar, null);
+                    ImageView imageView = (ImageView) snackView.findViewById(R.id.image);
+                    imageView.setImageBitmap(image);
+                    TextView textViewTop = (TextView) snackView.findViewById(R.id.text);
+                    textViewTop.setText(text);
+                    textViewTop.setTextColor(Color.WHITE);
+                    layout.setPadding(0,0,0,0);
+                    layout.addView(snackView,0);
+                    snackbar.show();*/
+
+                }
+                if (millisUntilFinished / 1000 < 6) {
+                    snackbar.setText("Seconds Remaining for Timeout: " + millisUntilFinished / 1000);
+                }
+
             }
 
             public void onFinish() {
@@ -449,6 +500,8 @@ public class FeedbackActivity extends BaseActivity {
                 finish();
             }
         }.start();
+
+
     }
 
 
@@ -558,7 +611,8 @@ public class FeedbackActivity extends BaseActivity {
 //                handler.removeMessages(0);
 //                handler.removeCallbacks(runnable);
                 countDownTimer.cancel();
-                toast.cancel();
+
+//                toast.cancel();
                 int count = dbh.feedback_count();
                 int totalquestionscount = dbh.totalquestions_count();
                 dbh.insertFeedbackData(String.valueOf(rec_id), String.valueOf(id), String.valueOf(icon_id));
@@ -579,7 +633,10 @@ public class FeedbackActivity extends BaseActivity {
                     } else {
                         finish();
                         //Toast.makeText(FeedbackActivity.this, "Else " + count, Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(FeedbackActivity.this, ThankuActivityScore.class));
+                        Intent i = new Intent(FeedbackActivity.this, ThankuActivityScore.class);
+                        i.putExtra("area", area);
+                        startActivity(i);
+                        finish();
                     }
 
 
@@ -664,5 +721,9 @@ public class FeedbackActivity extends BaseActivity {
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        countDownTimer.cancel();
+    }
 }

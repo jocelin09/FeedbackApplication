@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.feedbackapplication.BaseActivity;
+import com.example.feedbackapplication.EmployeeFeedback;
 import com.example.feedbackapplication.R;
 
 import java.util.ArrayList;
@@ -51,12 +52,13 @@ protected void onCreate(Bundle savedInstanceState) {
     mainLayout.setLayoutParams(params);
     mainLayout.setOrientation(LinearLayout.HORIZONTAL);
     mainLayout.setGravity(Gravity.CENTER);
-    mainLayout.setWeightSum(feedbackserviceList.size());
+    mainLayout.setWeightSum(feedbackserviceList.size()+1);
     
     for (int i = 0; i < feedbackserviceList.size(); i++) {
         String feedbackservicename = feedbackserviceList.get(i);
         mainLayout.addView(textView(i + 1, feedbackservicename));
     }
+    mainLayout.addView(textView(4,"Rate Employee"));
     setContentView(mainLayout);
     
 }
@@ -75,10 +77,16 @@ private View textView(int i, final String feedbackservicename) {
     textView.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(FeedbackServiceAct.this,AdminDetailsConfig.class);
-            intent.putExtra("feedbackservicename",feedbackservicename);
-            intent.putExtra("client_id",client_id);
-            startActivity(intent);
+            if(feedbackservicename.equals("Rate Employee")){
+                Intent intent = new Intent(FeedbackServiceAct.this, EmployeeFeedback.class);
+                intent.putExtra("client_id", client_id);
+                startActivity(intent);
+            }else {
+                Intent intent = new Intent(FeedbackServiceAct.this, AdminDetailsConfig.class);
+                intent.putExtra("feedbackservicename", feedbackservicename);
+                intent.putExtra("client_id", client_id);
+                startActivity(intent);
+            }
             
         }
     });
