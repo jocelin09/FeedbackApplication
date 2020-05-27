@@ -190,7 +190,7 @@ public class SelectArea extends BaseActivity {
                     i.putExtra("area",imgvalue);
                     startActivity(i);
                 } else if (imgvalue.equalsIgnoreCase("Washroom")) {
-                    Intent i = new Intent(SelectArea.this, FeedbackService.class);
+                    Intent i = new Intent(SelectArea.this, FeedbackActivity.class);
                     i.putExtra("area",imgvalue);
                     startActivity(i);
                 }

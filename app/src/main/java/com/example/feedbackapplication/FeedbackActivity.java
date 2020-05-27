@@ -101,26 +101,26 @@ public class FeedbackActivity extends BaseActivity {
 
 
 
-            questionscount1 = dbh.totalquestions_count();
+            questionscount1 = dbh.totalsmileyimage_count();
             if (questionscount1 == 0) {
-                uuid1 = UUID.randomUUID().toString();
-                dbh.insertData(uuid1, "How is your experience using cafeteria?", "1", "Smiley");
-
-
-                uuid2 = UUID.randomUUID().toString();
-                dbh.insertData(uuid2, "Do you really like the ambience of whole facility? How is it for you", "2", "Smiley");
-
-                uuid3 = UUID.randomUUID().toString();
-                dbh.insertData(uuid3, "Food Quality & Flavor", "3", "Smiley");
-
-                uuid4 = UUID.randomUUID().toString();
-                dbh.insertData(uuid4, "Service Personnel", "4", "Smiley");
-
-                uuid7 = UUID.randomUUID().toString();
-                dbh.insertData(uuid7, "Cafe Ambience", "5", "Smiley");
-
-                uuid8 = UUID.randomUUID().toString();
-                dbh.insertData(uuid8, "Food Hygiene", "6", "Smiley");
+//                uuid1 = UUID.randomUUID().toString();
+//                dbh.insertData(uuid1, "How is your experience using cafeteria?", "1", "Smiley");
+//
+//
+//                uuid2 = UUID.randomUUID().toString();
+//                dbh.insertData(uuid2, "Do you really like the ambience of whole facility? How is it for you", "2", "Smiley");
+//
+//                uuid3 = UUID.randomUUID().toString();
+//                dbh.insertData(uuid3, "Food Quality & Flavor", "3", "Smiley");
+//
+//                uuid4 = UUID.randomUUID().toString();
+//                dbh.insertData(uuid4, "Service Personnel", "4", "Smiley");
+//
+//                uuid7 = UUID.randomUUID().toString();
+//                dbh.insertData(uuid7, "Cafe Ambience", "5", "Smiley");
+//
+//                uuid8 = UUID.randomUUID().toString();
+//                dbh.insertData(uuid8, "Food Hygiene", "6", "Smiley");
         
         
        /* uuid5 = UUID.randomUUID().toString();

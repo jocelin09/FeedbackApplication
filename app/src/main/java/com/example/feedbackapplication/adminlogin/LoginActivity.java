@@ -411,11 +411,11 @@ public void onClick(View view) {
                                 Cursor cursor = db1.rawQuery(selectQuery, null);
                                 Log.d("asdgvdafg", cursor.getCount() + "");
                                 if (cursor.getCount() < task.length()) {
-                                    ContentValues contentValues = new ContentValues();
-                                    contentValues.put("Auto_Id", Auto_Id);
-                                    contentValues.put("Feedback_Question", Feedback_Question);
-                                    db1.insert("feedback_adminquestions", null, contentValues);
-
+//                                    ContentValues contentValues = new ContentValues();
+//                                    contentValues.put("Auto_Id", Auto_Id);
+//                                    contentValues.put("Feedback_Question", Feedback_Question);
+//                                    db1.insert("feedback_adminquestions", null, contentValues);
+                                    dbh.insertData(Auto_Id, Feedback_Question, String.valueOf(j+1), "Smiley");
                                 }
                                 cursor.close();
                                 db1.close();

@@ -98,6 +98,15 @@ public int totalquestions_count() {
         // db1.close();
         return count;
     }
+    public int totalsmileyimage_count() {
+        SQLiteDatabase db1 = this.getWritableDatabase();
+        Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_admin_icondetails where Icon_Type='Smiley';", null);
+        cursor1.moveToFirst();
+        int count = cursor1.getInt(0);
+        cursor1.close();
+        // db1.close();
+        return count;
+    }
 
     public int totalfeedbackcount() {
         SQLiteDatabase db1 = this.getWritableDatabase();
@@ -286,7 +295,7 @@ public ArrayList<String> getAllCompanyNames(String client_id){
     ArrayList<String> company_name_lists = new ArrayList<String>();
     //company_name_lists.add("Select Company");
 //    String selectQuery = "SELECT distinct(Company_Name) FROM admin_details where Company_ID = '"+client_id+"' ORDER BY Company_Name ASC ";
-    String selectQuery = "SELECT Company_Name FROM admin_details"; // where Company_ID = '"+client_id+"' ORDER BY Company_Name ASC ";
+    String selectQuery = "SELECT Company_Name FROM admin_details GROUP BY Company_Name "; // where Company_ID = '"+client_id+"' ORDER BY Company_Name ASC ";
     SQLiteDatabase db = this.getReadableDatabase();
     Cursor cursor = db.rawQuery(selectQuery, null);
     if (cursor.moveToFirst()) {
