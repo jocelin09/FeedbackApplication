@@ -38,7 +38,7 @@ import static android.widget.LinearLayout.HORIZONTAL;
 public class WashroomNegativeFB extends BaseActivity {
     final Handler handler = new Handler();
     Runnable runnable;
-    String area_name = "Cafeteria";
+    String area_name = "";//Cafeteria
     int totalquestionscount, current_question_id, rec_id;
     LinearLayout main_Layout;
     ScrollView scrollView;
@@ -65,12 +65,25 @@ public class WashroomNegativeFB extends BaseActivity {
 
         System.out.println("totalquestionscount = " + totalquestionscount + " current_question_id = " + current_question_id);
 
-        scrollView=(ScrollView) findViewById(R.id.scroll);
+        scrollView = (ScrollView) findViewById(R.id.scroll);
         main_Layout = (LinearLayout) findViewById(R.id.main_layout); //vertical
         LinearLayout first_layout = (LinearLayout) findViewById(R.id.first_layout); //vertical
         //TextViews
         first_layout.addView(textView(area_name));
-        first_layout.addView(subtextView("What went wrong?"));
+//        first_layout.addView(subtextView("What went wrong?"));
+        try {
+            SQLiteDatabase db2 = dbh.getWritableDatabase();
+            Cursor cursor1 = db2.rawQuery("Select Feedback_Sub_Question from feedback_adminsubquestions where Feedback_Id= '" + String.valueOf(current_question_id) + "' ;", null);
+            if (cursor1.moveToFirst()) {
+                do {
+                    String Feedback_Sub_Question = cursor1.getString(0);
+                    first_layout.addView(subtextView(Feedback_Sub_Question));
+                } while (cursor1.moveToNext());
+                db2.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         LinearLayout second_layout = (LinearLayout) findViewById(R.id.second_layout); //vertical
 
@@ -198,7 +211,7 @@ public class WashroomNegativeFB extends BaseActivity {
         };
         handler.postDelayed(runnable, 20000);*/
 
-        countDownTimer=new CountDownTimer(20000, 1000) {
+        countDownTimer = new CountDownTimer(20000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 Log.i("********negfeedback", "seconds remaining: " + millisUntilFinished / 1000);
@@ -345,19 +358,33 @@ public class WashroomNegativeFB extends BaseActivity {
         imageView.setLayoutParams(new android.view.ViewGroup.LayoutParams(300, 300));
         final DatabaseHelper dbh = new DatabaseHelper(WashroomNegativeFB.this);
         Bitmap b = null;
-        byte[] image_str = dbh.readDataIcon(strvalue);
-        ;
-        try {
-            b = BitmapFactory.decodeByteArray(image_str, 0, image_str.length);
-            imageView.setImageBitmap(Bitmap.createScaledBitmap(b, 100, 100, true));
-        } catch (Exception e) {
-
-            e.printStackTrace();
+        //Faulty Equipments,No Toilet Paper ,Floor Not Clean,Leakage,Others,Smelly
+        if (strvalue.equals("Faulty Equipments")) {
+            imageView.setBackgroundResource(R.drawable.litter_bin);
+        } else if (strvalue.equals("No Toilet Paper")) {
+            imageView.setBackgroundResource(R.drawable.notissue);
+        } else if (strvalue.equals("Floor Not Clean")) {
+            imageView.setBackgroundResource(R.drawable.dirty_floor);
+        } else if (strvalue.equals("Leakage")) {
+            imageView.setBackgroundResource(R.drawable.dirty_basin);
+        } else if (strvalue.equals("Smelly")) {
+            imageView.setBackgroundResource(R.drawable.smelly);
+        } else if (strvalue.equals("Others")) {
+            imageView.setBackgroundResource(R.drawable.others);
         }
+//        byte[] image_str = dbh.readDataIcon(strvalue);
+//
+//        try {
+//            b = BitmapFactory.decodeByteArray(image_str, 0, image_str.length);
+//            imageView.setImageBitmap(Bitmap.createScaledBitmap(b, 100, 100, true));
+//        } catch (Exception e) {
+//}
+//            e.printStackTrace();
+//        }
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (strvalue.equals("Food")) {
+                if (strvalue.equals("Faulty Equipments")) {
                     if (food == false) {
                         linearLayout1.setBackground(getDrawable(R.drawable.selected_item_green));
                         negative_lists.add(strvalue);
@@ -367,7 +394,7 @@ public class WashroomNegativeFB extends BaseActivity {
                         negative_lists.remove(strvalue);
                         food = false;
                     }
-                } else if (strvalue.equals("Seating")) {
+                } else if (strvalue.equals("No Toilet Paper")) {
                     if (seating == false) {
                         linearLayout1.setBackground(getDrawable(R.drawable.selected_item_green));
                         negative_lists.add(strvalue);
@@ -378,7 +405,7 @@ public class WashroomNegativeFB extends BaseActivity {
                         seating = false;
                     }
                 }
-                if (strvalue.equals("Service")) {
+                if (strvalue.equals("Floor Not Clean")) {
                     if (service == false) {
                         linearLayout1.setBackground(getDrawable(R.drawable.selected_item_green));
                         negative_lists.add(strvalue);
@@ -388,7 +415,7 @@ public class WashroomNegativeFB extends BaseActivity {
                         negative_lists.remove(strvalue);
                         service = false;
                     }
-                } else if (strvalue.equals("Hygiene")) {
+                } else if (strvalue.equals("Leakage")) {
                     if (hygiene == false) {
                         linearLayout1.setBackground(getDrawable(R.drawable.selected_item_green));
                         negative_lists.add(strvalue);
@@ -398,7 +425,7 @@ public class WashroomNegativeFB extends BaseActivity {
                         negative_lists.remove(strvalue);
                         hygiene = false;
                     }
-                } else if (strvalue.equals("Ambience")) {
+                } else if (strvalue.equals("Smelly")) {
                     if (ambience == false) {
                         linearLayout1.setBackground(getDrawable(R.drawable.selected_item_green));
                         negative_lists.add(strvalue);

@@ -100,7 +100,6 @@ public class FeedbackActivity extends BaseActivity {
             //sqLiteDatabase.delete("feedback_admin_icondetails", "ID" + "=" + 10, null);
 
 
-
             questionscount1 = dbh.totalsmileyimage_count();
             if (questionscount1 == 0) {
 //                uuid1 = UUID.randomUUID().toString();
@@ -330,7 +329,7 @@ public class FeedbackActivity extends BaseActivity {
             try {
 
                 SQLiteDatabase db1 = dbh.getWritableDatabase();
-                // Cursor cursor1 = db1.rawQuery("Select * from feedback_adminquestions where ID =" + (totalfeedback + 1) + ";", null); //
+//                 Cursor cursor1 = db1.rawQuery("Select * from feedback_adminquestions where ID =" + (totalfeedback + 1) + ";", null); //
                 Cursor cursor1 = db1.rawQuery("Select * from feedback_adminquestions where Order_Id= '" + String.valueOf(totalfeedback) + "' ;", null);
                 String feedback_question = "", order_id, a_id, icon_type;
                 int id;
@@ -358,42 +357,42 @@ public class FeedbackActivity extends BaseActivity {
 
                         linearLayout2.setId(id);
 //
-                            SQLiteDatabase db2 = dbh.getWritableDatabase();
+                        SQLiteDatabase db2 = dbh.getWritableDatabase();
 //                    Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where ID IN(3,4,5,6) ;", null); //
-                    Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where Icon_Type ='Smiley';", null);
+                        Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where Icon_Type ='Smiley';", null);
 
-                            String icon_name, icon_value;
-                            int icon_id;
-                            if (cursor2.moveToFirst()) {
+                        String icon_name, icon_value;
+                        int icon_id;
+                        if (cursor2.moveToFirst()) {
 
-                                do {
-                                    icon_id = cursor2.getInt(0);
-                                    icon_name = cursor2.getString(2);
+                            do {
+                                icon_id = cursor2.getInt(0);
+                                icon_name = cursor2.getString(2);
 //                            icon_value = cursor2.getString(3);
-                                    linearLayout3 = new LinearLayout(this);
+                                linearLayout3 = new LinearLayout(this);
 //                            new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
 //                            linearLayout3.setLayoutParams(params);
 
-                                    // ViewGroup.LayoutParams params1 = new ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
-                                    LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(WRAP_CONTENT, MATCH_PARENT);
-                                    params1.setMargins(10, 5, 10, 10);
+                                // ViewGroup.LayoutParams params1 = new ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+                                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(WRAP_CONTENT, MATCH_PARENT);
+                                params1.setMargins(10, 5, 10, 10);
 
-                                    linearLayout3.setLayoutParams(params1);
-                                    linearLayout3.setOrientation(VERTICAL);
-                                    linearLayout3.setGravity(Gravity.CENTER);
+                                linearLayout3.setLayoutParams(params1);
+                                linearLayout3.setOrientation(VERTICAL);
+                                linearLayout3.setGravity(Gravity.CENTER);
 //                                    for (int i = 0; i < iconList.size(); i++) {
 //                                        System.out.print(iconList.get(i)+ i);
 //                                        if (iconList.get(i).equals(icon_name)) {
-                                    if (iconList.contains(icon_name)) {
-                                            linearLayout3.addView(imageView(id, icon_name, icon_id));
-                                            linearLayout3.addView(subtextView(icon_id, icon_name));
-                                            linearLayout2.addView(linearLayout3);
-                                        }
+//                                    if (iconList.contains(icon_name)) {
+                                linearLayout3.addView(imageView(id, icon_name, icon_id));
+                                linearLayout3.addView(subtextView(icon_id, icon_name));
+                                linearLayout2.addView(linearLayout3);
+//                                        }
 //                                    }
 //                   icon_type = cursor.getString(4);
-                                } while (cursor2.moveToNext());
-                                db2.close();
-                            }
+                            } while (cursor2.moveToNext());
+                            db2.close();
+                        }
 
 
                         int questionscount = dbh.totalquestions_count();
@@ -589,17 +588,27 @@ public class FeedbackActivity extends BaseActivity {
         imageView.setLayoutParams(new ViewGroup.LayoutParams(350, 350));
         final DatabaseHelper dbh = new DatabaseHelper(FeedbackActivity.this);
         Bitmap b = null;
-        byte[] image_str = dbh.readDataIcon(strvalue);
-        ;
-        try {
-            b = BitmapFactory.decodeByteArray(image_str, 0, image_str.length);
-
-            imageView.setImageBitmap(Bitmap.createScaledBitmap(b, 100, 100, true));
-        } catch (Exception e) {
-
-            e.printStackTrace();
+//        byte[] image_str = dbh.readDataIcon(strvalue);
+//        ;
+//        try {
+//            b = BitmapFactory.decodeByteArray(image_str, 0, image_str.length);
+//
+//            imageView.setImageBitmap(Bitmap.createScaledBitmap(b, 100, 100, true));
+//        } catch (Exception e) {
+//
+//            e.printStackTrace();
+//        }
+        if (imgvalue.equalsIgnoreCase("Poor")) {
+            imageView.setBackgroundResource(R.drawable.poor);
+        } else if (imgvalue.equalsIgnoreCase("Average")) {
+            imageView.setBackgroundResource(R.drawable.average);
+        } else if (imgvalue.equalsIgnoreCase("Good")) {
+            imageView.setBackgroundResource(R.drawable.good);
+        } else if (imgvalue.equalsIgnoreCase("Very Good")) {
+            imageView.setBackgroundResource(R.drawable.very_good);
+        } else if (imgvalue.equalsIgnoreCase("Excellent")) {
+            imageView.setBackgroundResource(R.drawable.excellent);
         }
-
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -615,7 +624,7 @@ public class FeedbackActivity extends BaseActivity {
 //                toast.cancel();
                 int count = dbh.feedback_count();
                 int totalquestionscount = dbh.totalquestions_count();
-                dbh.insertFeedbackData(String.valueOf(rec_id), String.valueOf(id), String.valueOf(icon_id));
+                dbh.insertFeedbackData(String.valueOf(rec_id), String.valueOf(totalfeedback), String.valueOf(icon_id));
                 System.out.print("********rec_count " + (rec_id) + "quest_id" + id + "icon_id" + icon_id);/**/
                 //Last Question
                 if (count == totalquestionscount) {

@@ -242,12 +242,13 @@ public boolean insertStoreSettings(String Auto_Id, String Company_Name, String L
     }
 
 
-public boolean insertData(String AutoId, String FeedbackQuestion, String OrderId, String IconType) {//,String AreaId
+public boolean insertData(String AutoId, String FeedbackQuestion, String OrderId, String IconType,String AreaId) {//
     SQLiteDatabase db = this.getWritableDatabase();
     ContentValues contentValues = new ContentValues();
     contentValues.put("Auto_Id", AutoId);
     contentValues.put("Feedback_Question", FeedbackQuestion);
     contentValues.put("Order_Id", OrderId);
+    contentValues.put("AreaId", AreaId);
     //contentValues.put("Icon_Type",IconType);
     long result = db.insert("feedback_adminquestions", null, contentValues);
     if (result == -1)

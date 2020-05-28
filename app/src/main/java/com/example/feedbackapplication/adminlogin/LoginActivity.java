@@ -6,6 +6,8 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
@@ -28,6 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.UUID;
@@ -405,17 +408,62 @@ public void onClick(View view) {
                                 JSONObject c1 = task.getJSONObject(j);
                                 String Auto_Id = c1.getString("Auto_Id");
                                 String Feedback_Question = c1.getString("Feedback_Question");
+                                String Area_Id="";
+                                if(!c1.getString("Area_Id").equals("null")){
+                                    Area_Id= c1.getString("Area_Id");
+                                }
+                                String Order_Id = c1.getString("Disp_Order");
+//                                String Icon_Type= c1.getString("Icon_Type");
                                 String selectQuery = "SELECT * FROM feedback_adminquestions";
                                 databaseHelper1 = new DatabaseHelper(getApplicationContext());
                                 db1 = databaseHelper1.getWritableDatabase();
                                 Cursor cursor = db1.rawQuery(selectQuery, null);
                                 Log.d("asdgvdafg", cursor.getCount() + "");
                                 if (cursor.getCount() < task.length()) {
-//                                    ContentValues contentValues = new ContentValues();
-//                                    contentValues.put("Auto_Id", Auto_Id);
-//                                    contentValues.put("Feedback_Question", Feedback_Question);
-//                                    db1.insert("feedback_adminquestions", null, contentValues);
-                                    dbh.insertData(Auto_Id, Feedback_Question, String.valueOf(j+1), "Smiley");
+                                    ContentValues contentValues = new ContentValues();
+                                    contentValues.put("Auto_Id", Auto_Id);
+                                    contentValues.put("Feedback_Question", Feedback_Question);
+                                    contentValues.put("Order_Id", Order_Id);
+                                    contentValues.put("Area_Id", Area_Id);
+//                                    contentValues.put("Icon_Type", Icon_Type);
+                                    db1.insert("feedback_adminquestions", null, contentValues);
+//                                    dbh.insertData(Auto_Id, Feedback_Question, Order_Id, "Smiley",Area_Id);
+                                }
+                                cursor.close();
+                                db1.close();
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        //db1.endTransaction();
+                    }
+
+                    try {
+                        JSONArray task = jsonObj.getJSONArray("feedbackSubQuestionDetails");
+                        Log.d("DATasValue", task + "" + task.length());
+                        if (!task.toString().equals("[]")) {
+
+                            for (int j = 0; j < task.length(); j++) {
+                                JSONObject c1 = task.getJSONObject(j);
+                                String Auto_Id = c1.getString("Auto_Id");
+                                String Feedback_Question_Id = c1.getString("Feedback_Question_Id");
+                                String Feedback_Sub_Question= c1.getString("Feedback_Sub_Question");
+
+                                String Order_Id = c1.getString("Disp_Order");
+                                String selectQuery = "SELECT * FROM feedback_adminsubquestions";
+                                databaseHelper1 = new DatabaseHelper(getApplicationContext());
+                                db1 = databaseHelper1.getWritableDatabase();
+                                Cursor cursor = db1.rawQuery(selectQuery, null);
+                                Log.d("asdgvdafg", cursor.getCount() + "");
+                                if (cursor.getCount() < task.length()) {
+                                    //Auto_Id TEXT, Feedback_Id TEXT, Feedback_Sub_Question TEXT,Icon Blob, Order_Id TEXT,Weightage TEXT,RecordStatus TEXT
+                                    ContentValues contentValues = new ContentValues();
+                                    contentValues.put("Auto_Id", Auto_Id);
+                                    contentValues.put("Feedback_Id", Feedback_Question_Id);
+                                    contentValues.put("Feedback_Sub_Question", Feedback_Sub_Question);
+                                    contentValues.put("Order_Id", Order_Id);
+                                    db1.insert("feedback_adminsubquestions", null, contentValues);
+
                                 }
                                 cursor.close();
                                 db1.close();
@@ -592,35 +640,93 @@ public void onClick(View view) {
                         e.printStackTrace();
                         //db1.endTransaction();
                     }*/
-                    ////////////////////////Feedback Icons////////////////////////////
-//                    try {
-//                        JSONArray task = jsonObj.getJSONArray("feedbackIcons");
-//                        Log.d("DATasValue", task + "" + task.length());
-//                        if (!task.toString().equals("[]")) {
-//
-//                            for (int j = 0; j < task.length(); j++) {
-//                                JSONObject c1 = task.getJSONObject(j);
-//                                String Auto_Id = c1.getString("Auto_Id");
-//                                String Feedback_Name = c1.getString("Feedback_Name");
-//                                String selectQuery = "SELECT * FROM feedback_icons_details";
-//                                databaseHelper1 = new DatabaseHelper(getApplicationContext());
-//                                db1 = databaseHelper1.getWritableDatabase();
-//                                Cursor cursor = db1.rawQuery(selectQuery, null);
-//                                Log.d("asdgvdafg", cursor.getCount() + "");
-//                                if (cursor.getCount() < task.length()) {
-//                                    ContentValues contentValues = new ContentValues();
-//                                    contentValues.put("Auto_Id", Auto_Id);
-//                                    contentValues.put("Feedback_Name", Feedback_Name);
-//                                    db1.insert("feedback_icons_details", null, contentValues);
-//                                }
-//                                cursor.close();
-//                                db1.close();
-//                            }
-//                        }
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                        //db1.endTransaction();
-//                    }
+                    //////////////////////Feedback Icons////////////////////////////
+                    try {
+                        JSONArray task = jsonObj.getJSONArray("feedbackiconDetails");
+                        Log.d("DATasValue", task + "" + task.length());
+                        if (!task.toString().equals("[]")) {
+
+                            for (int j = 0; j < task.length(); j++) {
+                                JSONObject c1 = task.getJSONObject(j);
+                                //"Auto_Id":"0978d793-a018-11ea-a8e4-1c1b0dc1b24f",
+                                //         "Feedback_Name":"Average",
+                                //         "Icon_Value":null,
+                                //         "Icon_Type":"Smiley"
+                                //Auto_Id TEXT, Icon_Name TEXT, Icon_value BLOB,Icon_Type TEXT, Status TEXT
+                                String Auto_Id = c1.getString("Auto_Id");
+                                String Feedback_Name = c1.getString("Feedback_Name");
+//                                String Icon_Value = c1.getString("Icon_Value");
+                                String Icon_Type = c1.getString("Icon_Type");
+                                String selectQuery = "SELECT * FROM feedback_admin_icondetails";
+                                databaseHelper1 = new DatabaseHelper(getApplicationContext());
+                                db1 = databaseHelper1.getWritableDatabase();
+                                Cursor cursor = db1.rawQuery(selectQuery, null);
+                                Log.d("asdgvdafg", cursor.getCount() + "");
+                                if (cursor.getCount() < task.length()) {
+                                    ContentValues contentValues = new ContentValues();
+                                    contentValues.put("Auto_Id", Auto_Id);
+                                    contentValues.put("Icon_Name", Feedback_Name);
+                                    contentValues.put("Icon_Type", Icon_Type);
+                                    db1.insert("feedback_admin_icondetails", null, contentValues);
+                                }
+                                cursor.close();
+                                db1.close();
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        //db1.endTransaction();
+                    }
+                    //insert icon hardcoded values
+                  /*  try {
+                        SQLiteDatabase db2 = databaseHelper1.getWritableDatabase();
+                        Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.cafeteria);
+                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                        b.compress(Bitmap.CompressFormat.PNG, 100, bos);
+                         byte[] img = bos.toByteArray();
+                        //myDB = new DatabaseHelper(this);
+
+                        ContentValues cv = new ContentValues();
+                        cv.put("Icon_Name", "Cafeteria");
+                        cv.put("Icon_value", img);
+                        cv.put("Icon_Type", "area");
+//            cv.put("Area_Name", "Cafeteria");
+
+                        db2.insert("feedback_admin_icondetails", null, cv);
+
+
+                        Bitmap b1 = BitmapFactory.decodeResource(getResources(), R.drawable.washroom);
+                        ByteArrayOutputStream bos1 = new ByteArrayOutputStream();
+                        b1.compress(Bitmap.CompressFormat.PNG, 100, bos1);
+                        byte[] img1 = bos1.toByteArray();
+                        //myDB = new DatabaseHelper(this);
+
+                        ContentValues cv1 = new ContentValues();
+                        cv1.put("Icon_Name", "Washroom");
+                        cv1.put("Icon_value", img1);
+                        cv1.put("Icon_Type", "area");
+//            cv1.put("Area_Name", "Cafeteria");
+
+                        db2.insert("feedback_admin_icondetails", null, cv1);
+
+                      *//*  Bitmap b2 = BitmapFactory.decodeResource(getResources(), R.drawable.washroom);
+                        ByteArrayOutputStream bos2 = new ByteArrayOutputStream();
+                        b1.compress(Bitmap.CompressFormat.PNG, 100, bos2);
+                        byte[] img2 = bos2.toByteArray();
+                        //myDB = new DatabaseHelper(this);
+
+                        ContentValues cv2 = new ContentValues();
+                        cv2.put("Icon_Name", "Washroom");
+                        cv2.put("Icon_value", img1);
+                        cv2.put("Icon_Type", "area");
+//            cv1.put("Area_Name", "Cafeteria");
+
+                        sqLiteDatabase.insert("feedback_admin_icondetails", null, cv2);*//*
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }*/
+
+
 //                    ////////////////////////Feedback Email Details////////////////////////////
 //                    try {
 //                        JSONArray task = jsonObj.getJSONArray("feedbackEmail");

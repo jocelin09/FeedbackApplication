@@ -72,7 +72,7 @@ public class AdminDetailsConfig extends BaseActivity {
         //VIRTUAL AREA SPINNER
         virtualarea_names.add("Select Virtual Area");
         virtualarea_names.add("Washroom");
-//    virtualarea_names.add("Cafeteria");
+        virtualarea_names.add("Cafeteria");
 
 
         //FEEDBACK SERVICE SPINNER
@@ -2308,31 +2308,19 @@ private Constraints constraints() {
                     } else {
                         uuid = UUID.randomUUID().toString();
                         String areaName = "";
-                        if (area_spinner.getVisibility() == view.VISIBLE) {
                             areaName = area_spinner.getSelectedItemsAsString();
                             if (!areaName.equalsIgnoreCase(str_virtualareaname)) {
                                 areaName = areaName + "|" + str_virtualareaname;
                             }
-                        }else{
-                            areaName = str_virtualareaname;
-                        }
-                        boolean isInserted = dbh.insertStoreSettings(uuid, str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname, str_floorname, str_virtualareaname, areaName, str_feedbackservice, "20000", "yes", "Excellent|Very Good|Average|Poor");//area_spinner.getSelectedItemsAsString()
+
+                        boolean isInserted = dbh.insertStoreSettings(uuid, str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname, str_floorname, str_virtualareaname, areaName, str_feedbackservice, "20000", "yes", "Excellent|Very Good|Good|Average|Poor");//area_spinner.getSelectedItemsAsString()
                         System.out.println("isInserted = " + isInserted);
 
                         if (isInserted) {
                             Toast.makeText(AdminDetailsConfig.this, "Submitted", Toast.LENGTH_SHORT).show();
 
-                        if (areaName.equals("")){
-//                        SharedPreferences.Editor editor = prefs.edit();
-//                        editor.putString("area", areaName);
-//                        editor.commit();
-                            Intent i=new Intent(AdminDetailsConfig.this, SelectArea.class);
-                            i.putExtra("area","Washroom");
-                            startActivity(i);
-                        }else{
-                                startActivity(new Intent(AdminDetailsConfig.this, SelectArea.class));
-                        }
-//                            startActivity(new Intent(AdminDetailsConfig.this, SelectArea.class));
+
+                            startActivity(new Intent(AdminDetailsConfig.this, SelectArea.class));
                         } else {
                             Toast.makeText(AdminDetailsConfig.this, "Some error occured, Please try again", Toast.LENGTH_SHORT).show();
                         }

@@ -52,7 +52,7 @@ public class SelectArea extends BaseActivity {
 //        setContentView(R.layout.activity_select_area);
 //        databaseHelper = new DatabaseHelper(this);
 //        sqLiteDatabase = databaseHelper.getWritableDatabase();
-        imagecount = dbh.totalimage_count();
+      /*  imagecount = dbh.totalimage_count();
         if (imagecount == 0) {
             try {
                 Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.cafeteria);
@@ -86,7 +86,7 @@ public class SelectArea extends BaseActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
         linearLayout = new LinearLayout(this);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT);
@@ -161,21 +161,21 @@ public class SelectArea extends BaseActivity {
         imageView.setLayoutParams(params);
         Bitmap b = null;
 
-           /* if (imgvalue.equalsIgnoreCase("Cafeteria")) {
+            if (imgvalue.equalsIgnoreCase("Cafeteria")) {
                 imageView.setBackgroundResource(R.drawable.cafeteria);
             } else if (imgvalue.equalsIgnoreCase("Washroom")) {
                 imageView.setBackgroundResource(R.drawable.washroom);
-            }*/
-        byte[] image_str = dbh.readDataIcon(strvalue);
-
-        try {
-            b = BitmapFactory.decodeByteArray(image_str, 0, image_str.length);
-
-            imageView.setImageBitmap(Bitmap.createScaledBitmap(b, 600, 200, true));
-        } catch (Exception e) {
-
-            e.printStackTrace();
-        }
+            }
+//        byte[] image_str = dbh.readDataIcon(strvalue);
+//
+//        try {
+//            b = BitmapFactory.decodeByteArray(image_str, 0, image_str.length);
+//
+//            imageView.setImageBitmap(Bitmap.createScaledBitmap(b, 600, 200, true));
+//        } catch (Exception e) {
+//
+//            e.printStackTrace();
+//        }
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
