@@ -343,7 +343,7 @@ public class FeedbackActivity extends BaseActivity {
 
                         order_id = cursor1.getString(3);
 //                   icon_type = cursor.getString(4);
-                        linearLayout1.addView(textView(1, "Please Rate " + area));
+                        linearLayout1.addView(textView(1,  area));
                         linearLayout1.addView(textView(id, feedback_question));
                         linearLayout2 = new LinearLayout(this);
                         // new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
@@ -356,45 +356,45 @@ public class FeedbackActivity extends BaseActivity {
                         System.out.println("linear layout id = " + id);
 
                         linearLayout2.setId(id);
-//
-                        SQLiteDatabase db2 = dbh.getWritableDatabase();
+                        for (int i = 0; i < iconList.size(); i++) {
+                            SQLiteDatabase db2 = dbh.getWritableDatabase();
 //                    Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where ID IN(3,4,5,6) ;", null); //
-                        Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where Icon_Type ='Smiley';", null);
+                            Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where Icon_Type ='Smiley' and Icon_Name='"+iconList.get(i)+"' ;", null);
 
-                        String icon_name, icon_value;
-                        int icon_id;
-                        if (cursor2.moveToFirst()) {
+                            String icon_name, icon_value;
+                            int icon_id;
+                            if (cursor2.moveToFirst()) {
 
-                            do {
-                                icon_id = cursor2.getInt(0);
-                                icon_name = cursor2.getString(2);
+                                do {
+                                    icon_id = cursor2.getInt(0);
+                                    icon_name = cursor2.getString(2);
 //                            icon_value = cursor2.getString(3);
-                                linearLayout3 = new LinearLayout(this);
+                                    linearLayout3 = new LinearLayout(this);
 //                            new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
 //                            linearLayout3.setLayoutParams(params);
 
-                                // ViewGroup.LayoutParams params1 = new ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
-                                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(WRAP_CONTENT, MATCH_PARENT);
-                                params1.setMargins(10, 5, 10, 10);
+                                    // ViewGroup.LayoutParams params1 = new ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+                                    LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(WRAP_CONTENT, MATCH_PARENT);
+                                    params1.setMargins(10, 5, 10, 10);
 
-                                linearLayout3.setLayoutParams(params1);
-                                linearLayout3.setOrientation(VERTICAL);
-                                linearLayout3.setGravity(Gravity.CENTER);
-//                                    for (int i = 0; i < iconList.size(); i++) {
+                                    linearLayout3.setLayoutParams(params1);
+                                    linearLayout3.setOrientation(VERTICAL);
+                                    linearLayout3.setGravity(Gravity.CENTER);
+//
 //                                        System.out.print(iconList.get(i)+ i);
 //                                        if (iconList.get(i).equals(icon_name)) {
 //                                    if (iconList.contains(icon_name)) {
-                                linearLayout3.addView(imageView(id, icon_name, icon_id));
-                                linearLayout3.addView(subtextView(icon_id, icon_name));
-                                linearLayout2.addView(linearLayout3);
+                                    linearLayout3.addView(imageView(id, icon_name, icon_id));
+                                    linearLayout3.addView(subtextView(icon_id, icon_name));
+                                    linearLayout2.addView(linearLayout3);
 //                                        }
 //                                    }
 //                   icon_type = cursor.getString(4);
-                            } while (cursor2.moveToNext());
-                            db2.close();
+                                } while (cursor2.moveToNext());
+                                db2.close();
+                            }
+
                         }
-
-
                         int questionscount = dbh.totalquestions_count();
                         System.out.println("questionscount = " + questionscount);
 
