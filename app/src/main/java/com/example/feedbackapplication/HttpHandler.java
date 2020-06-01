@@ -97,7 +97,7 @@ public class HttpHandler {
     public String LoginDetails_main(String username, String password) {
         String response = null;
         try {
-            String reqUrl =  new ApplicationClass().urlString()+"android/LoginDetails_main.php";
+            String reqUrl =  new ApplicationClass().urlString()+"android/LoginDetails_20200529.php";
             URL url = new URL(reqUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
@@ -131,8 +131,27 @@ public class HttpHandler {
 
 
     public Bitmap ProfilePic(String profilename) {
-
+//
+        //http://45.118.160.162:81/punctualiti/com/dell_bangalore_feedback/android/imageslist.php
         String reqUrl =  new ApplicationClass().urlString()+"/AVFS/"+profilename+".jpg";
+
+        Bitmap bitmap = null;
+        try {
+            // Download Image from URL
+            InputStream input = new URL(reqUrl).openStream();
+            // Decode Bitmap
+            bitmap = BitmapFactory.decodeStream(input);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+
+    }
+
+    public Bitmap GetImage(String image_name) {
+//
+        //http://45.118.160.162:81/punctualiti/com/dell_bangalore_feedback/android/imageslist.php
+        String reqUrl =  new ApplicationClass().urlString()+"/android/"+image_name;
 
         Bitmap bitmap = null;
         try {

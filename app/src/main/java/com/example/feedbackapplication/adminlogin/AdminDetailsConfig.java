@@ -1,7 +1,6 @@
 package com.example.feedbackapplication.adminlogin;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.feedbackapplication.BaseActivity;
-import com.example.feedbackapplication.FeedbackActivity;
 import com.example.feedbackapplication.R;
 
 import java.util.ArrayList;
@@ -37,7 +35,7 @@ public class AdminDetailsConfig extends BaseActivity {
 
 
     int questionscount;
-    String str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname, str_floorname, str_virtualareaname, str_feedbackservice, client_id;
+    String str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname, str_floorname,str_virtualareaname,str_feedbackservice,client_id;
     String company_id, location_id, site_id, building_id, wing_id, floor_id, area_id;
     private ArrayList<String> company_names = new ArrayList<String>();
     private ArrayList<String> location_names = new ArrayList<String>();
@@ -51,10 +49,9 @@ public class AdminDetailsConfig extends BaseActivity {
 
     MultipleSelectionSpinner area_spinner;
     Button button;
-    String uuid = "";
+    String uuid="";
 
     private WorkManager mWorkManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,9 +96,12 @@ public class AdminDetailsConfig extends BaseActivity {
             final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_text, company_names);
             spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             company_spinner.setAdapter(spinnerArrayAdapter);
-            if (company_names.size() == 1) {
+            if (company_names.size() == 1)
+            {
                 company_spinner.setEnabled(false);
-            } else {
+            }
+            else
+            {
                 company_spinner.setEnabled(true);
             }
             ////////////LOCATION NAME//////////
@@ -141,10 +141,11 @@ public class AdminDetailsConfig extends BaseActivity {
             area_spinner.setLayoutParams(params1);
 
 
+
             //BUTTONS LAYOUT
             final LinearLayout sub1_secondlayout = new LinearLayout(getApplicationContext());
             LinearLayout.LayoutParams params_sub1 = new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
-            params_sub1.setMargins(16, 15, 16, 8);
+            params_sub1.setMargins(16,15,16,8);
             sub1_secondlayout.setLayoutParams(params_sub1);
             sub1_secondlayout.setOrientation(HORIZONTAL);
             // sub1_secondlayout.setWeightSum(2f);
@@ -153,7 +154,7 @@ public class AdminDetailsConfig extends BaseActivity {
 
             button = new Button(this);
             LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
-            params2.setMargins(16, 8, 16, 8);
+            params2.setMargins(16,8,16,8);
             button.setLayoutParams(params2);
             //button.setGravity(Gravity.CENTER_HORIZONTAL);
 
@@ -164,7 +165,7 @@ public class AdminDetailsConfig extends BaseActivity {
                     try {
                         if (!str_companyname.equals("")) {
                             company_id = dbh.getCompanyId(str_companyname);
-//                        company_spinner.setId(Integer.parseInt(company_id));
+                            company_spinner.setId(Integer.parseInt(company_id));
                             System.out.println("company_spinner.getId() = " + company_spinner.getId());
                         }
                     } catch (NumberFormatException e) {
@@ -177,9 +178,12 @@ public class AdminDetailsConfig extends BaseActivity {
                     if (!location_names.isEmpty()) {
 
                         //IF ONLY ONE ITEM IS PRESENT, SET SPINNER AS NON-EDITABLE
-                        if (location_names.size() == 1) {
+                        if (location_names.size() == 1)
+                        {
                             location_spinner.setEnabled(false);
-                        } else {
+                        }
+                        else
+                        {
                             location_spinner.setEnabled(true);
                         }
 
@@ -204,7 +208,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                 try {
                                     if (!str_locationname.equals("")) {
                                         location_id = dbh.getLocationId(str_locationname);
-//                                    location_spinner.setId(Integer.parseInt(location_id));
+                                        location_spinner.setId(Integer.parseInt(location_id));
                                         System.out.println("location_spinner.getId() = " + location_spinner.getId());
                                     }
                                 } catch (NumberFormatException e) {
@@ -217,9 +221,12 @@ public class AdminDetailsConfig extends BaseActivity {
                                 if (!site_names.isEmpty()) {
 
                                     //IF ONLY ONE ITEM IS PRESENT, SET SPINNER AS NON-EDITABLE
-                                    if (site_names.size() == 1) {
+                                    if (site_names.size() == 1)
+                                    {
                                         site_spinner.setEnabled(false);
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         site_spinner.setEnabled(true);
                                     }
 
@@ -245,7 +252,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                             try {
                                                 if (!str_sitename.equals("")) {
                                                     site_id = dbh.getSiteId(str_sitename);
-//                                                site_spinner.setId(Integer.parseInt(site_id));
+//                                                    site_spinner.setId(Integer.parseInt(site_id));
                                                     System.out.println("site_spinner.getId() = " + site_spinner.getId());
                                                 }
                                             } catch (NumberFormatException e) {
@@ -257,9 +264,12 @@ public class AdminDetailsConfig extends BaseActivity {
 
                                             if (!building_names.isEmpty()) {
                                                 //IF ONLY ONE ITEM IS PRESENT, SET SPINNER AS NON-EDITABLE
-                                                if (building_names.size() == 1) {
+                                                if (building_names.size() == 1)
+                                                {
                                                     building_spinner.setEnabled(false);
-                                                } else {
+                                                }
+                                                else
+                                                {
                                                     building_spinner.setEnabled(true);
                                                 }
 
@@ -284,7 +294,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                         try {
                                                             if (!str_buildingname.equals("")) {
                                                                 building_id = dbh.getBuildingId(str_buildingname);
-//                                                            building_spinner.setId(Integer.parseInt(building_id));
+//                                                                building_spinner.setId(Integer.parseInt(building_id));
                                                                 System.out.println("building_spinner.getId() = " + building_spinner.getId());
 
                                                             }
@@ -298,9 +308,12 @@ public class AdminDetailsConfig extends BaseActivity {
                                                         if (!wing_names.isEmpty()) {
 
                                                             //IF ONLY ONE ITEM IS PRESENT, SET SPINNER AS NON-EDITABLE
-                                                            if (wing_names.size() == 1) {
+                                                            if (wing_names.size() == 1)
+                                                            {
                                                                 wing_spinner.setEnabled(false);
-                                                            } else {
+                                                            }
+                                                            else
+                                                            {
                                                                 wing_spinner.setEnabled(true);
                                                             }
 
@@ -325,7 +338,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                     try {
                                                                         if (!str_wingname.equals("")) {
                                                                             wing_id = dbh.getWingId(str_wingname);
-//                                                                        wing_spinner.setId(Integer.parseInt(wing_id));
+//                                                                            wing_spinner.setId(Integer.parseInt(wing_id));
                                                                             System.out.println("wing_spinner.getId() = " + wing_spinner.getId());
                                                                         }
                                                                     } catch (NumberFormatException e) {
@@ -338,9 +351,12 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                     if (!floor_names.isEmpty()) {
 
                                                                         //IF ONLY ONE ITEM IS PRESENT, SET SPINNER AS NON-EDITABLE
-                                                                        if (floor_names.size() == 1) {
+                                                                        if (floor_names.size() == 1)
+                                                                        {
                                                                             floor_spinner.setEnabled(false);
-                                                                        } else {
+                                                                        }
+                                                                        else
+                                                                        {
                                                                             floor_spinner.setEnabled(true);
                                                                         }
 
@@ -366,7 +382,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                 try {
                                                                                     if (!str_floorname.equals("")) {
                                                                                         floor_id = dbh.getFloorId(str_floorname);
-//                                                                                    floor_spinner.setId(Integer.parseInt(floor_id));
+//                                                                                        floor_spinner.setId(Integer.parseInt(floor_id));
                                                                                         System.out.println("floor_spinner.getId() = " + floor_spinner.getId());
                                                                                     }
                                                                                 } catch (NumberFormatException e) {
@@ -374,7 +390,41 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                     System.out.println("Floor Id Exception");
                                                                                 }
 
-                                                                                if (!virtualarea_names.isEmpty()) {
+                                                                                if (!virtualarea_names.isEmpty())
+                                                                                {
+
+                                                                                    area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
+                                                                                    System.out.println("area_names = " + area_names);
+                                                                                    if (!area_names.isEmpty())
+                                                                                    {
+                                                                                        //MULTI SELECT SPINNER
+                                                                                        area_spinner.setVisibility(View.VISIBLE);
+                                                                                        area_spinner.setItems(area_names);
+                                                                                        System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedStrings());
+
+                                                                                        if (area_spinner.getParent() != null) {
+                                                                                            ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
+                                                                                        }
+                                                                                        main_Layout.addView(area_spinner);
+                                                                                    }
+                                                                                    //BUTTONS
+                                                                                    if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                        ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+                                                                                    }
+                                                                                    sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
+
+                                                                                    if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                                        ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                                                    }
+                                                                                    sub1_secondlayout.addView(button(R.id.submit,"Submit"));
+
+
+                                                                                    if (sub1_secondlayout.getParent() != null) {
+                                                                                        ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+                                                                                    }
+                                                                                    main_Layout.addView(sub1_secondlayout);
+                                                                                }
+                                                                             /*   {
                                                                                     ArrayAdapter<String> spinnerArrayAdapter6 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                             R.layout.spinner_text, virtualarea_names);
                                                                                     spinnerArrayAdapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -391,7 +441,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                             str_virtualareaname = virtualarea_spinner.getSelectedItem().toString();
                                                                                             try {
                                                                                                 if (!str_virtualareaname.equals("")) {
-                                                                                                    virtualarea_spinner.setId(i);
+//                                                                                                    virtualarea_spinner.setId(i);
                                                                                                     System.out.println("floor_spinner.getId() = " + virtualarea_spinner.getId());
                                                                                                 }
                                                                                             } catch (NumberFormatException e) {
@@ -399,9 +449,10 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                                 System.out.println("Virtual Area Id Exception");
                                                                                             }
 
-                                                                                            area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname, str_floorname);
+                                                                                            area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
                                                                                             System.out.println("area_names = " + area_names);
-                                                                                            if (!area_names.isEmpty()) {
+                                                                                            if (!area_names.isEmpty())
+                                                                                            {
                                                                                                 //MULTI SELECT SPINNER
                                                                                                 area_spinner.setVisibility(View.VISIBLE);
                                                                                                 area_spinner.setItems(area_names);
@@ -411,18 +462,18 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                                     ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
                                                                                                 }
                                                                                                 main_Layout.addView(area_spinner);
-        
-                                                                                           /* //FEEDBACK SERVICE
+
+                                                                                           *//* //FEEDBACK SERVICE
                                                                                             ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                                     R.layout.spinner_text, feedback_service_name);
                                                                                             spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                                                             feedback_service.setAdapter(spinnerArrayAdapter5);
-        
+
                                                                                             if (feedback_service.getParent() != null) {
                                                                                                 ((ViewGroup) feedback_service.getParent()).removeView(feedback_service); //
                                                                                             }
                                                                                             main_Layout.addView(feedback_service);
-        
+
                                                                                             feedback_service.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                                                                 @Override
                                                                                                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -437,43 +488,38 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                                         System.out.println("Feedback Service Id Exception");
                                                                                                     }
                                                                                                 }
-            
+
                                                                                                 @Override
                                                                                                 public void onNothingSelected(AdapterView<?> adapterView) {
-                
+
                                                                                                 }
-                                                                                            });*/
+                                                                                            });*//*
+
+                                                                                                //BUTTONS
+                                                                                                if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                                    ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+                                                                                                }
+                                                                                                sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
+
+                                                                                                if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                                                    ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                                                                }
+                                                                                                sub1_secondlayout.addView(button(R.id.submit,"Submit"));
 
 
-                                                                                            } else {
+                                                                                                if (sub1_secondlayout.getParent() != null) {
+                                                                                                    ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+                                                                                                }
+                                                                                                main_Layout.addView(sub1_secondlayout);
+
+
+                                                                                            }
+                                                                                            else
+                                                                                            {
                                                                                                 main_Layout.removeView(area_spinner);
-                                                                                                if (button(R.id.cancel, "Cancel").getParent() != null) {
-                                                                                                    ((ViewGroup) button(R.id.cancel, "Cancel").getParent()).removeView(button(R.id.cancel, "Cancel")); //
-                                                                                                }
-                                                                                                sub1_secondlayout.addView(button(R.id.cancel, "Cancel"));
-
-                                                                                                if (button(R.id.submit, "Submit").getParent() != null) {
-                                                                                                    ((ViewGroup) button(R.id.submit, "Submit").getParent()).removeView(button(R.id.submit, "Submit")); //
-                                                                                                }
-                                                                                                sub1_secondlayout.addView(button(R.id.submit, "Submit"));
 
                                                                                             }
-                                                                                            //BUTTONS
-                                                                                            if (button(R.id.cancel, "Cancel").getParent() != null) {
-                                                                                                ((ViewGroup) button(R.id.cancel, "Cancel").getParent()).removeView(button(R.id.cancel, "Cancel")); //
-                                                                                            }
-                                                                                            sub1_secondlayout.addView(button(R.id.cancel, "Cancel"));
 
-                                                                                            if (button(R.id.submit, "Submit").getParent() != null) {
-                                                                                                ((ViewGroup) button(R.id.submit, "Submit").getParent()).removeView(button(R.id.submit, "Submit")); //
-                                                                                            }
-                                                                                            sub1_secondlayout.addView(button(R.id.submit, "Submit"));
-
-
-                                                                                            if (sub1_secondlayout.getParent() != null) {
-                                                                                                ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
-                                                                                            }
-                                                                                            main_Layout.addView(sub1_secondlayout);
                                                                                         }
 
                                                                                         @Override
@@ -483,9 +529,13 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                     });
 
 
-                                                                                } else {
+
+
+                                                                                }*/
+                                                                                else {
                                                                                     main_Layout.removeView(virtualarea_spinner);
                                                                                 }
+
 
 
                                                                             }
@@ -495,7 +545,9 @@ public class AdminDetailsConfig extends BaseActivity {
 
                                                                             }
                                                                         });
-                                                                    } else {
+                                                                    }
+
+                                                                    else {
                                                                         main_Layout.removeView(floor_spinner);
                                                                     }
                                                                 }
@@ -505,7 +557,9 @@ public class AdminDetailsConfig extends BaseActivity {
 
                                                                 }
                                                             });
-                                                        } else {
+                                                        }
+
+                                                        else {
                                                             main_Layout.removeView(wing_spinner);
 
                                                             //If no wing data, then add next spinner floor
@@ -515,9 +569,12 @@ public class AdminDetailsConfig extends BaseActivity {
                                                             floor_names = dbh.getAllFloors(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname);
                                                             if (!floor_names.isEmpty()) {
                                                                 //IF ONLY ONE ITEM IS PRESENT, SET SPINNER AS NON-EDITABLE
-                                                                if (floor_names.size() == 1) {
+                                                                if (floor_names.size() == 1)
+                                                                {
                                                                     floor_spinner.setEnabled(false);
-                                                                } else {
+                                                                }
+                                                                else
+                                                                {
                                                                     floor_spinner.setEnabled(true);
                                                                 }
 
@@ -542,7 +599,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                         try {
                                                                             if (!str_floorname.equals("")) {
                                                                                 floor_id = dbh.getFloorId(str_floorname);
-//                                                                            floor_spinner.setId(Integer.parseInt(floor_id));
+//                                                                                floor_spinner.setId(Integer.parseInt(floor_id));
                                                                                 System.out.println("floor_spinner.getId() = " + floor_spinner.getId());
                                                                             }
                                                                         } catch (NumberFormatException e) {
@@ -551,7 +608,41 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                         }
 
 
-                                                                        if (!virtualarea_names.isEmpty()) {
+                                                                        if (!virtualarea_names.isEmpty())
+                                                                        {
+
+                                                                            area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
+                                                                            System.out.println("area_names = " + area_names);
+                                                                            if (!area_names.isEmpty())
+                                                                            {
+                                                                                //MULTI SELECT SPINNER
+                                                                                area_spinner.setVisibility(View.VISIBLE);
+                                                                                area_spinner.setItems(area_names);
+                                                                                System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedStrings());
+
+                                                                                if (area_spinner.getParent() != null) {
+                                                                                    ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
+                                                                                }
+                                                                                main_Layout.addView(area_spinner);
+                                                                            }
+                                                                            //BUTTONS
+                                                                            if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+                                                                            }
+                                                                            sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
+
+                                                                            if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                                ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                                            }
+                                                                            sub1_secondlayout.addView(button(R.id.submit,"Submit"));
+
+
+                                                                            if (sub1_secondlayout.getParent() != null) {
+                                                                                ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+                                                                            }
+                                                                            main_Layout.addView(sub1_secondlayout);
+                                                                        }
+                                                                        /*{
                                                                             ArrayAdapter<String> spinnerArrayAdapter6 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                     R.layout.spinner_text, virtualarea_names);
                                                                             spinnerArrayAdapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -568,7 +659,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                     str_virtualareaname = virtualarea_spinner.getSelectedItem().toString();
                                                                                     try {
                                                                                         if (!str_virtualareaname.equals("")) {
-                                                                                            virtualarea_spinner.setId(i);
+//                                                                                            virtualarea_spinner.setId(i);
                                                                                             System.out.println("floor_spinner.getId() = " + virtualarea_spinner.getId());
                                                                                         }
                                                                                     } catch (NumberFormatException e) {
@@ -576,9 +667,10 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                         System.out.println("Virtual Area Id Exception");
                                                                                     }
 
-                                                                                    area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname, str_floorname);
+                                                                                    area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
                                                                                     System.out.println("area_names = " + area_names);
-                                                                                    if (!area_names.isEmpty()) {
+                                                                                    if (!area_names.isEmpty())
+                                                                                    {
                                                                                         //MULTI SELECT SPINNER
                                                                                         area_spinner.setVisibility(View.VISIBLE);
                                                                                         area_spinner.setItems(area_names);
@@ -588,18 +680,18 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                             ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
                                                                                         }
                                                                                         main_Layout.addView(area_spinner);
-                    
-                                                                                    /*//FEEDBACK SERVICE
+
+                                                                                   FEEDBACK SERVICE
                                                                                     ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                             R.layout.spinner_text, feedback_service_name);
                                                                                     spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                                                     feedback_service.setAdapter(spinnerArrayAdapter5);
-                    
+
                                                                                     if (feedback_service.getParent() != null) {
                                                                                         ((ViewGroup) feedback_service.getParent()).removeView(feedback_service); //
                                                                                     }
                                                                                     main_Layout.addView(feedback_service);
-                    
+
                                                                                     feedback_service.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                                                         @Override
                                                                                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -614,23 +706,23 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                                 System.out.println("Feedback Service Id Exception");
                                                                                             }
                                                                                         }
-                        
+
                                                                                         @Override
                                                                                         public void onNothingSelected(AdapterView<?> adapterView) {
-                            
+
                                                                                         }
-                                                                                    });*/
+                                                                                    });*//*
 
                                                                                         //BUTTONS
-                                                                                        if (button(R.id.cancel, "Cancel").getParent() != null) {
-                                                                                            ((ViewGroup) button(R.id.cancel, "Cancel").getParent()).removeView(button(R.id.cancel, "Cancel")); //
+                                                                                        if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                            ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
                                                                                         }
-                                                                                        sub1_secondlayout.addView(button(R.id.cancel, "Cancel"));
+                                                                                        sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
 
-                                                                                        if (button(R.id.submit, "Submit").getParent() != null) {
-                                                                                            ((ViewGroup) button(R.id.submit, "Submit").getParent()).removeView(button(R.id.submit, "Submit")); //
+                                                                                        if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                                            ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
                                                                                         }
-                                                                                        sub1_secondlayout.addView(button(R.id.submit, "Submit"));
+                                                                                        sub1_secondlayout.addView(button(R.id.submit,"Submit"));
 
 
                                                                                         if (sub1_secondlayout.getParent() != null) {
@@ -639,24 +731,11 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                         main_Layout.addView(sub1_secondlayout);
 
 
-                                                                                    } else {
+                                                                                    }
+                                                                                    else
+                                                                                    {
                                                                                         main_Layout.removeView(area_spinner);
-                                                                                        //BUTTONS
-                                                                                        if (button(R.id.cancel, "Cancel").getParent() != null) {
-                                                                                            ((ViewGroup) button(R.id.cancel, "Cancel").getParent()).removeView(button(R.id.cancel, "Cancel")); //
-                                                                                        }
-                                                                                        sub1_secondlayout.addView(button(R.id.cancel, "Cancel"));
 
-                                                                                        if (button(R.id.submit, "Submit").getParent() != null) {
-                                                                                            ((ViewGroup) button(R.id.submit, "Submit").getParent()).removeView(button(R.id.submit, "Submit")); //
-                                                                                        }
-                                                                                        sub1_secondlayout.addView(button(R.id.submit, "Submit"));
-
-
-                                                                                        if (sub1_secondlayout.getParent() != null) {
-                                                                                            ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
-                                                                                        }
-                                                                                        main_Layout.addView(sub1_secondlayout);
                                                                                     }
 
                                                                                 }
@@ -668,7 +747,10 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                             });
 
 
-                                                                        } else {
+
+
+                                                                        }*/
+                                                                        else {
                                                                             main_Layout.removeView(virtualarea_spinner);
                                                                         }
 
@@ -703,7 +785,9 @@ public class AdminDetailsConfig extends BaseActivity {
 
                                         }
                                     });
-                                } else {
+                                }
+
+                                else {
                                     str_sitename = "";
 
                                     main_Layout.removeView(site_spinner);
@@ -714,9 +798,12 @@ public class AdminDetailsConfig extends BaseActivity {
 
                                     if (!building_names.isEmpty()) {
                                         //IF ONLY ONE ITEM IS PRESENT, SET SPINNER AS NON-EDITABLE
-                                        if (building_names.size() == 1) {
+                                        if (building_names.size() == 1)
+                                        {
                                             building_spinner.setEnabled(false);
-                                        } else {
+                                        }
+                                        else
+                                        {
                                             building_spinner.setEnabled(true);
                                         }
 
@@ -742,7 +829,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                 try {
                                                     if (!str_buildingname.equals("")) {
                                                         building_id = dbh.getBuildingId(str_buildingname);
-//                                                    building_spinner.setId(Integer.parseInt(building_id));
+//                                                        building_spinner.setId(Integer.parseInt(building_id));
                                                         System.out.println("building_spinner.getId() = " + building_spinner.getId());
 
                                                     }
@@ -755,9 +842,12 @@ public class AdminDetailsConfig extends BaseActivity {
 
                                                 if (!wing_names.isEmpty()) {
                                                     //IF ONLY ONE ITEM IS PRESENT, SET SPINNER AS NON-EDITABLE
-                                                    if (wing_names.size() == 1) {
+                                                    if (wing_names.size() == 1)
+                                                    {
                                                         wing_spinner.setEnabled(false);
-                                                    } else {
+                                                    }
+                                                    else
+                                                    {
                                                         wing_spinner.setEnabled(true);
                                                     }
 
@@ -782,7 +872,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                             try {
                                                                 if (!str_wingname.equals("")) {
                                                                     wing_id = dbh.getWingId(str_wingname);
-//                                                                wing_spinner.setId(Integer.parseInt(wing_id));
+//                                                                    wing_spinner.setId(Integer.parseInt(wing_id));
                                                                     System.out.println("wing_spinner.getId() = " + wing_spinner.getId());
                                                                 }
                                                             } catch (NumberFormatException e) {
@@ -794,9 +884,12 @@ public class AdminDetailsConfig extends BaseActivity {
 
                                                             if (!floor_names.isEmpty()) {
                                                                 //IF ONLY ONE ITEM IS PRESENT, SET SPINNER AS NON-EDITABLE
-                                                                if (floor_names.size() == 1) {
+                                                                if (floor_names.size() == 1)
+                                                                {
                                                                     floor_spinner.setEnabled(false);
-                                                                } else {
+                                                                }
+                                                                else
+                                                                {
                                                                     floor_spinner.setEnabled(true);
                                                                 }
 
@@ -821,7 +914,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                         try {
                                                                             if (!str_floorname.equals("")) {
                                                                                 floor_id = dbh.getFloorId(str_floorname);
-//                                                                            floor_spinner.setId(Integer.parseInt(floor_id));
+//                                                                                floor_spinner.setId(Integer.parseInt(floor_id));
                                                                                 System.out.println("floor_spinner.getId() = " + floor_spinner.getId());
                                                                             }
                                                                         } catch (NumberFormatException e) {
@@ -829,7 +922,9 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                             System.out.println("Floor Id Exception");
                                                                         }
 
-                                                                        if (!virtualarea_names.isEmpty()) {
+                                                                        if (!virtualarea_names.isEmpty())
+
+                                                                        /*{
                                                                             ArrayAdapter<String> spinnerArrayAdapter6 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                     R.layout.spinner_text, virtualarea_names);
                                                                             spinnerArrayAdapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -846,7 +941,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                     str_virtualareaname = virtualarea_spinner.getSelectedItem().toString();
                                                                                     try {
                                                                                         if (!str_virtualareaname.equals("")) {
-                                                                                            virtualarea_spinner.setId(i);
+//                                                                                            virtualarea_spinner.setId(i);
                                                                                             System.out.println("floor_spinner.getId() = " + virtualarea_spinner.getId());
                                                                                         }
                                                                                     } catch (NumberFormatException e) {
@@ -854,9 +949,10 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                         System.out.println("Virtual Area Id Exception");
                                                                                     }
 
-                                                                                    area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname, str_floorname);
+                                                                                    area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
                                                                                     System.out.println("area_names = " + area_names);
-                                                                                    if (!area_names.isEmpty()) {
+                                                                                    if (!area_names.isEmpty())
+                                                                                    {
                                                                                         //MULTI SELECT SPINNER
                                                                                         area_spinner.setVisibility(View.VISIBLE);
                                                                                         area_spinner.setItems(area_names);
@@ -868,16 +964,16 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                         main_Layout.addView(area_spinner);
 
                                                                                         //FEEDBACK SERVICE
-                                                                                   /* ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
+                                                                                   *//* ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                             R.layout.spinner_text, feedback_service_name);
                                                                                     spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                                                     feedback_service.setAdapter(spinnerArrayAdapter5);
-                    
+
                                                                                     if (feedback_service.getParent() != null) {
                                                                                         ((ViewGroup) feedback_service.getParent()).removeView(feedback_service); //
                                                                                     }
                                                                                     main_Layout.addView(feedback_service);
-                    
+
                                                                                     feedback_service.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                                                         @Override
                                                                                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -892,23 +988,23 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                                 System.out.println("Feedback Service Id Exception");
                                                                                             }
                                                                                         }
-                        
+
                                                                                         @Override
                                                                                         public void onNothingSelected(AdapterView<?> adapterView) {
-                            
+
                                                                                         }
-                                                                                    });*/
+                                                                                    });*//*
 
                                                                                         //BUTTONS
-                                                                                        if (button(R.id.cancel, "Cancel").getParent() != null) {
-                                                                                            ((ViewGroup) button(R.id.cancel, "Cancel").getParent()).removeView(button(R.id.cancel, "Cancel")); //
+                                                                                        if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                            ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
                                                                                         }
-                                                                                        sub1_secondlayout.addView(button(R.id.cancel, "Cancel"));
+                                                                                        sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
 
-                                                                                        if (button(R.id.submit, "Submit").getParent() != null) {
-                                                                                            ((ViewGroup) button(R.id.submit, "Submit").getParent()).removeView(button(R.id.submit, "Submit")); //
+                                                                                        if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                                            ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
                                                                                         }
-                                                                                        sub1_secondlayout.addView(button(R.id.submit, "Submit"));
+                                                                                        sub1_secondlayout.addView(button(R.id.submit,"Submit"));
 
 
                                                                                         if (sub1_secondlayout.getParent() != null) {
@@ -917,24 +1013,11 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                         main_Layout.addView(sub1_secondlayout);
 
 
-                                                                                    } else {
+                                                                                    }
+                                                                                    else
+                                                                                    {
                                                                                         main_Layout.removeView(area_spinner);
-                                                                                        //BUTTONS
-                                                                                        if (button(R.id.cancel, "Cancel").getParent() != null) {
-                                                                                            ((ViewGroup) button(R.id.cancel, "Cancel").getParent()).removeView(button(R.id.cancel, "Cancel")); //
-                                                                                        }
-                                                                                        sub1_secondlayout.addView(button(R.id.cancel, "Cancel"));
 
-                                                                                        if (button(R.id.submit, "Submit").getParent() != null) {
-                                                                                            ((ViewGroup) button(R.id.submit, "Submit").getParent()).removeView(button(R.id.submit, "Submit")); //
-                                                                                        }
-                                                                                        sub1_secondlayout.addView(button(R.id.submit, "Submit"));
-
-
-                                                                                        if (sub1_secondlayout.getParent() != null) {
-                                                                                            ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
-                                                                                        }
-                                                                                        main_Layout.addView(sub1_secondlayout);
                                                                                     }
 
                                                                                 }
@@ -946,7 +1029,43 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                             });
 
 
-                                                                        } else {
+
+
+                                                                        }*/
+                                                                        {
+
+                                                                            area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
+                                                                            System.out.println("area_names = " + area_names);
+                                                                            if (!area_names.isEmpty())
+                                                                            {
+                                                                                //MULTI SELECT SPINNER
+                                                                                area_spinner.setVisibility(View.VISIBLE);
+                                                                                area_spinner.setItems(area_names);
+                                                                                System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedStrings());
+
+                                                                                if (area_spinner.getParent() != null) {
+                                                                                    ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
+                                                                                }
+                                                                                main_Layout.addView(area_spinner);
+                                                                            }
+                                                                            //BUTTONS
+                                                                            if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+                                                                            }
+                                                                            sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
+
+                                                                            if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                                ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                                            }
+                                                                            sub1_secondlayout.addView(button(R.id.submit,"Submit"));
+
+
+                                                                            if (sub1_secondlayout.getParent() != null) {
+                                                                                ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+                                                                            }
+                                                                            main_Layout.addView(sub1_secondlayout);
+                                                                        }
+                                                                        else {
                                                                             main_Layout.removeView(virtualarea_spinner);
                                                                         }
                                                                     }
@@ -956,7 +1075,9 @@ public class AdminDetailsConfig extends BaseActivity {
 
                                                                     }
                                                                 });
-                                                            } else {
+                                                            }
+
+                                                            else {
                                                                 main_Layout.removeView(floor_spinner);
 
                                                             }
@@ -967,7 +1088,9 @@ public class AdminDetailsConfig extends BaseActivity {
 
                                                         }
                                                     });
-                                                } else {
+                                                }
+
+                                                else {
                                                     main_Layout.removeView(wing_spinner);
 
                                                     //If no wing data, then add next spinner floor
@@ -977,9 +1100,12 @@ public class AdminDetailsConfig extends BaseActivity {
                                                     floor_names = dbh.getAllFloors(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname);
                                                     if (!floor_names.isEmpty()) {
                                                         //IF ONLY ONE ITEM IS PRESENT, SET SPINNER AS NON-EDITABLE
-                                                        if (floor_names.size() == 1) {
+                                                        if (floor_names.size() == 1)
+                                                        {
                                                             floor_spinner.setEnabled(false);
-                                                        } else {
+                                                        }
+                                                        else
+                                                        {
                                                             floor_spinner.setEnabled(true);
                                                         }
 
@@ -1004,7 +1130,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                 try {
                                                                     if (!str_floorname.equals("")) {
                                                                         floor_id = dbh.getFloorId(str_floorname);
-//                                                                    floor_spinner.setId(Integer.parseInt(floor_id));
+//                                                                        floor_spinner.setId(Integer.parseInt(floor_id));
                                                                         System.out.println("floor_spinner.getId() = " + floor_spinner.getId());
                                                                     }
                                                                 } catch (NumberFormatException e) {
@@ -1012,7 +1138,8 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                     System.out.println("Floor Id Exception");
                                                                 }
 
-                                                                if (!virtualarea_names.isEmpty()) {
+                                                                if (!virtualarea_names.isEmpty())
+                                                               /* {
                                                                     ArrayAdapter<String> spinnerArrayAdapter6 = new ArrayAdapter<String>(getApplicationContext(),
                                                                             R.layout.spinner_text, virtualarea_names);
                                                                     spinnerArrayAdapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -1029,7 +1156,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                             str_virtualareaname = virtualarea_spinner.getSelectedItem().toString();
                                                                             try {
                                                                                 if (!str_virtualareaname.equals("")) {
-                                                                                    virtualarea_spinner.setId(i);
+//                                                                                    virtualarea_spinner.setId(i);
                                                                                     System.out.println("floor_spinner.getId() = " + virtualarea_spinner.getId());
                                                                                 }
                                                                             } catch (NumberFormatException e) {
@@ -1037,9 +1164,10 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                 System.out.println("Virtual Area Id Exception");
                                                                             }
 
-                                                                            area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname, str_floorname);
+                                                                            area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
                                                                             System.out.println("area_names = " + area_names);
-                                                                            if (!area_names.isEmpty()) {
+                                                                            if (!area_names.isEmpty())
+                                                                            {
                                                                                 //MULTI SELECT SPINNER
                                                                                 area_spinner.setVisibility(View.VISIBLE);
                                                                                 area_spinner.setItems(area_names);
@@ -1049,18 +1177,18 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                     ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
                                                                                 }
                                                                                 main_Layout.addView(area_spinner);
-                    
-                                                                            /*//FEEDBACK SERVICE
+
+                                                                            FEEDBACK SERVICE
                                                                             ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                     R.layout.spinner_text, feedback_service_name);
                                                                             spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                                             feedback_service.setAdapter(spinnerArrayAdapter5);
-                    
+
                                                                             if (feedback_service.getParent() != null) {
                                                                                 ((ViewGroup) feedback_service.getParent()).removeView(feedback_service); //
                                                                             }
                                                                             main_Layout.addView(feedback_service);
-                    
+
                                                                             feedback_service.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                                                 @Override
                                                                                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -1075,23 +1203,23 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                         System.out.println("Feedback Service Id Exception");
                                                                                     }
                                                                                 }
-                        
+
                                                                                 @Override
                                                                                 public void onNothingSelected(AdapterView<?> adapterView) {
-                            
+
                                                                                 }
-                                                                            });*/
+                                                                            });*//*
 
                                                                                 //BUTTONS
-                                                                                if (button(R.id.cancel, "Cancel").getParent() != null) {
-                                                                                    ((ViewGroup) button(R.id.cancel, "Cancel").getParent()).removeView(button(R.id.cancel, "Cancel")); //
+                                                                                if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                    ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
                                                                                 }
-                                                                                sub1_secondlayout.addView(button(R.id.cancel, "Cancel"));
+                                                                                sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
 
-                                                                                if (button(R.id.submit, "Submit").getParent() != null) {
-                                                                                    ((ViewGroup) button(R.id.submit, "Submit").getParent()).removeView(button(R.id.submit, "Submit")); //
+                                                                                if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                                    ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
                                                                                 }
-                                                                                sub1_secondlayout.addView(button(R.id.submit, "Submit"));
+                                                                                sub1_secondlayout.addView(button(R.id.submit,"Submit"));
 
 
                                                                                 if (sub1_secondlayout.getParent() != null) {
@@ -1100,24 +1228,11 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                 main_Layout.addView(sub1_secondlayout);
 
 
-                                                                            } else {
+                                                                            }
+                                                                            else
+                                                                            {
                                                                                 main_Layout.removeView(area_spinner);
-                                                                                //BUTTONS
-                                                                                if (button(R.id.cancel, "Cancel").getParent() != null) {
-                                                                                    ((ViewGroup) button(R.id.cancel, "Cancel").getParent()).removeView(button(R.id.cancel, "Cancel")); //
-                                                                                }
-                                                                                sub1_secondlayout.addView(button(R.id.cancel, "Cancel"));
 
-                                                                                if (button(R.id.submit, "Submit").getParent() != null) {
-                                                                                    ((ViewGroup) button(R.id.submit, "Submit").getParent()).removeView(button(R.id.submit, "Submit")); //
-                                                                                }
-                                                                                sub1_secondlayout.addView(button(R.id.submit, "Submit"));
-
-
-                                                                                if (sub1_secondlayout.getParent() != null) {
-                                                                                    ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
-                                                                                }
-                                                                                main_Layout.addView(sub1_secondlayout);
                                                                             }
 
                                                                         }
@@ -1129,7 +1244,43 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                     });
 
 
-                                                                } else {
+
+
+                                                                }*/
+                                                                {
+
+                                                                    area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
+                                                                    System.out.println("area_names = " + area_names);
+                                                                    if (!area_names.isEmpty())
+                                                                    {
+                                                                        //MULTI SELECT SPINNER
+                                                                        area_spinner.setVisibility(View.VISIBLE);
+                                                                        area_spinner.setItems(area_names);
+                                                                        System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedStrings());
+
+                                                                        if (area_spinner.getParent() != null) {
+                                                                            ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
+                                                                        }
+                                                                        main_Layout.addView(area_spinner);
+                                                                    }
+                                                                    //BUTTONS
+                                                                    if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                        ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+                                                                    }
+                                                                    sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
+
+                                                                    if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                        ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                                    }
+                                                                    sub1_secondlayout.addView(button(R.id.submit,"Submit"));
+
+
+                                                                    if (sub1_secondlayout.getParent() != null) {
+                                                                        ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+                                                                    }
+                                                                    main_Layout.addView(sub1_secondlayout);
+                                                                }
+                                                                else {
                                                                     main_Layout.removeView(virtualarea_spinner);
                                                                 }
 
@@ -1176,9 +1327,12 @@ public class AdminDetailsConfig extends BaseActivity {
 
                             if (!site_names.isEmpty()) {
                                 //IF ONLY ONE ITEM IS PRESENT, SET SPINNER AS NON-EDITABLE
-                                if (site_names.size() == 1) {
+                                if (site_names.size() == 1)
+                                {
                                     site_spinner.setEnabled(false);
-                                } else {
+                                }
+                                else
+                                {
                                     site_spinner.setEnabled(true);
                                 }
 
@@ -1205,9 +1359,12 @@ public class AdminDetailsConfig extends BaseActivity {
 
                                         if (!building_names.isEmpty()) {
                                             //IF ONLY ONE ITEM IS PRESENT, SET SPINNER AS NON-EDITABLE
-                                            if (building_names.size() == 1) {
+                                            if (building_names.size() == 1)
+                                            {
                                                 building_spinner.setEnabled(false);
-                                            } else {
+                                            }
+                                            else
+                                            {
                                                 building_spinner.setEnabled(true);
                                             }
 
@@ -1218,7 +1375,7 @@ public class AdminDetailsConfig extends BaseActivity {
 
                                             if (!str_sitename.equals("")) {
                                                 site_id = dbh.getSiteId(str_sitename);
-//                                            site_spinner.setId(Integer.parseInt(site_id));
+//                                                site_spinner.setId(Integer.parseInt(site_id));
                                                 System.out.println("site_spinner.getId() = " + site_spinner.getId());
 
                                             }
@@ -1239,7 +1396,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                     try {
                                                         if (!str_buildingname.equals("")) {
                                                             building_id = dbh.getBuildingId(str_buildingname);
-//                                                        building_spinner.setId(Integer.parseInt(building_id));
+//                                                            building_spinner.setId(Integer.parseInt(building_id));
                                                             System.out.println("building_spinner.getId() = " + building_spinner.getId());
                                                         }
                                                     } catch (NumberFormatException e) {
@@ -1251,9 +1408,12 @@ public class AdminDetailsConfig extends BaseActivity {
 
                                                     if (!wing_names.isEmpty()) {
                                                         //IF ONLY ONE ITEM IS PRESENT, SET SPINNER AS NON-EDITABLE
-                                                        if (wing_names.size() == 1) {
+                                                        if (wing_names.size() == 1)
+                                                        {
                                                             wing_spinner.setEnabled(false);
-                                                        } else {
+                                                        }
+                                                        else
+                                                        {
                                                             wing_spinner.setEnabled(true);
                                                         }
 
@@ -1278,7 +1438,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                 try {
                                                                     if (!str_wingname.equals("")) {
                                                                         wing_id = dbh.getWingId(str_wingname);
-//                                                                    wing_spinner.setId(Integer.parseInt(wing_id));
+//                                                                        wing_spinner.setId(Integer.parseInt(wing_id));
                                                                         System.out.println("wing_spinner.getId() = " + wing_spinner.getId());
                                                                     }
                                                                 } catch (NumberFormatException e) {
@@ -1289,9 +1449,12 @@ public class AdminDetailsConfig extends BaseActivity {
 
                                                                 if (!floor_names.isEmpty()) {
                                                                     //IF ONLY ONE ITEM IS PRESENT, SET SPINNER AS NON-EDITABLE
-                                                                    if (floor_names.size() == 1) {
+                                                                    if (floor_names.size() == 1)
+                                                                    {
                                                                         floor_spinner.setEnabled(false);
-                                                                    } else {
+                                                                    }
+                                                                    else
+                                                                    {
                                                                         floor_spinner.setEnabled(true);
                                                                     }
 
@@ -1316,7 +1479,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                             try {
                                                                                 if (!str_floorname.equals("")) {
                                                                                     floor_id = dbh.getFloorId(str_floorname);
-//                                                                                floor_spinner.setId(Integer.parseInt(floor_id));
+//                                                                                    floor_spinner.setId(Integer.parseInt(floor_id));
                                                                                     System.out.println("floor_spinner.getId() = " + floor_spinner.getId());
                                                                                 }
                                                                             } catch (NumberFormatException e) {
@@ -1324,7 +1487,8 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                 System.out.println("Floor Exception");
                                                                             }
 
-                                                                            if (!virtualarea_names.isEmpty()) {
+                                                                            if (!virtualarea_names.isEmpty())
+                                                                           /* {
                                                                                 ArrayAdapter<String> spinnerArrayAdapter6 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                         R.layout.spinner_text, virtualarea_names);
                                                                                 spinnerArrayAdapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -1341,7 +1505,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                         str_virtualareaname = virtualarea_spinner.getSelectedItem().toString();
                                                                                         try {
                                                                                             if (!str_virtualareaname.equals("")) {
-                                                                                                virtualarea_spinner.setId(i);
+//                                                                                                virtualarea_spinner.setId(i);
                                                                                                 System.out.println("floor_spinner.getId() = " + virtualarea_spinner.getId());
                                                                                             }
                                                                                         } catch (NumberFormatException e) {
@@ -1349,9 +1513,10 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                             System.out.println("Virtual Area Id Exception");
                                                                                         }
 
-                                                                                        area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname, str_floorname);
+                                                                                        area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
                                                                                         System.out.println("area_names = " + area_names);
-                                                                                        if (!area_names.isEmpty()) {
+                                                                                        if (!area_names.isEmpty())
+                                                                                        {
                                                                                             //MULTI SELECT SPINNER
                                                                                             area_spinner.setVisibility(View.VISIBLE);
                                                                                             area_spinner.setItems(area_names);
@@ -1363,16 +1528,16 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                             main_Layout.addView(area_spinner);
 
                                                                                             //FEEDBACK SERVICE
-                                                                                        /*ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
+                                                                                        *//*ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                                 R.layout.spinner_text, feedback_service_name);
                                                                                         spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                                                         feedback_service.setAdapter(spinnerArrayAdapter5);
-                    
+
                                                                                         if (feedback_service.getParent() != null) {
                                                                                             ((ViewGroup) feedback_service.getParent()).removeView(feedback_service); //
                                                                                         }
                                                                                         main_Layout.addView(feedback_service);
-                    
+
                                                                                         feedback_service.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                                                             @Override
                                                                                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -1387,23 +1552,23 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                                     System.out.println("Feedback Service Id Exception");
                                                                                                 }
                                                                                             }
-                        
+
                                                                                             @Override
                                                                                             public void onNothingSelected(AdapterView<?> adapterView) {
-                            
+
                                                                                             }
-                                                                                        });*/
+                                                                                        });*//*
 
                                                                                             //BUTTONS
-                                                                                            if (button(R.id.cancel, "Cancel").getParent() != null) {
-                                                                                                ((ViewGroup) button(R.id.cancel, "Cancel").getParent()).removeView(button(R.id.cancel, "Cancel")); //
+                                                                                            if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                                ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
                                                                                             }
-                                                                                            sub1_secondlayout.addView(button(R.id.cancel, "Cancel"));
+                                                                                            sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
 
-                                                                                            if (button(R.id.submit, "Submit").getParent() != null) {
-                                                                                                ((ViewGroup) button(R.id.submit, "Submit").getParent()).removeView(button(R.id.submit, "Submit")); //
+                                                                                            if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                                                ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
                                                                                             }
-                                                                                            sub1_secondlayout.addView(button(R.id.submit, "Submit"));
+                                                                                            sub1_secondlayout.addView(button(R.id.submit,"Submit"));
 
 
                                                                                             if (sub1_secondlayout.getParent() != null) {
@@ -1412,24 +1577,11 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                             main_Layout.addView(sub1_secondlayout);
 
 
-                                                                                        } else {
+                                                                                        }
+                                                                                        else
+                                                                                        {
                                                                                             main_Layout.removeView(area_spinner);
-                                                                                            //BUTTONS
-                                                                                            if (button(R.id.cancel, "Cancel").getParent() != null) {
-                                                                                                ((ViewGroup) button(R.id.cancel, "Cancel").getParent()).removeView(button(R.id.cancel, "Cancel")); //
-                                                                                            }
-                                                                                            sub1_secondlayout.addView(button(R.id.cancel, "Cancel"));
 
-                                                                                            if (button(R.id.submit, "Submit").getParent() != null) {
-                                                                                                ((ViewGroup) button(R.id.submit, "Submit").getParent()).removeView(button(R.id.submit, "Submit")); //
-                                                                                            }
-                                                                                            sub1_secondlayout.addView(button(R.id.submit, "Submit"));
-
-
-                                                                                            if (sub1_secondlayout.getParent() != null) {
-                                                                                                ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
-                                                                                            }
-                                                                                            main_Layout.addView(sub1_secondlayout);
                                                                                         }
 
                                                                                     }
@@ -1441,7 +1593,43 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                 });
 
 
-                                                                            } else {
+
+
+                                                                            }*/
+                                                                            {
+
+                                                                                area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
+                                                                                System.out.println("area_names = " + area_names);
+                                                                                if (!area_names.isEmpty())
+                                                                                {
+                                                                                    //MULTI SELECT SPINNER
+                                                                                    area_spinner.setVisibility(View.VISIBLE);
+                                                                                    area_spinner.setItems(area_names);
+                                                                                    System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedStrings());
+
+                                                                                    if (area_spinner.getParent() != null) {
+                                                                                        ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
+                                                                                    }
+                                                                                    main_Layout.addView(area_spinner);
+                                                                                }
+                                                                                //BUTTONS
+                                                                                if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                    ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+                                                                                }
+                                                                                sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
+
+                                                                                if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                                    ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                                                }
+                                                                                sub1_secondlayout.addView(button(R.id.submit,"Submit"));
+
+
+                                                                                if (sub1_secondlayout.getParent() != null) {
+                                                                                    ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+                                                                                }
+                                                                                main_Layout.addView(sub1_secondlayout);
+                                                                            }
+                                                                            else {
                                                                                 main_Layout.removeView(virtualarea_spinner);
                                                                             }
                                                                         }
@@ -1473,9 +1661,12 @@ public class AdminDetailsConfig extends BaseActivity {
                                                         if (!floor_names.isEmpty()) {
 
                                                             //IF ONLY ONE ITEM IS PRESENT, SET SPINNER AS NON-EDITABLE
-                                                            if (floor_names.size() == 1) {
+                                                            if (floor_names.size() == 1)
+                                                            {
                                                                 floor_spinner.setEnabled(false);
-                                                            } else {
+                                                            }
+                                                            else
+                                                            {
                                                                 floor_spinner.setEnabled(true);
                                                             }
 
@@ -1500,7 +1691,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                     try {
                                                                         if (!str_floorname.equals("")) {
                                                                             floor_id = dbh.getFloorId(str_floorname);
-//                                                                        floor_spinner.setId(Integer.parseInt(floor_id));
+//                                                                            floor_spinner.setId(Integer.parseInt(floor_id));
                                                                             System.out.println("floor_spinner.getId() = " + floor_spinner.getId());
                                                                         }
                                                                     } catch (NumberFormatException e) {
@@ -1508,7 +1699,9 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                         System.out.println("Floor Exception");
                                                                     }
 
-                                                                    if (!virtualarea_names.isEmpty()) {
+                                                                    if (!virtualarea_names.isEmpty())
+
+                                                                 /*   {
                                                                         ArrayAdapter<String> spinnerArrayAdapter6 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                 R.layout.spinner_text, virtualarea_names);
                                                                         spinnerArrayAdapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -1525,7 +1718,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                 str_virtualareaname = virtualarea_spinner.getSelectedItem().toString();
                                                                                 try {
                                                                                     if (!str_virtualareaname.equals("")) {
-                                                                                        virtualarea_spinner.setId(i);
+//                                                                                        virtualarea_spinner.setId(i);
                                                                                         System.out.println("floor_spinner.getId() = " + virtualarea_spinner.getId());
                                                                                     }
                                                                                 } catch (NumberFormatException e) {
@@ -1533,9 +1726,10 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                     System.out.println("Virtual Area Id Exception");
                                                                                 }
 
-                                                                                area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname, str_floorname);
+                                                                                area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
                                                                                 System.out.println("area_names = " + area_names);
-                                                                                if (!area_names.isEmpty()) {
+                                                                                if (!area_names.isEmpty())
+                                                                                {
                                                                                     //MULTI SELECT SPINNER
                                                                                     area_spinner.setVisibility(View.VISIBLE);
                                                                                     area_spinner.setItems(area_names);
@@ -1547,16 +1741,16 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                     main_Layout.addView(area_spinner);
 
                                                                                     //FEEDBACK SERVICE
-                                                                               /* ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
+                                                                               *//* ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                         R.layout.spinner_text, feedback_service_name);
                                                                                 spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                                                 feedback_service.setAdapter(spinnerArrayAdapter5);
-                    
+
                                                                                 if (feedback_service.getParent() != null) {
                                                                                     ((ViewGroup) feedback_service.getParent()).removeView(feedback_service); //
                                                                                 }
                                                                                 main_Layout.addView(feedback_service);
-                    
+
                                                                                 feedback_service.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                                                     @Override
                                                                                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -1571,23 +1765,23 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                             System.out.println("Feedback Service Id Exception");
                                                                                         }
                                                                                     }
-                        
+
                                                                                     @Override
                                                                                     public void onNothingSelected(AdapterView<?> adapterView) {
-                            
+
                                                                                     }
-                                                                                });*/
+                                                                                });*//*
 
                                                                                     //BUTTONS
-                                                                                    if (button(R.id.cancel, "Cancel").getParent() != null) {
-                                                                                        ((ViewGroup) button(R.id.cancel, "Cancel").getParent()).removeView(button(R.id.cancel, "Cancel")); //
+                                                                                    if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                        ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
                                                                                     }
-                                                                                    sub1_secondlayout.addView(button(R.id.cancel, "Cancel"));
+                                                                                    sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
 
-                                                                                    if (button(R.id.submit, "Submit").getParent() != null) {
-                                                                                        ((ViewGroup) button(R.id.submit, "Submit").getParent()).removeView(button(R.id.submit, "Submit")); //
+                                                                                    if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                                        ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
                                                                                     }
-                                                                                    sub1_secondlayout.addView(button(R.id.submit, "Submit"));
+                                                                                    sub1_secondlayout.addView(button(R.id.submit,"Submit"));
 
 
                                                                                     if (sub1_secondlayout.getParent() != null) {
@@ -1596,24 +1790,11 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                     main_Layout.addView(sub1_secondlayout);
 
 
-                                                                                } else {
+                                                                                }
+                                                                                else
+                                                                                {
                                                                                     main_Layout.removeView(area_spinner);
-                                                                                    //BUTTONS
-                                                                                    if (button(R.id.cancel, "Cancel").getParent() != null) {
-                                                                                        ((ViewGroup) button(R.id.cancel, "Cancel").getParent()).removeView(button(R.id.cancel, "Cancel")); //
-                                                                                    }
-                                                                                    sub1_secondlayout.addView(button(R.id.cancel, "Cancel"));
 
-                                                                                    if (button(R.id.submit, "Submit").getParent() != null) {
-                                                                                        ((ViewGroup) button(R.id.submit, "Submit").getParent()).removeView(button(R.id.submit, "Submit")); //
-                                                                                    }
-                                                                                    sub1_secondlayout.addView(button(R.id.submit, "Submit"));
-
-
-                                                                                    if (sub1_secondlayout.getParent() != null) {
-                                                                                        ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
-                                                                                    }
-                                                                                    main_Layout.addView(sub1_secondlayout);
                                                                                 }
 
                                                                             }
@@ -1625,7 +1806,43 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                         });
 
 
-                                                                    } else {
+
+
+                                                                    }*/
+                                                                    {
+
+                                                                        area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
+                                                                        System.out.println("area_names = " + area_names);
+                                                                        if (!area_names.isEmpty())
+                                                                        {
+                                                                            //MULTI SELECT SPINNER
+                                                                            area_spinner.setVisibility(View.VISIBLE);
+                                                                            area_spinner.setItems(area_names);
+                                                                            System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedStrings());
+
+                                                                            if (area_spinner.getParent() != null) {
+                                                                                ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
+                                                                            }
+                                                                            main_Layout.addView(area_spinner);
+                                                                        }
+                                                                        //BUTTONS
+                                                                        if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                            ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+                                                                        }
+                                                                        sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
+
+                                                                        if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                            ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                                        }
+                                                                        sub1_secondlayout.addView(button(R.id.submit,"Submit"));
+
+
+                                                                        if (sub1_secondlayout.getParent() != null) {
+                                                                            ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+                                                                        }
+                                                                        main_Layout.addView(sub1_secondlayout);
+                                                                    }
+                                                                    else {
                                                                         main_Layout.removeView(virtualarea_spinner);
                                                                     }
 
@@ -1679,9 +1896,12 @@ public class AdminDetailsConfig extends BaseActivity {
 
                                 if (!building_names.isEmpty()) {
                                     //IF ONLY ONE ITEM IS PRESENT, SET SPINNER AS NON-EDITABLE
-                                    if (building_names.size() == 1) {
+                                    if (building_names.size() == 1)
+                                    {
                                         building_spinner.setEnabled(false);
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         building_spinner.setEnabled(true);
                                     }
 
@@ -1707,7 +1927,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                             try {
                                                 if (!str_buildingname.equals("")) {
                                                     building_id = dbh.getBuildingId(str_buildingname);
-//                                                building_spinner.setId(Integer.parseInt(building_id));
+//                                                    building_spinner.setId(Integer.parseInt(building_id));
                                                     System.out.println("building_spinner.getId() = " + building_spinner.getId());
                                                 }
                                             } catch (NumberFormatException e) {
@@ -1719,9 +1939,12 @@ public class AdminDetailsConfig extends BaseActivity {
 
                                             if (!wing_names.isEmpty()) {
                                                 //IF ONLY ONE ITEM IS PRESENT, SET SPINNER AS NON-EDITABLE
-                                                if (wing_names.size() == 1) {
+                                                if (wing_names.size() == 1)
+                                                {
                                                     wing_spinner.setEnabled(false);
-                                                } else {
+                                                }
+                                                else
+                                                {
                                                     wing_spinner.setEnabled(true);
                                                 }
 
@@ -1747,7 +1970,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                         try {
                                                             if (!str_wingname.equals("")) {
                                                                 wing_id = dbh.getWingId(str_wingname);
-//                                                            wing_spinner.setId(Integer.parseInt(wing_id));
+//                                                                wing_spinner.setId(Integer.parseInt(wing_id));
                                                                 System.out.println("wing_spinner.getId() = " + wing_spinner.getId());
                                                             }
 
@@ -1760,9 +1983,12 @@ public class AdminDetailsConfig extends BaseActivity {
 
                                                         if (!floor_names.isEmpty()) {
                                                             //IF ONLY ONE ITEM IS PRESENT, SET SPINNER AS NON-EDITABLE
-                                                            if (floor_names.size() == 1) {
+                                                            if (floor_names.size() == 1)
+                                                            {
                                                                 floor_spinner.setEnabled(false);
-                                                            } else {
+                                                            }
+                                                            else
+                                                            {
                                                                 floor_spinner.setEnabled(true);
                                                             }
 
@@ -1790,7 +2016,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                     try {
                                                                         if (!str_floorname.equals("")) {
                                                                             floor_id = dbh.getFloorId(str_floorname);
-//                                                                        floor_spinner.setId(Integer.parseInt(floor_id));
+//                                                                            floor_spinner.setId(Integer.parseInt(floor_id));
                                                                             System.out.println("floor_spinner.getId() = " + floor_spinner.getId());
                                                                         }
                                                                     } catch (NumberFormatException e) {
@@ -1798,7 +2024,9 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                         System.out.println("Floor Id Exception");
                                                                     }
 
-                                                                    if (!virtualarea_names.isEmpty()) {
+                                                                    if (!virtualarea_names.isEmpty())
+
+                                                                   /* {
                                                                         ArrayAdapter<String> spinnerArrayAdapter6 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                 R.layout.spinner_text, virtualarea_names);
                                                                         spinnerArrayAdapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -1815,7 +2043,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                 str_virtualareaname = virtualarea_spinner.getSelectedItem().toString();
                                                                                 try {
                                                                                     if (!str_virtualareaname.equals("")) {
-                                                                                        virtualarea_spinner.setId(i);
+//                                                                                        virtualarea_spinner.setId(i);
                                                                                         System.out.println("floor_spinner.getId() = " + virtualarea_spinner.getId());
                                                                                     }
                                                                                 } catch (NumberFormatException e) {
@@ -1823,9 +2051,10 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                     System.out.println("Virtual Area Id Exception");
                                                                                 }
 
-                                                                                area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname, str_floorname);
+                                                                                area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
                                                                                 System.out.println("area_names = " + area_names);
-                                                                                if (!area_names.isEmpty()) {
+                                                                                if (!area_names.isEmpty())
+                                                                                {
                                                                                     //MULTI SELECT SPINNER
                                                                                     area_spinner.setVisibility(View.VISIBLE);
                                                                                     area_spinner.setItems(area_names);
@@ -1837,16 +2066,16 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                     main_Layout.addView(area_spinner);
 
                                                                                     //FEEDBACK SERVICE
-                                                                                /*ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
+                                                                                *//*ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
                                                                                         R.layout.spinner_text, feedback_service_name);
                                                                                 spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                                                 feedback_service.setAdapter(spinnerArrayAdapter5);
-                    
+
                                                                                 if (feedback_service.getParent() != null) {
                                                                                     ((ViewGroup) feedback_service.getParent()).removeView(feedback_service); //
                                                                                 }
                                                                                 main_Layout.addView(feedback_service);
-                    
+
                                                                                 feedback_service.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                                                     @Override
                                                                                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -1861,23 +2090,23 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                             System.out.println("Feedback Service Id Exception");
                                                                                         }
                                                                                     }
-                        
+
                                                                                     @Override
                                                                                     public void onNothingSelected(AdapterView<?> adapterView) {
-                            
+
                                                                                     }
-                                                                                });*/
+                                                                                });*//*
 
                                                                                     //BUTTONS
-                                                                                    if (button(R.id.cancel, "Cancel").getParent() != null) {
-                                                                                        ((ViewGroup) button(R.id.cancel, "Cancel").getParent()).removeView(button(R.id.cancel, "Cancel")); //
+                                                                                    if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                                        ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
                                                                                     }
-                                                                                    sub1_secondlayout.addView(button(R.id.cancel, "Cancel"));
+                                                                                    sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
 
-                                                                                    if (button(R.id.submit, "Submit").getParent() != null) {
-                                                                                        ((ViewGroup) button(R.id.submit, "Submit").getParent()).removeView(button(R.id.submit, "Submit")); //
+                                                                                    if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                                        ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
                                                                                     }
-                                                                                    sub1_secondlayout.addView(button(R.id.submit, "Submit"));
+                                                                                    sub1_secondlayout.addView(button(R.id.submit,"Submit"));
 
 
                                                                                     if (sub1_secondlayout.getParent() != null) {
@@ -1886,24 +2115,11 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                                     main_Layout.addView(sub1_secondlayout);
 
 
-                                                                                } else {
+                                                                                }
+                                                                                else
+                                                                                {
                                                                                     main_Layout.removeView(area_spinner);
-                                                                                    //BUTTONS
-                                                                                    if (button(R.id.cancel, "Cancel").getParent() != null) {
-                                                                                        ((ViewGroup) button(R.id.cancel, "Cancel").getParent()).removeView(button(R.id.cancel, "Cancel")); //
-                                                                                    }
-                                                                                    sub1_secondlayout.addView(button(R.id.cancel, "Cancel"));
 
-                                                                                    if (button(R.id.submit, "Submit").getParent() != null) {
-                                                                                        ((ViewGroup) button(R.id.submit, "Submit").getParent()).removeView(button(R.id.submit, "Submit")); //
-                                                                                    }
-                                                                                    sub1_secondlayout.addView(button(R.id.submit, "Submit"));
-
-
-                                                                                    if (sub1_secondlayout.getParent() != null) {
-                                                                                        ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
-                                                                                    }
-                                                                                    main_Layout.addView(sub1_secondlayout);
                                                                                 }
 
                                                                             }
@@ -1915,7 +2131,44 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                         });
 
 
-                                                                    } else {
+
+
+                                                                    }*/
+                                                                    {
+
+
+                                                                            area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
+                                                                            System.out.println("area_names = " + area_names);
+                                                                            if (!area_names.isEmpty())
+                                                                            {
+                                                                                //MULTI SELECT SPINNER
+                                                                                area_spinner.setVisibility(View.VISIBLE);
+                                                                                area_spinner.setItems(area_names);
+                                                                                System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedStrings());
+
+                                                                                if (area_spinner.getParent() != null) {
+                                                                                    ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
+                                                                                }
+                                                                                main_Layout.addView(area_spinner);
+                                                                            }
+                                                                        //BUTTONS
+                                                                        if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                            ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+                                                                        }
+                                                                        sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
+
+                                                                        if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                            ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                                        }
+                                                                        sub1_secondlayout.addView(button(R.id.submit,"Submit"));
+
+
+                                                                        if (sub1_secondlayout.getParent() != null) {
+                                                                            ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+                                                                        }
+                                                                        main_Layout.addView(sub1_secondlayout);
+                                                                    }
+                                                                    else {
                                                                         main_Layout.removeView(virtualarea_spinner);
                                                                     }
 
@@ -1939,7 +2192,8 @@ public class AdminDetailsConfig extends BaseActivity {
 
                                                     }
                                                 });
-                                            } else {
+                                            }
+                                            else {
                                                 main_Layout.removeView(wing_spinner);
 
                                                 str_wingname = "";
@@ -1949,9 +2203,12 @@ public class AdminDetailsConfig extends BaseActivity {
                                                 if (!floor_names.isEmpty()) {
 
                                                     //IF ONLY ONE ITEM IS PRESENT, SET SPINNER AS NON-EDITABLE
-                                                    if (floor_names.size() == 1) {
+                                                    if (floor_names.size() == 1)
+                                                    {
                                                         floor_spinner.setEnabled(false);
-                                                    } else {
+                                                    }
+                                                    else
+                                                    {
                                                         floor_spinner.setEnabled(true);
                                                     }
 
@@ -1977,7 +2234,7 @@ public class AdminDetailsConfig extends BaseActivity {
                                                             try {
                                                                 if (!str_floorname.equals("")) {
                                                                     floor_id = dbh.getFloorId(str_floorname);
-//                                                                floor_spinner.setId(Integer.parseInt(floor_id));
+//                                                                    floor_spinner.setId(Integer.parseInt(floor_id));
                                                                     System.out.println("floor_spinner.getId() = " + floor_spinner.getId());
                                                                 }
                                                             } catch (NumberFormatException e) {
@@ -1985,125 +2242,149 @@ public class AdminDetailsConfig extends BaseActivity {
                                                                 System.out.println("Floor Id Exception");
                                                             }
 
-                                                            if (!virtualarea_names.isEmpty()) {
-                                                                ArrayAdapter<String> spinnerArrayAdapter6 = new ArrayAdapter<String>(getApplicationContext(),
-                                                                        R.layout.spinner_text, virtualarea_names);
-                                                                spinnerArrayAdapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                                                virtualarea_spinner.setAdapter(spinnerArrayAdapter6);
+                                                            if (!virtualarea_names.isEmpty())
+                                                            {
 
-                                                                if (virtualarea_spinner.getParent() != null) {
-                                                                    ((ViewGroup) virtualarea_spinner.getParent()).removeView(virtualarea_spinner); //
+                                                                    area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
+                                                                    System.out.println("area_names = " + area_names);
+                                                                    if (!area_names.isEmpty())
+                                                                    {
+                                                                        //MULTI SELECT SPINNER
+                                                                        area_spinner.setVisibility(View.VISIBLE);
+                                                                        area_spinner.setItems(area_names);
+                                                                        System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedStrings());
+
+                                                                        if (area_spinner.getParent() != null) {
+                                                                            ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
+                                                                        }
+                                                                        main_Layout.addView(area_spinner);
+                                                                    }
+                                                                //BUTTONS
+                                                                if (button(R.id.cancel,"Cancel").getParent() != null) {
+                                                                    ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
                                                                 }
-                                                                main_Layout.addView(virtualarea_spinner);
+                                                                sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
 
-                                                                virtualarea_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                                                    @Override
-                                                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                                                        str_virtualareaname = virtualarea_spinner.getSelectedItem().toString();
-                                                                        try {
-                                                                            if (!str_virtualareaname.equals("")) {
-                                                                                virtualarea_spinner.setId(i);
-                                                                                System.out.println("floor_spinner.getId() = " + virtualarea_spinner.getId());
-                                                                            }
-                                                                        } catch (NumberFormatException e) {
-                                                                            e.printStackTrace();
-                                                                            System.out.println("Virtual Area Id Exception");
-                                                                        }
-
-                                                                        area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname, str_floorname);
-                                                                        System.out.println("area_names = " + area_names);
-                                                                        if (!area_names.isEmpty()) {
-                                                                            //MULTI SELECT SPINNER
-                                                                            area_spinner.setVisibility(View.VISIBLE);
-                                                                            area_spinner.setItems(area_names);
-                                                                            System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedStrings());
-
-                                                                            if (area_spinner.getParent() != null) {
-                                                                                ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
-                                                                            }
-                                                                            main_Layout.addView(area_spinner);
-
-                                                                            //FEEDBACK SERVICE
-                                                                      /*  ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
-                                                                                R.layout.spinner_text, feedback_service_name);
-                                                                        spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                                                        feedback_service.setAdapter(spinnerArrayAdapter5);
-                    
-                                                                        if (feedback_service.getParent() != null) {
-                                                                            ((ViewGroup) feedback_service.getParent()).removeView(feedback_service); //
-                                                                        }
-                                                                        main_Layout.addView(feedback_service);
-                    
-                                                                        feedback_service.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                                                            @Override
-                                                                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                                                                str_feedbackservice = feedback_service.getSelectedItem().toString();
-                                                                                try {
-                                                                                    if (!str_feedbackservice.equals("")) {
-                                                                                        feedback_service.setId(i);
-                                                                                        System.out.println("floor_spinner.getId() = " + feedback_service.getId());
-                                                                                    }
-                                                                                } catch (NumberFormatException e) {
-                                                                                    e.printStackTrace();
-                                                                                    System.out.println("Feedback Service Id Exception");
-                                                                                }
-                                                                            }
-                        
-                                                                            @Override
-                                                                            public void onNothingSelected(AdapterView<?> adapterView) {
-                            
-                                                                            }
-                                                                        });*/
-
-                                                                            //BUTTONS
-                                                                            if (button(R.id.cancel, "Cancel").getParent() != null) {
-                                                                                ((ViewGroup) button(R.id.cancel, "Cancel").getParent()).removeView(button(R.id.cancel, "Cancel")); //
-                                                                            }
-                                                                            sub1_secondlayout.addView(button(R.id.cancel, "Cancel"));
-
-                                                                            if (button(R.id.submit, "Submit").getParent() != null) {
-                                                                                ((ViewGroup) button(R.id.submit, "Submit").getParent()).removeView(button(R.id.submit, "Submit")); //
-                                                                            }
-                                                                            sub1_secondlayout.addView(button(R.id.submit, "Submit"));
+                                                                if (button(R.id.submit,"Submit").getParent() != null) {
+                                                                    ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+                                                                }
+                                                                sub1_secondlayout.addView(button(R.id.submit,"Submit"));
 
 
-                                                                            if (sub1_secondlayout.getParent() != null) {
-                                                                                ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
-                                                                            }
-                                                                            main_Layout.addView(sub1_secondlayout);
-
-
-                                                                        } else {
-                                                                            main_Layout.removeView(area_spinner);
-
-                                                                            //BUTTONS
-                                                                            if (button(R.id.cancel, "Cancel").getParent() != null) {
-                                                                                ((ViewGroup) button(R.id.cancel, "Cancel").getParent()).removeView(button(R.id.cancel, "Cancel")); //
-                                                                            }
-                                                                            sub1_secondlayout.addView(button(R.id.cancel, "Cancel"));
-
-                                                                            if (button(R.id.submit, "Submit").getParent() != null) {
-                                                                                ((ViewGroup) button(R.id.submit, "Submit").getParent()).removeView(button(R.id.submit, "Submit")); //
-                                                                            }
-                                                                            sub1_secondlayout.addView(button(R.id.submit, "Submit"));
-
-
-                                                                            if (sub1_secondlayout.getParent() != null) {
-                                                                                ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
-                                                                            }
-                                                                            main_Layout.addView(sub1_secondlayout);
-                                                                        }
-
-                                                                    }
-
-                                                                    @Override
-                                                                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                                                                    }
-                                                                });
-
-
-                                                            } else {
+                                                                if (sub1_secondlayout.getParent() != null) {
+                                                                    ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+                                                                }
+                                                                main_Layout.addView(sub1_secondlayout);
+                                                            }
+//                                                            {
+//                                                                ArrayAdapter<String> spinnerArrayAdapter6 = new ArrayAdapter<String>(getApplicationContext(),
+//                                                                        R.layout.spinner_text, virtualarea_names);
+//                                                                spinnerArrayAdapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                                                                virtualarea_spinner.setAdapter(spinnerArrayAdapter6);
+//
+//                                                                if (virtualarea_spinner.getParent() != null) {
+//                                                                    ((ViewGroup) virtualarea_spinner.getParent()).removeView(virtualarea_spinner); //
+//                                                                }
+//                                                                main_Layout.addView(virtualarea_spinner);
+//
+//                                                                virtualarea_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                                                                    @Override
+//                                                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                                                                        str_virtualareaname = virtualarea_spinner.getSelectedItem().toString();
+//                                                                        try {
+//                                                                            if (!str_virtualareaname.equals("")) {
+////                                                                                virtualarea_spinner.setId(i);
+//                                                                                System.out.println("floor_spinner.getId() = " + virtualarea_spinner.getId());
+//                                                                            }
+//                                                                        } catch (NumberFormatException e) {
+//                                                                            e.printStackTrace();
+//                                                                            System.out.println("Virtual Area Id Exception");
+//                                                                        }
+//
+//                                                                        area_names = dbh.getAllAreas(str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname,str_floorname);
+//                                                                        System.out.println("area_names = " + area_names);
+//                                                                        if (!area_names.isEmpty())
+//                                                                        {
+//                                                                            //MULTI SELECT SPINNER
+//                                                                            area_spinner.setVisibility(View.VISIBLE);
+//                                                                            area_spinner.setItems(area_names);
+//                                                                            System.out.println("area_spinner.getSelectedItemsAsString() = " + area_spinner.getSelectedStrings());
+//
+//                                                                            if (area_spinner.getParent() != null) {
+//                                                                                ((ViewGroup) area_spinner.getParent()).removeView(area_spinner); //
+//                                                                            }
+//                                                                            main_Layout.addView(area_spinner);
+//
+//                                                                            //FEEDBACK SERVICE
+//                                                                      /*  ArrayAdapter<String> spinnerArrayAdapter5 = new ArrayAdapter<String>(getApplicationContext(),
+//                                                                                R.layout.spinner_text, feedback_service_name);
+//                                                                        spinnerArrayAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                                                                        feedback_service.setAdapter(spinnerArrayAdapter5);
+//
+//                                                                        if (feedback_service.getParent() != null) {
+//                                                                            ((ViewGroup) feedback_service.getParent()).removeView(feedback_service); //
+//                                                                        }
+//                                                                        main_Layout.addView(feedback_service);
+//
+//                                                                        feedback_service.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                                                                            @Override
+//                                                                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                                                                                str_feedbackservice = feedback_service.getSelectedItem().toString();
+//                                                                                try {
+//                                                                                    if (!str_feedbackservice.equals("")) {
+//                                                                                        feedback_service.setId(i);
+//                                                                                        System.out.println("floor_spinner.getId() = " + feedback_service.getId());
+//                                                                                    }
+//                                                                                } catch (NumberFormatException e) {
+//                                                                                    e.printStackTrace();
+//                                                                                    System.out.println("Feedback Service Id Exception");
+//                                                                                }
+//                                                                            }
+//
+//                                                                            @Override
+//                                                                            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//                                                                            }
+//                                                                        });*/
+//
+//                                                                            //BUTTONS
+//                                                                            if (button(R.id.cancel,"Cancel").getParent() != null) {
+//                                                                                ((ViewGroup) button(R.id.cancel,"Cancel").getParent()).removeView(button(R.id.cancel,"Cancel")); //
+//                                                                            }
+//                                                                            sub1_secondlayout.addView(button(R.id.cancel,"Cancel"));
+//
+//                                                                            if (button(R.id.submit,"Submit").getParent() != null) {
+//                                                                                ((ViewGroup) button(R.id.submit,"Submit").getParent()).removeView(button(R.id.submit,"Submit")); //
+//                                                                            }
+//                                                                            sub1_secondlayout.addView(button(R.id.submit,"Submit"));
+//
+//
+//                                                                            if (sub1_secondlayout.getParent() != null) {
+//                                                                                ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
+//                                                                            }
+//                                                                            main_Layout.addView(sub1_secondlayout);
+//
+//
+//                                                                        }
+//                                                                        else
+//                                                                        {
+//                                                                            main_Layout.removeView(area_spinner);
+//
+//                                                                        }
+//
+//                                                                    }
+//
+//                                                                    @Override
+//                                                                    public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//                                                                    }
+//                                                                });
+//
+//
+//
+//
+//                                                            }
+                                                            else {
                                                                 main_Layout.removeView(virtualarea_spinner);
                                                             }
 
@@ -2163,29 +2444,13 @@ public class AdminDetailsConfig extends BaseActivity {
       /*  Spinner feedback_service = new Spinner(getApplicationContext());
         feedback_service.setBackground(getDrawable(R.drawable.edit_style));
         feedback_service.setLayoutParams(params1);
-        
+
         final ArrayAdapter<String> spinnerArrayAdapter11 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, feedback_service_name);
         feedback_service.setAdapter(spinnerArrayAdapter11);
         feedback_service.setEnabled(false);*/
 
             main_Layout.addView(textView(str_feedbackservice));
             main_Layout.addView(company_spinner);
-            //BUTTONS
-            if (button(R.id.cancel, "Cancel").getParent() != null) {
-                ((ViewGroup) button(R.id.cancel, "Cancel").getParent()).removeView(button(R.id.cancel, "Cancel")); //
-            }
-            sub1_secondlayout.addView(button(R.id.cancel, "Cancel"));
-
-            if (button(R.id.submit, "Submit").getParent() != null) {
-                ((ViewGroup) button(R.id.submit, "Submit").getParent()).removeView(button(R.id.submit, "Submit")); //
-            }
-            sub1_secondlayout.addView(button(R.id.submit, "Submit"));
-
-
-            if (sub1_secondlayout.getParent() != null) {
-                ((ViewGroup) sub1_secondlayout.getParent()).removeView(sub1_secondlayout); //
-            }
-            main_Layout.addView(sub1_secondlayout);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -2195,14 +2460,14 @@ public class AdminDetailsConfig extends BaseActivity {
   /*  Data source = new Data.Builder()
                           .putString("workType", "OneTime")
                           .build();
-    
+
     OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(MyDownloadWorker.class)
                                                     .setConstraints(constraints())
                                                     .setInputData(source)
                                                     .build();
     WorkManager.getInstance().enqueue(oneTimeWorkRequest);
-    
-    
+
+
     WorkManager.getInstance().getWorkInfoByIdLiveData(oneTimeWorkRequest.getId())
             .observe(this, new Observer<WorkInfo>() {
                 @Override
@@ -2212,22 +2477,23 @@ public class AdminDetailsConfig extends BaseActivity {
             });*/
 
 
+
     }
 
 /*private void startWorkManager() {
-    
+
     //Passing Arguments to Worker
     Data source = new Data.Builder()
                           .putString("workType", "OneTime")
                           .build();
-    
+
     OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(MyDownloadWorker.class)
                                                     .setConstraints(constraints())
                                                     .setInputData(source)
                                                     .build();
     WorkManager.getInstance().enqueue(oneTimeWorkRequest);
-    
-    
+
+
 }
 
 private Constraints constraints() {
@@ -2288,7 +2554,6 @@ private Constraints constraints() {
         return textView;
 
     }
-
     private TextView button(int id, String uname) {
 
         button.setId(id);
@@ -2302,26 +2567,26 @@ private Constraints constraints() {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (button.getId() == R.id.submit) {
-                    if (str_virtualareaname.equalsIgnoreCase("Select Virtual Name")) {
+                if (button.getId() == R.id.submit)
+                {
+                    if (str_virtualareaname.equalsIgnoreCase("Select Virtual Name"))
+                    {
                         Toast.makeText(AdminDetailsConfig.this, "Please Enter all details", Toast.LENGTH_SHORT).show();
-                    } else {
+                    }
+                    else
+                    {
                         uuid = UUID.randomUUID().toString();
-                        String areaName = "";
-                            areaName = area_spinner.getSelectedItemsAsString();
-                            if (!areaName.equalsIgnoreCase(str_virtualareaname)) {
-                                areaName = areaName + "|" + str_virtualareaname;
-                            }
 
-                        boolean isInserted = dbh.insertStoreSettings(uuid, str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname, str_floorname, str_virtualareaname, areaName, str_feedbackservice, "20000", "yes", "Excellent|Very Good|Good|Average|Poor");//area_spinner.getSelectedItemsAsString()
+                        boolean isInserted = dbh.insertStoreSettings(uuid,str_companyname,str_locationname,str_sitename,str_buildingname,str_wingname,str_floorname,str_virtualareaname,area_spinner.getSelectedItemsAsString(),str_feedbackservice,"20000","yes", "Excellent|Very Good|Good|Average|Poor");
                         System.out.println("isInserted = " + isInserted);
 
-                        if (isInserted) {
+                        if (isInserted)
+                        {
                             Toast.makeText(AdminDetailsConfig.this, "Submitted", Toast.LENGTH_SHORT).show();
-
-
-                            startActivity(new Intent(AdminDetailsConfig.this, SelectArea.class));
-                        } else {
+                            startActivity(new Intent(AdminDetailsConfig.this,SelectArea.class));
+                        }
+                        else
+                        {
                             Toast.makeText(AdminDetailsConfig.this, "Some error occured, Please try again", Toast.LENGTH_SHORT).show();
                         }
 
@@ -2329,7 +2594,9 @@ private Constraints constraints() {
                     }
 
 
-                } else if (button.getId() == R.id.cancel) {
+                }
+                else if(button.getId() == R.id.cancel)
+                {
                     Toast.makeText(AdminDetailsConfig.this, "Cancelled", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -2338,6 +2605,8 @@ private Constraints constraints() {
         return button;
 
     }
+
+
 
 
 }

@@ -11,9 +11,13 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,19 +35,22 @@ public class ThankuActivityScore extends BaseActivity {
 
     //    DatabaseHelper dbh;
 //    SharedPreferences prefs;
-    String ShowLogo, Timeout,area;
+    String ShowLogo, Timeout, area;
+    Snackbar snackbar;
+    LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thanku);
-
-        //  Toast.makeText(this, "ThankuActivityScore called...", Toast.LENGTH_SHORT).show();
-//        prefs = PreferenceManager.getDefaultSharedPreferences(ThankuActivityScore.this);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("QuestNo", 1);
-        editor.commit();
         try {
+            linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
+            //  Toast.makeText(this, "ThankuActivityScore called...", Toast.LENGTH_SHORT).show();
+//        prefs = PreferenceManager.getDefaultSharedPreferences(ThankuActivityScore.this);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt("QuestNo", 1);
+            editor.commit();
+
             area = getIntent().getStringExtra("area");
 //        dbh = new DatabaseHelper(ThankuActivityScore.this);
             ContentValues values = new ContentValues();
@@ -66,7 +73,7 @@ public class ThankuActivityScore extends BaseActivity {
                 db1.close();
             }*/
 
-            Timeout="20000";
+            Timeout = "20000";
 //        final Handler handler = new Handler();
 //        handler.postDelayed(new Runnable() {
 //            @Override
@@ -76,18 +83,33 @@ public class ThankuActivityScore extends BaseActivity {
 //                startActivity(intent);
 //            }
 //        },Integer.parseInt(Timeout));
+
             countDownTimer = new CountDownTimer(Long.parseLong(Timeout), 1000) {
 
                 public void onTick(long millisUntilFinished) {
                     Log.i("********", "seconds remaining: " + millisUntilFinished / 1000);
                     Toast.makeText(ThankuActivityScore.this, "You will be redirected to Feedback Questions page in " + millisUntilFinished / 1000+" secs", Toast.LENGTH_SHORT).show();
+                  /*  try {
+                            snackbar = Snackbar
+                                    .make(linearLayout, "", snackbar.LENGTH_INDEFINITE);
+                            (snackbar.getView()).getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+
+                       if (!snackbar.isShown()) {
+                           snackbar.show();
+                       }
+                         if (millisUntilFinished / 1000 < 21){
+                            snackbar.setText("You will be redirected to Feedback Questions page in " + millisUntilFinished / 1000 + " secs");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }*/
                 }
 
                 public void onFinish() {
                     Log.i("********", "Timer Finished");
                     countDownTimer.cancel();
                     Intent intent = new Intent(getApplicationContext(), FeedbackActivity.class);
-                    intent.putExtra("area",area);
+                    intent.putExtra("area", area);
                     startActivity(intent);
                 }
             }.start();
@@ -114,7 +136,8 @@ public class ThankuActivityScore extends BaseActivity {
             sqLiteDatabase = dbh.getWritableDatabase();
             Cursor cursor = sqLiteDatabase.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {
-                do {//ID INTEGER PRIMARY KEY,Company_ID TEXT,Company_Name TEXT,Location_Id TEXT,Location_Name TEXT,Site_Id TEXT, Site_Name TEXT,Building_Id TEXT,
+                do
+                {//ID INTEGER PRIMARY KEY,Company_ID TEXT,Company_Name TEXT,Location_Id TEXT,Location_Name TEXT,Site_Id TEXT, Site_Name TEXT,Building_Id TEXT,
                     // Building_Name TEXT,Wing_Id TEXT,Wing_Name TEXT,Floor_Id TEXT, Floor_Name TEXT,Area_Id TEXT, Area_Name TEXT,Feedback_Service_Type text, RecordStatus TEXT
 
                     JSONObject feedbackObject = new JSONObject();
@@ -131,7 +154,6 @@ public class ThankuActivityScore extends BaseActivity {
                     feedbackObject.put("Area_Id", cursor.getString(cursor.getColumnIndex("Area_Id")));
                     feedbackObject.put("Area_Name", cursor.getString(cursor.getColumnIndex("Area_Name")));
                     feedbackObject.put("Feedback_Service_Type", cursor.getString(cursor.getColumnIndex("Feedback_Service_Type")));
-
 
 
                     feedbackObject.put("Feedback_Icon_Id", cursor.getString(cursor.getColumnIndex("Feedback_Icon_Id")));

@@ -41,7 +41,7 @@ public void onCreate(SQLiteDatabase sqLiteDatabase) {
     sqLiteDatabase.execSQL(" CREATE TABLE admin_details(ID INTEGER PRIMARY KEY,Company_ID TEXT,Company_Name TEXT,Location_Id TEXT,Location_Name TEXT,Site_Id TEXT, Site_Name TEXT,Building_Id TEXT, Building_Name TEXT,Wing_Id TEXT,Wing_Name TEXT,Floor_Id TEXT, Floor_Name TEXT,Area_Id TEXT, Area_Name TEXT,Feedback_Service_Type text, RecordStatus TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE feedback_adminquestions (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Feedback_Question TEXT,Order_Id TEXT, Area_Id TEXT, Weightage TEXT,EmailSMS TEXT,RecordStatus TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE feedback_adminsubquestions (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Feedback_Id TEXT, Feedback_Sub_Question TEXT,Icon Blob, Order_Id TEXT,Weightage TEXT,RecordStatus TEXT)");
-    sqLiteDatabase.execSQL(" CREATE TABLE feedback_admin_icondetails (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Icon_Name TEXT, Icon_value BLOB,Icon_Type TEXT, Status TEXT)");
+    sqLiteDatabase.execSQL(" CREATE TABLE feedback_admin_icondetails (ID INTEGER PRIMARY KEY ,Auto_Id TEXT, Icon_Name TEXT, Icon_value BLOB,Icon_Type TEXT, Status TEXT, Feedback_Name TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE feedback_details (ID INTEGER PRIMARY KEY ,Rec_Id TEXT,Admin_Id TEXT, Supervisor_Id TEXT, Display_Name Text,Feedback_DateTime TEXT, UpdatedStatus TEXT,Last_IP TEXT,Apk_Web_Version TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE feedback_userquestiondata (ID INTEGER PRIMARY KEY ,Rec_Id TEXT,Question_ID TEXT, Feedback_Icon_Id TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE feedback_usersubquestiondata (ID INTEGER PRIMARY KEY ,Rec_Id TEXT,Question_ID TEXT,Sub_Question_ID TEXT,Response TEXT)");

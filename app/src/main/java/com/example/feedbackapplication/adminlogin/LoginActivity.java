@@ -1,8 +1,10 @@
 package com.example.feedbackapplication.adminlogin;
 
 
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,8 +34,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.UUID;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
@@ -44,6 +50,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private ProgressDialog pDialog;
     int questionscount;
     public boolean internetConnection = false;
+    String LastImageName="";
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -134,14 +141,7 @@ public void onClick(View view) {
         }
         else
         {
-            uuid = UUID.randomUUID().toString();
-            //dbh.insertLoginDetails(uuid,str_username,str_pwd,str_companyname);
-            boolean isInserted = dbh.insertLoginDetails(uuid,str_clientid,str_username,str_pwd);
-            System.out.println("isInserted = " + isInserted);
 
-            if (isInserted)
-            {
-                Toast.makeText(LoginActivity.this, "Successfully Logged In", Toast.LENGTH_SHORT).show();
                 questionscount = dbh.admindetails_count();
                 if (questionscount == 0) {
                     new CheckingInternetConnectivity().execute();
@@ -162,11 +162,7 @@ public void onClick(View view) {
 //                    startActivity(intent);
 //                }
                 }
-            }
-            else
-            {
-                Toast.makeText(LoginActivity.this, "Some error occured, Please try again", Toast.LENGTH_SHORT).show();
-            }
+
         }
     } catch (Exception e) {
         e.printStackTrace();
@@ -174,6 +170,8 @@ public void onClick(View view) {
     }
 
 }
+
+
 
     private class CheckingInternetConnectivity extends AsyncTask<Void, Void, Boolean> {
         @Override
@@ -221,7 +219,8 @@ public void onClick(View view) {
 
             if (result == true) {
                 pDialog.dismiss();
-                new DataDownload().execute();
+                new DataDownload().execute(str_username,str_pwd);
+
             } else {
                 pDialog.dismiss();
 
@@ -241,7 +240,8 @@ public void onClick(View view) {
             DatabaseHelper databaseHelper1 = DatabaseHelper.getInstance(getApplicationContext());
             SQLiteDatabase db1 = databaseHelper1.getWritableDatabase();
             HttpHandler handler = new HttpHandler();
-            String jsonFeedbackSms = handler.taskDataCall();
+//            String jsonFeedbackSms = handler.taskDataCall();
+            String jsonFeedbackSms =handler.LoginDetails_main(URL[0],URL[1]);
             System.out.print("*********data downloaded:"+jsonFeedbackSms);
 //            finish();
             if (jsonFeedbackSms != null) {
@@ -299,8 +299,8 @@ public void onClick(View view) {
                                 }
                                 String selectQuery = "SELECT * FROM admin_details";
                                 databaseHelper1 = new DatabaseHelper(getApplicationContext());
-                                db1 = databaseHelper1.getWritableDatabase();
-                                Cursor cursor = db1.rawQuery(selectQuery, null);
+                                SQLiteDatabase db2  = databaseHelper1.getWritableDatabase();
+                                Cursor cursor = db2.rawQuery(selectQuery, null);
                                 Log.d("asdgvdafg", cursor.getCount() + "");
                                 if (cursor.getCount() < task.length()) {
                                     /*ContentValues contentValues = new ContentValues();
@@ -313,7 +313,7 @@ public void onClick(View view) {
                                     contentValues.put("Site_Location_Id", Site_Location_Id);
                                     contentValues.put("Floor_Name", Floor_Name);
                                     contentValues.put("Area_Name", Area_Name);
-                                    db1.insert("admin_details", null, contentValues);*/
+                                    db2.insert("admin_details", null, contentValues);*/
                                     dbh.insertAdminDetails(Company_Id, Company_Name, Location_Id, Location_Name,
                                             Site_Id, Site_Name, Building_Id, Building_Name,
                                             Wing_Id, Wing_Name, Floor_Id,
@@ -321,7 +321,7 @@ public void onClick(View view) {
                                             "Area specific|Common Feedback|Common Feedback with Area Specific");//Area specific|Common Feedback|Common Feedback with Area Specific
                                 }
                                 cursor.close();
-                                db1.close();
+                                db2.close();
                             }
                         }
                     } catch (JSONException e) {
@@ -416,8 +416,8 @@ public void onClick(View view) {
 //                                String Icon_Type= c1.getString("Icon_Type");
                                 String selectQuery = "SELECT * FROM feedback_adminquestions";
                                 databaseHelper1 = new DatabaseHelper(getApplicationContext());
-                                db1 = databaseHelper1.getWritableDatabase();
-                                Cursor cursor = db1.rawQuery(selectQuery, null);
+                                SQLiteDatabase db2= databaseHelper1.getWritableDatabase();
+                                Cursor cursor = db2.rawQuery(selectQuery, null);
                                 Log.d("asdgvdafg", cursor.getCount() + "");
                                 if (cursor.getCount() < task.length()) {
                                     ContentValues contentValues = new ContentValues();
@@ -426,16 +426,16 @@ public void onClick(View view) {
                                     contentValues.put("Order_Id", Order_Id);
                                     contentValues.put("Area_Id", Area_Id);
 //                                    contentValues.put("Icon_Type", Icon_Type);
-                                    db1.insert("feedback_adminquestions", null, contentValues);
+                                    db2.insert("feedback_adminquestions", null, contentValues);
 //                                    dbh.insertData(Auto_Id, Feedback_Question, Order_Id, "Smiley",Area_Id);
                                 }
                                 cursor.close();
-                                db1.close();
+                                db2.close();
                             }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        //db1.endTransaction();
+                        //db2.endTransaction();
                     }
 
                     try {
@@ -452,8 +452,8 @@ public void onClick(View view) {
                                 String Order_Id = c1.getString("Disp_Order");
                                 String selectQuery = "SELECT * FROM feedback_adminsubquestions";
                                 databaseHelper1 = new DatabaseHelper(getApplicationContext());
-                                db1 = databaseHelper1.getWritableDatabase();
-                                Cursor cursor = db1.rawQuery(selectQuery, null);
+                                SQLiteDatabase db3 = databaseHelper1.getWritableDatabase();
+                                Cursor cursor = db3.rawQuery(selectQuery, null);
                                 Log.d("asdgvdafg", cursor.getCount() + "");
                                 if (cursor.getCount() < task.length()) {
                                     //Auto_Id TEXT, Feedback_Id TEXT, Feedback_Sub_Question TEXT,Icon Blob, Order_Id TEXT,Weightage TEXT,RecordStatus TEXT
@@ -462,13 +462,54 @@ public void onClick(View view) {
                                     contentValues.put("Feedback_Id", Feedback_Question_Id);
                                     contentValues.put("Feedback_Sub_Question", Feedback_Sub_Question);
                                     contentValues.put("Order_Id", Order_Id);
-                                    db1.insert("feedback_adminsubquestions", null, contentValues);
+                                    db3.insert("feedback_adminsubquestions", null, contentValues);
 
                                 }
                                 cursor.close();
-                                db1.close();
+                                db3.close();
                             }
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        //db1.endTransaction();
+                    }
+
+                    //////////////////////Feedback Icons////////////////////////////
+                    try {
+                        JSONArray task = jsonObj.getJSONArray("feedbackiconDetails");
+                        Log.d("DATasValue", task + "" + task.length());
+                        if (!task.toString().equals("[]")) {
+
+                            for (int j = 0; j < task.length(); j++) {
+                                JSONObject c1 = task.getJSONObject(j);
+                                //"Auto_Id":"0978d793-a018-11ea-a8e4-1c1b0dc1b24f",
+                                //         "Feedback_Name":"Average",
+                                //         "Icon_Value":null,
+                                //         "Icon_Type":"Smiley"
+                                //Auto_Id TEXT, Icon_Name TEXT, Icon_value BLOB,Icon_Type TEXT, Status TEXT
+                                String Auto_Id = c1.getString("Auto_Id");
+                                String Icon_Name = c1.getString("Icon_Name");
+                                String Feedback_Name = c1.getString("Feedback_Name");
+                                String Icon_Type = c1.getString("Icon_Type");
+                                String selectQuery = "SELECT * FROM feedback_admin_icondetails";
+                                databaseHelper1 = new DatabaseHelper(getApplicationContext());
+                                SQLiteDatabase db4 = databaseHelper1.getWritableDatabase();
+                                Cursor cursor = db4.rawQuery(selectQuery, null);
+                                Log.d("asdgvdafg", cursor.getCount() + "");
+                                if (cursor.getCount() < task.length()) {
+                                    ContentValues contentValues = new ContentValues();
+                                    contentValues.put("Auto_Id", Auto_Id);
+                                    contentValues.put("Icon_Name", Icon_Name);
+                                    contentValues.put("Feedback_Name", Feedback_Name);
+                                    contentValues.put("Icon_Type", Icon_Type);
+                                    db4.insert("feedback_admin_icondetails", null, contentValues);
+                                }
+                                cursor.close();
+                                db4.close();
+                            }
+                        }
+
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                         //db1.endTransaction();
@@ -640,43 +681,7 @@ public void onClick(View view) {
                         e.printStackTrace();
                         //db1.endTransaction();
                     }*/
-                    //////////////////////Feedback Icons////////////////////////////
-                    try {
-                        JSONArray task = jsonObj.getJSONArray("feedbackiconDetails");
-                        Log.d("DATasValue", task + "" + task.length());
-                        if (!task.toString().equals("[]")) {
 
-                            for (int j = 0; j < task.length(); j++) {
-                                JSONObject c1 = task.getJSONObject(j);
-                                //"Auto_Id":"0978d793-a018-11ea-a8e4-1c1b0dc1b24f",
-                                //         "Feedback_Name":"Average",
-                                //         "Icon_Value":null,
-                                //         "Icon_Type":"Smiley"
-                                //Auto_Id TEXT, Icon_Name TEXT, Icon_value BLOB,Icon_Type TEXT, Status TEXT
-                                String Auto_Id = c1.getString("Auto_Id");
-                                String Feedback_Name = c1.getString("Feedback_Name");
-//                                String Icon_Value = c1.getString("Icon_Value");
-                                String Icon_Type = c1.getString("Icon_Type");
-                                String selectQuery = "SELECT * FROM feedback_admin_icondetails";
-                                databaseHelper1 = new DatabaseHelper(getApplicationContext());
-                                db1 = databaseHelper1.getWritableDatabase();
-                                Cursor cursor = db1.rawQuery(selectQuery, null);
-                                Log.d("asdgvdafg", cursor.getCount() + "");
-                                if (cursor.getCount() < task.length()) {
-                                    ContentValues contentValues = new ContentValues();
-                                    contentValues.put("Auto_Id", Auto_Id);
-                                    contentValues.put("Icon_Name", Feedback_Name);
-                                    contentValues.put("Icon_Type", Icon_Type);
-                                    db1.insert("feedback_admin_icondetails", null, contentValues);
-                                }
-                                cursor.close();
-                                db1.close();
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        //db1.endTransaction();
-                    }
                     //insert icon hardcoded values
                   /*  try {
                         SQLiteDatabase db2 = databaseHelper1.getWritableDatabase();
@@ -772,6 +777,80 @@ public void onClick(View view) {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            uuid = UUID.randomUUID().toString();
+            //dbh.insertLoginDetails(uuid,str_username,str_pwd,str_companyname);
+            boolean isInserted = dbh.insertLoginDetails(uuid,str_clientid,str_username,str_pwd);
+            System.out.println("isInserted = " + isInserted);
+            if (isInserted)
+            {
+                SQLiteDatabase db = dbh.getWritableDatabase();
+                String UserGroupQuery = "Select Image_Name from feedback_admin_icondetails";
+                Cursor cursor1 = sqLiteDatabase.rawQuery(UserGroupQuery, null);
+                HttpHandler httpHandler=new HttpHandler();
+                if (cursor1.moveToFirst()) {
+                    do {
+                        String Image_Name = cursor1.getString(cursor1.getColumnIndex("Icon_Name"));
+
+
+                        if (!checkImages(Image_Name)) {
+                            Bitmap b =httpHandler.GetImage(Image_Name);
+                            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                            b.compress(Bitmap.CompressFormat.PNG, 100, bos);
+                            byte[] img = bos.toByteArray();
+                            //myDB = new DatabaseHelper(this);
+                            ContentValues cv = new ContentValues();
+                            cv.put("Icon_value", img);
+                            sqLiteDatabase.update("feedback_admin_icondetails", cv, "Icon_Name='"+Image_Name+"'",null);
+                        }
+                        if (cursor1.getPosition() == (cursor1.getCount() - 1)) {
+                            LastImageName = Image_Name;
+                        }
+                    } while (cursor1.moveToNext());
+                }
+                cursor1.close();
+                db.close();
+                Intent intent = new Intent(getApplicationContext(), AdminDetailsConfig.class);
+                intent.putExtra("feedbackservicename",feedbackservicename);
+                intent.putExtra("client_id",str_clientid);
+//            count++;
+//            intent.putExtra("Count", count);
+                startActivity(intent);
+            }
+            else
+            {
+                Toast.makeText(LoginActivity.this, "Some error occured, Please try again", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+    }
+
+
+
+
+    private boolean checkImages(String Image){
+        boolean imageFound = false;
+        File[] files;
+        File mydir = getApplicationContext().getDir("images", Context.MODE_PRIVATE); //Creating an internal dir;
+        if(mydir.exists()){
+            files = mydir.listFiles();
+            //Log.d("Files", "Size: " + files.length);
+            for (int i = 0; i < files.length; i++)
+            {
+                if(files[i].getName().equals(Image)){
+                    imageFound = true;
+                    break;
+                }else {
+                    imageFound = false;
+                }
+
+            }
+
+        }else {
+            imageFound = false;
+        }
+        if(LastImageName.equalsIgnoreCase(Image)){
+//            intentHomepage();
             Intent intent = new Intent(getApplicationContext(), AdminDetailsConfig.class);
             intent.putExtra("feedbackservicename",feedbackservicename);
             intent.putExtra("client_id",str_clientid);
@@ -780,6 +859,8 @@ public void onClick(View view) {
             startActivity(intent);
         }
 
+        return imageFound;
     }
+
 
 }
