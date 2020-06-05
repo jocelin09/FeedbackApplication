@@ -35,7 +35,7 @@ public class AdminDetailsConfig extends BaseActivity {
 
 
     int questionscount;
-    String str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname, str_floorname,str_virtualareaname,str_feedbackservice,client_id;
+    String str_companyname, str_locationname, str_sitename, str_buildingname, str_wingname, str_floorname,str_virtualareaname="",str_feedbackservice,client_id;
     String company_id, location_id, site_id, building_id, wing_id, floor_id, area_id;
     private ArrayList<String> company_names = new ArrayList<String>();
     private ArrayList<String> location_names = new ArrayList<String>();
@@ -2569,12 +2569,12 @@ private Constraints constraints() {
             public void onClick(View view) {
                 if (button.getId() == R.id.submit)
                 {
-                    if (str_virtualareaname.equalsIgnoreCase("Select Virtual Name"))
-                    {
-                        Toast.makeText(AdminDetailsConfig.this, "Please Enter all details", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
+                    //if (str_virtualareaname.equalsIgnoreCase("Select Virtual Name"))
+                    //{
+                      //  Toast.makeText(AdminDetailsConfig.this, "Please Enter all details", Toast.LENGTH_SHORT).show();
+                   // }
+                    //else
+                    //{
                         uuid = UUID.randomUUID().toString();
 
                         boolean isInserted = dbh.insertStoreSettings(uuid,str_companyname,str_locationname,str_sitename,str_buildingname,str_wingname,str_floorname,str_virtualareaname,area_spinner.getSelectedItemsAsString(),str_feedbackservice,"20000","yes", "Excellent|Very Good|Good|Average|Poor");
@@ -2591,7 +2591,7 @@ private Constraints constraints() {
                         }
 
 
-                    }
+                   // }
 
 
                 }

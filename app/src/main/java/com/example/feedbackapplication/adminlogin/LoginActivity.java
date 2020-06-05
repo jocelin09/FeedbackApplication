@@ -5,7 +5,10 @@ import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -24,10 +27,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.feedbackapplication.BaseActivity;
+import com.example.feedbackapplication.BroadcastRec;
+import com.example.feedbackapplication.Constants;
 import com.example.feedbackapplication.HttpHandler;
+import com.example.feedbackapplication.JobIntentServiceClass;
 import com.example.feedbackapplication.R;
 import com.example.feedbackapplication.database.DatabaseHelper;
 import com.google.android.material.snackbar.Snackbar;
+import com.sac.speech.Speech;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,6 +48,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.UUID;
 
+import androidx.core.app.JobIntentService;
+
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     String str_clientid,str_username,str_pwd,uuid="";
@@ -51,12 +60,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     int questionscount;
     public boolean internetConnection = false;
     String LastImageName="";
+BroadcastRec broadcastRec = new BroadcastRec();
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_login);
-
+    
+    IntentFilter intentFilter = new IntentFilter("com.example.feedbackapplication.ACTION_BROADCAST");
+    registerReceiver(broadcastRec, intentFilter);
+    
+    enableAutoStart();
+    
+    Intent intent = new Intent(LoginActivity.this, JobIntentService.class);
+    JobIntentServiceClass.enqueueWork(this, intent);
+    
+    
    /* try {
         questionscount = dbh.admindetails_count();
         if (questionscount == 0) {
@@ -240,7 +259,7 @@ public void onClick(View view) {
             DatabaseHelper databaseHelper1 = DatabaseHelper.getInstance(getApplicationContext());
             SQLiteDatabase db1 = databaseHelper1.getWritableDatabase();
             HttpHandler handler = new HttpHandler();
-//            String jsonFeedbackSms = handler.taskDataCall();
+           // String jsonFeedbackSms = handler.taskDataCall();
             String jsonFeedbackSms =handler.LoginDetails_main(URL[0],URL[1]);
             System.out.print("*********data downloaded:"+jsonFeedbackSms);
 //            finish();
@@ -784,15 +803,15 @@ public void onClick(View view) {
             if (isInserted)
             {
                 SQLiteDatabase db = dbh.getWritableDatabase();
-                String UserGroupQuery = "Select Image_Name from feedback_admin_icondetails";
-                Cursor cursor1 = sqLiteDatabase.rawQuery(UserGroupQuery, null);
+                String UserGroupQuery = "Select * from feedback_admin_icondetails";
+                Cursor cursor1 = db.rawQuery(UserGroupQuery, null);
                 HttpHandler httpHandler=new HttpHandler();
                 if (cursor1.moveToFirst()) {
                     do {
                         String Image_Name = cursor1.getString(cursor1.getColumnIndex("Icon_Name"));
+                        System.out.println("Image_Name = " + Image_Name);
 
-
-                        if (!checkImages(Image_Name)) {
+                        /*if (!checkImages(Image_Name)) {
                             Bitmap b =httpHandler.GetImage(Image_Name);
                             ByteArrayOutputStream bos = new ByteArrayOutputStream();
                             b.compress(Bitmap.CompressFormat.PNG, 100, bos);
@@ -801,7 +820,7 @@ public void onClick(View view) {
                             ContentValues cv = new ContentValues();
                             cv.put("Icon_value", img);
                             sqLiteDatabase.update("feedback_admin_icondetails", cv, "Icon_Name='"+Image_Name+"'",null);
-                        }
+                        }*/
                         if (cursor1.getPosition() == (cursor1.getCount() - 1)) {
                             LastImageName = Image_Name;
                         }
@@ -812,8 +831,7 @@ public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AdminDetailsConfig.class);
                 intent.putExtra("feedbackservicename",feedbackservicename);
                 intent.putExtra("client_id",str_clientid);
-//            count++;
-//            intent.putExtra("Count", count);
+
                 startActivity(intent);
             }
             else
@@ -861,6 +879,40 @@ public void onClick(View view) {
 
         return imageFound;
     }
+
+private void enableAutoStart() {
+    for (Intent intent : Constants.AUTO_START_INTENTS) {
+        if (getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null) {
+            new android.app.AlertDialog.Builder(this)
+                    .setTitle(R.string.enable_autostart)
+                    .setMessage(R.string.ask_permission)
+                    .setPositiveButton(getString(R.string.allow), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                               /* for (Intent intent1 : Constants.AUTO_START_INTENTS)
+                                    if (getPackageManager().resolveActivity(intent1, PackageManager.MATCH_DEFAULT_ONLY) != null) {
+                                        startActivity(intent1);
+                                        break;
+                                    }*/
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    })
+                    .show();
+            break;
+        }
+    }
+}
+
+@Override
+protected void onDestroy() {
+    super.onDestroy();
+    if (Speech.getInstance().isListening())
+        Speech.getInstance().shutdown();
+    unregisterReceiver(broadcastRec);
+}
 
 
 }

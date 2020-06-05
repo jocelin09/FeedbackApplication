@@ -3,7 +3,6 @@ package com.example.feedbackapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -77,10 +76,12 @@ public class FeedbackActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
 //        setContentView(R.layout.activity_feedback);
 //        dbh = new DatabaseHelper(FeedbackActivity.this);
 //        sqLiteDatabase = dbh.getWritableDatabase();
 //        prefs = PreferenceManager.getDefaultSharedPreferences(FeedbackActivity.this);
+        
         try {
             rec_id = getIntent().getIntExtra("rec_id", 0);
 //        area = getIntent().getStringExtra("area");
@@ -463,24 +464,6 @@ public class FeedbackActivity extends BaseActivity {
                     (snackbar.getView()).getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
                     snackbar.show();
 
-
-                   /* Snackbar snackbar = Snackbar.make(linearLayout, "", Snackbar.LENGTH_LONG);
-                    Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout)
-                            snackbar.getView();
-                    TextView textView = (TextView)
-                            layout.findViewById(android.support.design.R.id.snackbarText);
-                    textView.setVisibility(View.INVISIBLE);
-
-                    View snackView = mInflater.inflate(R.layout.snckBar, null);
-                    ImageView imageView = (ImageView) snackView.findViewById(R.id.image);
-                    imageView.setImageBitmap(image);
-                    TextView textViewTop = (TextView) snackView.findViewById(R.id.text);
-                    textViewTop.setText(text);
-                    textViewTop.setTextColor(Color.WHITE);
-                    layout.setPadding(0,0,0,0);
-                    layout.addView(snackView,0);
-                    snackbar.show();*/
-
                 }
                 if (millisUntilFinished / 1000 < 6) {
                     snackbar.setText("Seconds Remaining for Timeout: " + millisUntilFinished / 1000);
@@ -723,6 +706,9 @@ public class FeedbackActivity extends BaseActivity {
 //            Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show();
                 return true;
 
+            case R.id.speechtotext:
+                startActivity(new Intent(FeedbackActivity.this,SpeechToText.class));
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -733,6 +719,6 @@ public class FeedbackActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        countDownTimer.cancel();
+       // countDownTimer.cancel();
     }
 }

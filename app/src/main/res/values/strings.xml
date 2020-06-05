@@ -9,4 +9,10 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="speech_prompt">Say something</string>
+    <string name="speech_not_supported">Not supported</string>
+    <string name="ask_permission">Please allow Speech to always run in the background,else our services can\'t be accessed when you are in distress</string>
+    <string name="allow">ALLOW</string>
+    <string name="enable_autostart">Enable AutoStart</string>
+
 </resources>
