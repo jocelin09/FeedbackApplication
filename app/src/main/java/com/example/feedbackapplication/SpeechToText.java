@@ -104,10 +104,11 @@ protected void onCreate(Bundle savedInstanceState) {
     }
     //System.out.println("iconList = " + iconList.size());
     
-    if (iconList.size() !=0)
+    //if (iconList.size() !=0)
+    for (int i = 0; i < iconList.size(); i++)
     {
         SQLiteDatabase db2 = dbh.getWritableDatabase();
-        Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where Icon_Type ='Smiley';", null);
+        Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where Icon_Type ='Smiley' and Feedback_Name='"+iconList.get(i)+"';", null);
     
         String icon_name, icon_value,icon_name1;
     
@@ -127,6 +128,8 @@ protected void onCreate(Bundle savedInstanceState) {
             } while (cursor2.moveToNext());
         }
     }
+    
+    System.out.println("iconNames = " + iconNames);
 }
 
 private void enableAutoStart() {

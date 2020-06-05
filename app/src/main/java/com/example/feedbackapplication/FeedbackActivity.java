@@ -81,7 +81,8 @@ public class FeedbackActivity extends BaseActivity {
 //        dbh = new DatabaseHelper(FeedbackActivity.this);
 //        sqLiteDatabase = dbh.getWritableDatabase();
 //        prefs = PreferenceManager.getDefaultSharedPreferences(FeedbackActivity.this);
-        
+    
+        System.out.println(" FeedbackActivity = " );
         try {
             rec_id = getIntent().getIntExtra("rec_id", 0);
 //        area = getIntent().getStringExtra("area");
@@ -360,9 +361,9 @@ public class FeedbackActivity extends BaseActivity {
                         for (int i = 0; i < iconList.size(); i++) {
                             SQLiteDatabase db2 = dbh.getWritableDatabase();
 //                    Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where ID IN(3,4,5,6) ;", null); //
-                            Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where Icon_Type ='Smiley' and Icon_Name='"+iconList.get(i)+"' ;", null);
+                            Cursor cursor2 = db2.rawQuery("Select * from feedback_admin_icondetails where Icon_Type ='Smiley' and Feedback_Name='"+iconList.get(i)+"' ;", null);
 
-                            String icon_name, icon_value;
+                            String icon_name, icon_value,feedback_name;
                             int icon_id;
                             if (cursor2.moveToFirst()) {
 
@@ -370,6 +371,9 @@ public class FeedbackActivity extends BaseActivity {
                                     icon_id = cursor2.getInt(0);
                                     icon_name = cursor2.getString(2);
 //                            icon_value = cursor2.getString(3);
+                                    feedback_name = cursor2.getString(6);
+                                    System.out.println("feedback_name = " + feedback_name);
+                                    System.out.println("icon_id = " + icon_id);
                                     linearLayout3 = new LinearLayout(this);
 //                            new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
 //                            linearLayout3.setLayoutParams(params);
@@ -385,8 +389,8 @@ public class FeedbackActivity extends BaseActivity {
 //                                        System.out.print(iconList.get(i)+ i);
 //                                        if (iconList.get(i).equals(icon_name)) {
 //                                    if (iconList.contains(icon_name)) {
-                                    linearLayout3.addView(imageView(id, icon_name, icon_id));
-                                    linearLayout3.addView(subtextView(icon_id, icon_name));
+                                    linearLayout3.addView(imageView(id, feedback_name, icon_id));
+                                    linearLayout3.addView(subtextView(icon_id, feedback_name));
                                     linearLayout2.addView(linearLayout3);
 //                                        }
 //                                    }
@@ -551,6 +555,8 @@ public class FeedbackActivity extends BaseActivity {
 
 
     private TextView subtextView(int hint, String uname) {
+        System.out.println("uname = " + uname);
+        
         final TextView textView = new TextView(this);
         textView.setId(hint);
         textView.setTextSize(1, 20);
@@ -565,7 +571,8 @@ public class FeedbackActivity extends BaseActivity {
 
 
     private ImageView imageView(final int id, final String strvalue, final int icon_id) {
-
+        System.out.println("strvalue = " + strvalue);
+        
         final String imgvalue = strvalue;
         ImageView imageView = new ImageView(this);
         imageView.setLayoutParams(new ViewGroup.LayoutParams(350, 350));
