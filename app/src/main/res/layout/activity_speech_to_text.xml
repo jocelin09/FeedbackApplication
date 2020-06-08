@@ -67,5 +67,14 @@
         android:backgroundTint="@color/colorAccent"
         android:background="@drawable/ic_mic_black" />-->
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:text="@string/provide_feedback"
+        android:textSize="17sp" />
 
 </RelativeLayout>

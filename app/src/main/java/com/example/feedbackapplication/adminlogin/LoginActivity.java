@@ -1,6 +1,7 @@
 package com.example.feedbackapplication.adminlogin;
 
 
+import android.Manifest;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -35,6 +36,9 @@ import com.example.feedbackapplication.R;
 import com.example.feedbackapplication.database.DatabaseHelper;
 import com.google.android.material.snackbar.Snackbar;
 import com.sac.speech.Speech;
+import com.vanniktech.rxpermission.Permission;
+import com.vanniktech.rxpermission.RealRxPermission;
+import com.vanniktech.rxpermission.RxPermission;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,6 +53,7 @@ import java.net.URLEncoder;
 import java.util.UUID;
 
 import androidx.core.app.JobIntentService;
+import io.reactivex.functions.Consumer;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
@@ -60,20 +65,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     int questionscount;
     public boolean internetConnection = false;
     String LastImageName="";
-BroadcastRec broadcastRec = new BroadcastRec();
+//BroadcastRec broadcastRec = new BroadcastRec();
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_login);
     
-    IntentFilter intentFilter = new IntentFilter("com.example.feedbackapplication.ACTION_BROADCAST");
-    registerReceiver(broadcastRec, intentFilter);
+//    IntentFilter intentFilter = new IntentFilter("com.example.feedbackapplication.ACTION_BROADCAST");
+//    registerReceiver(broadcastRec, intentFilter);
     
     enableAutoStart();
+    checkAudioPermission();
     
-    Intent intent = new Intent(LoginActivity.this, JobIntentService.class);
-    JobIntentServiceClass.enqueueWork(this, intent);
+//    Intent intent = new Intent(LoginActivity.this, JobIntentService.class);
+//    JobIntentServiceClass.enqueueWork(this, intent);
     
     
    /* try {
@@ -135,6 +141,18 @@ protected void onCreate(Bundle savedInstanceState) {
         System.out.println("Login Activity 65 = " + e);
     }
 
+}
+
+private void checkAudioPermission() {
+    RxPermission rxPermission = RealRxPermission.getInstance(getApplication());
+    rxPermission.request(Manifest.permission.RECORD_AUDIO)
+            .subscribe(new Consumer<Permission>() {
+                @Override
+                public void accept(Permission permission) throws Exception {
+                    //Toast.makeText(LoginActivity.this, "Permission granted", Toast.LENGTH_SHORT).show();
+                }
+            }).isDisposed();
+    //boolean granted = rxPermission.isGranted(Manifest.permission.RECORD_AUDIO);
 }
 
 @Override
@@ -906,6 +924,7 @@ private void enableAutoStart() {
     }
 }
 
+/*
 @Override
 protected void onDestroy() {
     super.onDestroy();
@@ -913,6 +932,7 @@ protected void onDestroy() {
         Speech.getInstance().shutdown();
     unregisterReceiver(broadcastRec);
 }
+*/
 
 
 }

@@ -92,7 +92,7 @@ public class WashroomNegativeFB extends BaseActivity {
             String query = "Select * from feedback_admin_icondetails where Icon_Type ='neg_feedback'";//ID IN(7,8,9,10,11,12) "
             Cursor cursor = sqLiteDatabase.rawQuery(query, null);
             while (cursor.moveToNext()) {
-                neg_iconnames.add(cursor.getString(cursor.getColumnIndex("Icon_Name")));
+                neg_iconnames.add(cursor.getString(cursor.getColumnIndex("Feedback_Name")));
             }
         } catch (Exception ex) {
             // Log.e(TAG,"Erro in geting friends "+ex.toString());
@@ -100,8 +100,16 @@ public class WashroomNegativeFB extends BaseActivity {
 
 //    int number = Math.round(neg_iconnames.size()/2);
 //    System.out.println("number = " + number);
-
-
+   // [Faulty Equipments, Food, Seating, Service, Ambience, Smelly, Others, Leakage, Dirty Floor, Wet Floor, No Tissue Paper , Hygiene]
+        System.out.println("neg_iconnames = " + neg_iconnames);
+    
+        neg_iconnames.remove("Food");
+        neg_iconnames.remove("Seating");
+        neg_iconnames.remove("Service");
+        neg_iconnames.remove("Ambience");
+        neg_iconnames.remove("Wet Floor");
+        neg_iconnames.remove("Hygiene");
+        
         LinearLayout sub1_secondlayout = new LinearLayout(this);
         LinearLayout.LayoutParams params_sub1 = new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT, 0.5f);
         sub1_secondlayout.setLayoutParams(params_sub1);
@@ -361,9 +369,9 @@ public class WashroomNegativeFB extends BaseActivity {
         //Faulty Equipments,No Toilet Paper ,Floor Not Clean,Leakage,Others,Smelly
         if (strvalue.equals("Faulty Equipments")) {
             imageView.setBackgroundResource(R.drawable.litter_bin);
-        } else if (strvalue.equals("No Toilet Paper")) {
+        } else if (strvalue.equals("No Tissue Paper ")) {
             imageView.setBackgroundResource(R.drawable.notissue);
-        } else if (strvalue.equals("Floor Not Clean")) {
+        } else if (strvalue.equals("Dirty Floor")) {
             imageView.setBackgroundResource(R.drawable.dirty_floor);
         } else if (strvalue.equals("Leakage")) {
             imageView.setBackgroundResource(R.drawable.dirty_basin);
@@ -394,7 +402,7 @@ public class WashroomNegativeFB extends BaseActivity {
                         negative_lists.remove(strvalue);
                         food = false;
                     }
-                } else if (strvalue.equals("No Toilet Paper")) {
+                } else if (strvalue.equals("No Tissue Paper ")) {
                     if (seating == false) {
                         linearLayout1.setBackground(getDrawable(R.drawable.selected_item_green));
                         negative_lists.add(strvalue);
@@ -405,7 +413,7 @@ public class WashroomNegativeFB extends BaseActivity {
                         seating = false;
                     }
                 }
-                if (strvalue.equals("Floor Not Clean")) {
+                if (strvalue.equals("Dirty Floor")) {
                     if (service == false) {
                         linearLayout1.setBackground(getDrawable(R.drawable.selected_item_green));
                         negative_lists.add(strvalue);

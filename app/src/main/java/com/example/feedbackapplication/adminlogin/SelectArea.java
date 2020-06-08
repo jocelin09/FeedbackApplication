@@ -1,14 +1,19 @@
 package com.example.feedbackapplication.adminlogin;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.JobIntentService;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -19,10 +24,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.feedbackapplication.BaseActivity;
+import com.example.feedbackapplication.BroadcastRec;
+import com.example.feedbackapplication.Constants;
 import com.example.feedbackapplication.FeedbackActivity;
+import com.example.feedbackapplication.JobIntentServiceClass;
 import com.example.feedbackapplication.LoggerFile;
 import com.example.feedbackapplication.R;
+import com.example.feedbackapplication.SpeechToText;
 import com.example.feedbackapplication.database.DatabaseHelper;
+import com.sac.speech.Speech;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +41,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
+import static android.view.View.TEXT_ALIGNMENT_CENTER;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static android.widget.LinearLayout.VERTICAL;
@@ -45,10 +56,18 @@ public class SelectArea extends BaseActivity {
     private byte[] img = null;
     private byte[] img1 = null;
     int imagecount,rec_id;
+BroadcastRec broadcastRec = new BroadcastRec();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        IntentFilter intentFilter = new IntentFilter("com.example.feedbackapplication.ACTION_BROADCAST");
+        registerReceiver(broadcastRec, intentFilter);
+    
+        Intent intent = new Intent(SelectArea.this, JobIntentService.class);
+        JobIntentServiceClass.enqueueWork(this, intent);
+        
 //        setContentView(R.layout.activity_select_area);
 //        databaseHelper = new DatabaseHelper(this);
 //        sqLiteDatabase = databaseHelper.getWritableDatabase();
@@ -93,8 +112,8 @@ public class SelectArea extends BaseActivity {
         linearLayout.setLayoutParams(params);
         linearLayout.setOrientation(VERTICAL);
         //  linearLayout.setBackgroundColor(R.color.colorAccent);
-
-
+    
+        
         linearLayout1 = new LinearLayout(this);
         // new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
 
@@ -148,6 +167,17 @@ public class SelectArea extends BaseActivity {
 
         }
         linearLayout.addView(linearLayout1);
+        LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
+    
+        TextView textView = new TextView(this);
+        textView.setLayoutParams(textLayoutParams);
+        textView.setText(getResources().getString(R.string.activate_feedback));
+        textView.setPadding(5, 5, 5, 5);
+        textView.setGravity(TEXT_ALIGNMENT_CENTER);
+        textView.setTextColor(Color.BLACK);
+        textView.setTextSize(16);
+        textView.setTextAlignment(TEXT_ALIGNMENT_CENTER);
+        linearLayout.addView(textView);
         setContentView(linearLayout);
     }
 
@@ -343,6 +373,34 @@ public class SelectArea extends BaseActivity {
         }
         return UploadArray;
     }*/
+
+
+private TextView textView() {
+    
+    LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(MATCH_PARENT, 100);
+    
+    TextView textView = new TextView(this);
+    textView.setLayoutParams(textLayoutParams);
+    textView.setText(getResources().getString(R.string.activate_feedback));
+    textView.setPadding(5, 5, 5, 5);
+    textView.setGravity(TEXT_ALIGNMENT_CENTER);
+    textView.setTextColor(Color.BLACK);
+    textView.setTextSize(16);
+    textView.setTextAlignment(TEXT_ALIGNMENT_CENTER);
+   
+    return textView;
+    
+}
+
+
+@Override
+protected void onDestroy() {
+    super.onDestroy();
+    if (Speech.getInstance().isListening())
+        Speech.getInstance().shutdown();
+    unregisterReceiver(broadcastRec);
+}
+
 
 
 }

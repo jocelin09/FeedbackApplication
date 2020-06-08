@@ -18,6 +18,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -353,6 +354,13 @@ BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
             Bundle b = intent.getExtras();
             String result = b.getString("value");
             
+            JobIntentServiceClass jobIntentServiceClass = new JobIntentServiceClass();
+
+               /* System.out.println("Checking: " + jobIntentServiceClass.onStopCurrentWork());
+                System.out.println("Checking: " + jobIntentServiceClass.isStopped());*/
+            
+            AlertDialog.Builder builder;
+            
             if (iconNames.contains(result)) {
                 int pos = iconNames.indexOf(result);
                 int id = IconIDs.get(pos);
@@ -368,39 +376,14 @@ BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
                 if (result.equalsIgnoreCase("excellent") ||
                             result.equalsIgnoreCase("very good") ||
                             result.equalsIgnoreCase("good")) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        tts.setSpeechRate(1);
-                        tts.setPitch(0.4f);
-                        int speechStatus = tts.speak("Thank You", TextToSpeech.QUEUE_ADD, null, null);
-                        if (speechStatus == TextToSpeech.ERROR) {
-                            Log.e("TTS", "Error in converting Text to Speech!23");
-                        }
-                    } else {
-                        tts.setSpeechRate(1);
-                        tts.setPitch(0.4f);
-                        int speechStatus = tts.speak("Thank You", TextToSpeech.QUEUE_ADD, null, null);
-                        if (speechStatus == TextToSpeech.ERROR) {
-                            Log.e("TTS", "Error in converting Text to Speech4!");
-                        }
-                    }
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        tts.setSpeechRate(1);
-                        tts.setPitch(0.4f);
-                        int speechStatus = tts.speak("Are you sure you want to select "+result.substring(0, 1).toUpperCase() + result.substring(1)+" ?", TextToSpeech.QUEUE_ADD, null, null);
-                        if (speechStatus == TextToSpeech.ERROR) {
-                            Log.e("TTS", "Error in converting Text to Speech!23");
-                        }
-                    } else {
-                        tts.setSpeechRate(1);
-                        tts.setPitch(0.4f);
-                        int speechStatus = tts.speak("Are you sure you want to select "+result.substring(0, 1).toUpperCase() + result.substring(1)+" ?", TextToSpeech.QUEUE_ADD, null, null);
-                        if (speechStatus == TextToSpeech.ERROR) {
-                            Log.e("TTS", "Error in converting Text to Speech4!");
-                        }
-                    }
                     
-                    AlertDialog.Builder builder = new AlertDialog.Builder(SpeechToText.this);
+                    textToSpeechNormal("Thank You");
+                    
+                } else {
+                    textToSpeech(result);
+                    
+                    
+                    builder = new AlertDialog.Builder(SpeechToText.this);
                     builder.setMessage("Are you sure you want to select " + result.substring(0, 1).toUpperCase() + result.substring(1) + " ?")
                             .setCancelable(false)
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -416,27 +399,29 @@ BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
                                     dialog.cancel();
                                 }
                             });
-                    
                     alert = builder.create();
                     alert.show();
                     
                 }
                 
             } else {
+                
                 if (alert != null && alert.isShowing()) {
                     System.out.println("Alert is showing..");
-        
+                    
                     if (result.equalsIgnoreCase("Yes")) {
                         alert.dismiss();
                         startActivity(new Intent(SpeechToText.this, SecondActivity.class));
-                    } else {
+                    } else if (result.equalsIgnoreCase("no")) {
                         alert.dismiss();
                         removeBackground();
                     }
-        
+                    
                 } else {
                     System.out.println("Alert is not showing");
                 }
+                
+                //Toast.makeText(context, "Not matched.", Toast.LENGTH_SHORT).show();
             }
             
         }
@@ -444,6 +429,77 @@ BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         
     }
 };
+
+
+private void muteBeepSoundOfRecorder() {
+    AudioManager amanager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+    if (amanager != null) {
+        amanager.adjustStreamVolume(AudioManager.STREAM_NOTIFICATION, AudioManager.ADJUST_MUTE, 0);
+        amanager.adjustStreamVolume(AudioManager.STREAM_ALARM, AudioManager.ADJUST_MUTE, 0);
+        amanager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_MUTE, 0);
+        amanager.adjustStreamVolume(AudioManager.STREAM_RING, AudioManager.ADJUST_MUTE, 0);
+        amanager.adjustStreamVolume(AudioManager.STREAM_SYSTEM, AudioManager.ADJUST_MUTE, 0);
+    }
+}
+
+private void unmuteBeepSoundOfRecorder() {
+    AudioManager amanager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+    if (amanager != null) {
+        amanager.adjustStreamVolume(AudioManager.STREAM_NOTIFICATION, AudioManager.ADJUST_UNMUTE, 0);
+        amanager.adjustStreamVolume(AudioManager.STREAM_ALARM, AudioManager.ADJUST_UNMUTE, 0);
+        amanager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_UNMUTE, 0);
+        amanager.adjustStreamVolume(AudioManager.STREAM_RING, AudioManager.ADJUST_UNMUTE, 0);
+        amanager.adjustStreamVolume(AudioManager.STREAM_SYSTEM, AudioManager.ADJUST_UNMUTE, 0);
+    }
+}
+
+private void textToSpeechNormal(String result) {
+    
+    unmuteBeepSoundOfRecorder();
+    
+    int speechStatus;
+    
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        tts.setSpeechRate(1);
+        tts.setPitch(0.4f);
+        speechStatus = tts.speak(result, TextToSpeech.QUEUE_ADD, null, null);
+        
+    } else {
+        tts.setSpeechRate(1);
+        tts.setPitch(0.4f);
+        speechStatus = tts.speak(result, TextToSpeech.QUEUE_ADD, null, null);
+        
+    }
+    
+    if (speechStatus == TextToSpeech.ERROR) {
+        Log.e("TTS", "Error in converting Text to Speech4!");
+    }
+    
+}
+
+private void textToSpeech(String result) {
+    
+    unmuteBeepSoundOfRecorder();
+    
+    int speechStatus;
+    
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        tts.setSpeechRate(1f);
+        tts.setPitch(0.4f);
+        speechStatus = tts.speak("Are you sure you want to select " + result + " ?", TextToSpeech.QUEUE_ADD, null, null);
+        
+    } else {
+        tts.setSpeechRate(1f);
+        tts.setPitch(0.4f);
+        speechStatus = tts.speak("Are you sure you want to select " + result + " ?", TextToSpeech.QUEUE_ADD, null, null);
+        
+    }
+    
+    if (speechStatus == TextToSpeech.ERROR) {
+        Log.e("TTS", "Error in converting Text to Speech4!");
+    }
+    
+}
 
 
 }
