@@ -2449,7 +2449,7 @@ public class AdminDetailsConfig extends BaseActivity {
         feedback_service.setAdapter(spinnerArrayAdapter11);
         feedback_service.setEnabled(false);*/
 
-            main_Layout.addView(textView(str_feedbackservice));
+           // main_Layout.addView(textView(str_feedbackservice));
             main_Layout.addView(company_spinner);
 
         } catch (Exception e) {
