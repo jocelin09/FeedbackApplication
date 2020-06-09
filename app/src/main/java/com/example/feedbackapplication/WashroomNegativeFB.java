@@ -49,12 +49,13 @@ public class WashroomNegativeFB extends BaseActivity {
     boolean overallratingdone = false;
     Snackbar snackbar;
     String q_id;
+    public CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
-
+        countDownTimer=null;
         // area_name = getIntent().getStringExtra("area_name");
         totalquestionscount = getIntent().getIntExtra("totalquestionscount", 0);
         current_question_id = getIntent().getIntExtra("current_question_id", 0);
@@ -328,13 +329,17 @@ public class WashroomNegativeFB extends BaseActivity {
                 } else if (button.getId() == R.id.cancel) {
                     countDownTimer.cancel();
 //                    toast.cancel();
-                    if (current_question_id == totalquestionscount) {
-                        finish();
-                        startActivity(new Intent(WashroomNegativeFB.this, ThankuActivityScore.class));
-                    } else {
+//                    if (current_question_id == totalquestionscount) {
+//                        finish();
+//                        startActivity(new Intent(WashroomNegativeFB.this, ThankuActivityScore.class));
+//                    } else {
+
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putInt("QuestNo", current_question_id);
+                    editor.commit();
                         finish();
                         startActivity(new Intent(WashroomNegativeFB.this, FeedbackActivity.class));
-                    }
+//                    }
                 }
             }
         });

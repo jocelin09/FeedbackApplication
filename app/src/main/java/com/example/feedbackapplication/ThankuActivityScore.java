@@ -44,6 +44,7 @@ public class ThankuActivityScore extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thanku);
         try {
+            countDownTimer=null;
             linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
             //  Toast.makeText(this, "ThankuActivityScore called...", Toast.LENGTH_SHORT).show();
 //        prefs = PreferenceManager.getDefaultSharedPreferences(ThankuActivityScore.this);

@@ -285,7 +285,7 @@ public void onClick(View view) {
                 try {
                     JSONObject jsonObj = new JSONObject(jsonFeedbackSms);
 
-                    ////////////////////////Company Details////////////////////////////
+                    ////////////////////////Admin Details////////////////////////////
                     try {
                         JSONArray task = jsonObj.getJSONArray("adminDetails");
                         Log.d("DATasValue", task + "" + task.length());
@@ -551,6 +551,40 @@ public void onClick(View view) {
                         e.printStackTrace();
                         //db1.endTransaction();
                     }
+
+                   /* ////////////////////////Admin settings Details////////////////////////////
+                    try {
+                        JSONArray task = jsonObj.getJSONArray("adminsettingDetails");
+                        Log.d("DATasValue", task + "" + task.length());
+                        if (!task.toString().equals("[]")) {
+
+                            for (int j = 0; j < task.length(); j++) {
+                                JSONObject c1 = task.getJSONObject(j);
+                                String Auto_Id = c1.getString("Auto_Id");
+                                String Company_Id = c1.getString("Company_Id");
+                                String Location_Id = c1.getString("Location_Id");
+                                String Site_Name = c1.getString("Site_Name");
+                                String selectQuery = "SELECT * FROM admin_details";
+                                databaseHelper1 = new DatabaseHelper(getApplicationContext());
+                                db1 = databaseHelper1.getWritableDatabase();
+                                Cursor cursor = db1.rawQuery(selectQuery, null);
+                                Log.d("asdgvdafg", cursor.getCount() + "");
+                                if (cursor.getCount() < task.length()) {
+                                    ContentValues contentValues = new ContentValues();
+                                    contentValues.put("Auto_Id", Auto_Id);
+                                    contentValues.put("Company_Id", Company_Id);
+                                    contentValues.put("Location_Id", Location_Id);
+                                    contentValues.put("Site_Name", Site_Name);
+                                    db1.insert("admin_details", null, contentValues);
+                                }
+                                cursor.close();
+                                db1.close();
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        //db1.endTransaction();
+                    }*/
 
                     ////////////////////////Site Details////////////////////////////
                    /* try {

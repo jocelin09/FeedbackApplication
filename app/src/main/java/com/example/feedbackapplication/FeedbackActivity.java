@@ -44,6 +44,7 @@ import static android.widget.LinearLayout.VERTICAL;
 public class FeedbackActivity extends BaseActivity {
 
     String rbid = "", Icon_List,area_id,quest_id;
+    public CountDownTimer countDownTimer;
     int r_id = 0;
     ScrollView s;
     int totalfeedback, rec_id;
@@ -82,7 +83,7 @@ public class FeedbackActivity extends BaseActivity {
 //        dbh = new DatabaseHelper(FeedbackActivity.this);
 //        sqLiteDatabase = dbh.getWritableDatabase();
 //        prefs = PreferenceManager.getDefaultSharedPreferences(FeedbackActivity.this);
-    
+        countDownTimer=null;
         System.out.println(" FeedbackActivity = " );
         try {
             rec_id = getIntent().getIntExtra("rec_id", 0);
