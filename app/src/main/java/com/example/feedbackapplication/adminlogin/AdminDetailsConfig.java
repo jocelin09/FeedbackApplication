@@ -2577,7 +2577,7 @@ private Constraints constraints() {
                     //{
                         uuid = UUID.randomUUID().toString();
 
-                        boolean isInserted = dbh.insertStoreSettings(uuid,str_companyname,str_locationname,str_sitename,str_buildingname,str_wingname,str_floorname,str_virtualareaname,area_spinner.getSelectedItemsAsString(),str_feedbackservice,"20000","yes", "Excellent|Very Good|Good|Average|Poor");
+                        boolean isInserted = dbh.insertStoreSettings(uuid,str_companyname,str_locationname,str_sitename,str_buildingname,str_wingname,str_floorname,str_virtualareaname,area_spinner.getSelectedItemsAsString());//,str_feedbackservice,"20000","yes", "Excellent|Very Good|Good|Average|Poor"
                         System.out.println("isInserted = " + isInserted);
 
                         if (isInserted)

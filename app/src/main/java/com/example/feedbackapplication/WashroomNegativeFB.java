@@ -48,6 +48,7 @@ public class WashroomNegativeFB extends BaseActivity {
     boolean food = false, seating = false, service = false, hygiene = false, ambience = false, others = false;
     boolean overallratingdone = false;
     Snackbar snackbar;
+    String q_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class WashroomNegativeFB extends BaseActivity {
         totalquestionscount = getIntent().getIntExtra("totalquestionscount", 0);
         current_question_id = getIntent().getIntExtra("current_question_id", 0);
         rec_id = getIntent().getIntExtra("rec_id", 0);
+        q_id=getIntent().getStringExtra("q_id");
 
 //    dbh = new DatabaseHelper(this);
 //    sqLiteDatabase = dbh.getWritableDatabase();
@@ -73,7 +75,7 @@ public class WashroomNegativeFB extends BaseActivity {
 //        first_layout.addView(subtextView("What went wrong?"));
         try {
             SQLiteDatabase db2 = dbh.getWritableDatabase();
-            Cursor cursor1 = db2.rawQuery("Select Feedback_Sub_Question from feedback_adminsubquestions where Feedback_Id= '" + String.valueOf(current_question_id) + "' ;", null);
+            Cursor cursor1 = db2.rawQuery("Select Feedback_Sub_Question from feedback_adminsubquestions where Feedback_Id= '" + q_id+ "' ;", null);//String.valueOf(current_question_id)
             if (cursor1.moveToFirst()) {
                 do {
                     String Feedback_Sub_Question = cursor1.getString(0);
@@ -89,12 +91,15 @@ public class WashroomNegativeFB extends BaseActivity {
 
         final ArrayList<String> neg_iconnames = new ArrayList<>();
         try {
+            SQLiteDatabase db1 = dbh.getWritableDatabase();
             String query = "Select * from feedback_admin_icondetails where Icon_Type ='neg_feedback'";//ID IN(7,8,9,10,11,12) "
-            Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+            Cursor cursor = db1.rawQuery(query, null);
             while (cursor.moveToNext()) {
                 neg_iconnames.add(cursor.getString(cursor.getColumnIndex("Feedback_Name")));
             }
+            db1.close();
         } catch (Exception ex) {
+            ex.printStackTrace();
             // Log.e(TAG,"Erro in geting friends "+ex.toString());
         }
 
@@ -251,7 +256,7 @@ public class WashroomNegativeFB extends BaseActivity {
                 countDownTimer.cancel();
                 Intent intent = new Intent(getApplicationContext(), FeedbackActivity.class);
                 SharedPreferences.Editor editor = prefs.edit();
-                editor.putInt("QuestNo", current_question_id);
+                editor.putInt("QuestNo", 1);
                 editor.commit();
                 startActivity(intent);
                 finish();

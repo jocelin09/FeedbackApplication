@@ -49,8 +49,8 @@ public void onCreate(SQLiteDatabase sqLiteDatabase) {
     sqLiteDatabase.execSQL(" CREATE TABLE emp_neg_ratings(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,Emp_Feedback_Id TEXT,Name TEXT,Email TEXT,Contact TEXT,Comment TEXT,UpdatedStatus TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE EmailSMSList (Id INTEGER PRIMARY KEY, Auto_Id TEXT,Building_Id TEXT, Employee_Email TEXT, Recipient_Type TEXT,Mobile_Number TEXT, Record_Status TEXT)");
     sqLiteDatabase.execSQL(" CREATE TABLE sms_master(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,UserName TEXT, Password TEXT, Type TEXT, Source TEXT, URL TEXT)");
-    sqLiteDatabase.execSQL(" CREATE TABLE store_setting(Admin_Id INTEGER PRIMARY KEY , Auto_Id TEXT,Company_Name TEXT,Location_Name TEXT, Site_Name TEXT, Building_Name TEXT,Wing_Name TEXT, Floor_Name TEXT, Virtual_Area_Name TXET, Area_Name TEXT, Feedback_Service_Name TEXT, Display_Name TEXT, Checked_Display_Name TEXT,Active_Setting Text,Icon_Type TEXT,Question_Timeout TEXT,Thankyou_Timeout TEXT,ShowLogo TEXT,Icon_List TEXT)");
-
+    sqLiteDatabase.execSQL(" CREATE TABLE store_setting(Admin_Id INTEGER PRIMARY KEY , Auto_Id TEXT,Company_Name TEXT,Location_Name TEXT, Site_Name TEXT, Building_Name TEXT,Wing_Name TEXT, Floor_Name TEXT, Virtual_Area_Name TXET, Area_Name TEXT)");
+    sqLiteDatabase.execSQL(" CREATE TABLE admin_setting(Id INTEGER PRIMARY KEY , Auto_Id TEXT, Feedback_Service_Name TEXT, Display_Name TEXT, Checked_Display_Name TEXT,Active_Setting Text,Question_Timeout TEXT,ShowLogo TEXT,Icon_List TEXT)");
 }
 
 @Override
@@ -79,9 +79,9 @@ public int admindetails_count() {
     return count;
 }
 
-public int totalquestions_count() {
+public int totalquestions_count(String area_id) {
     SQLiteDatabase db1 = this.getWritableDatabase();
-    Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_adminquestions ;", null);
+    Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_adminquestions where Area_Id='"+area_id+"';", null);
     cursor1.moveToFirst();
     int count = cursor1.getInt(0);
     cursor1.close();
@@ -89,9 +89,9 @@ public int totalquestions_count() {
     return count;
 }
 
-    public int totalimage_count() {
+    public int subquestion_count(String q_id) {
         SQLiteDatabase db1 = this.getWritableDatabase();
-        Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_admin_icondetails ;", null);
+        Cursor cursor1 = db1.rawQuery("Select count(*) from feedback_adminsubquestions where Feedback_Id= '" + q_id+ "' ;", null);
         cursor1.moveToFirst();
         int count = cursor1.getInt(0);
         cursor1.close();
@@ -184,7 +184,7 @@ public boolean insertAdminDetails(String Company_ID, String Company_Name, String
 
 
 public boolean insertStoreSettings(String Auto_Id, String Company_Name, String Location_Name, String Site_Name, String Building_Name,
-                                  String Wing_Name,String Floor_Name,String Virtual_Area,String Area_Name,String Feedback_Service_Name,String Timeout,String ShowLogo,String Icon_List) {
+                                  String Wing_Name,String Floor_Name,String Virtual_Area,String Area_Name) {//,String Feedback_Service_Name,String Timeout,String ShowLogo,String Icon_List
     SQLiteDatabase db = this.getWritableDatabase();
     ContentValues contentValues = new ContentValues();
     
@@ -197,10 +197,10 @@ public boolean insertStoreSettings(String Auto_Id, String Company_Name, String L
     contentValues.put("Floor_Name", Floor_Name);
     contentValues.put("Virtual_Area_Name", Virtual_Area);
     contentValues.put("Area_Name", Area_Name);
-    contentValues.put("Feedback_Service_Name", Feedback_Service_Name);
-    contentValues.put("Question_Timeout",Timeout);
-    contentValues.put("ShowLogo",ShowLogo);
-    contentValues.put("Icon_List",Icon_List);
+//    contentValues.put("Feedback_Service_Name", Feedback_Service_Name);
+//    contentValues.put("Question_Timeout",Timeout);
+//    contentValues.put("ShowLogo",ShowLogo);
+//    contentValues.put("Icon_List",Icon_List);
     long result = db.insert("store_setting", null, contentValues);
     
     if (result == -1)
@@ -209,6 +209,27 @@ public boolean insertStoreSettings(String Auto_Id, String Company_Name, String L
         return true;
     
 }
+    public boolean insertadminSettings(String Auto_Id,String Feedback_Service_Name,String Display_Name,String Checked_Display_Name,String Active_Setting,String Timeout,String ShowLogo,String Icon_List) {//,
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        //Feedback_Service_Name TEXT, Display_Name TEXT, Checked_Display_Name TEXT,Active_Setting Text,Icon_Type TEXT,Question_Timeout TEXT,ShowLogo TEXT,Icon_List TEXT
+        contentValues.put("Auto_Id", Auto_Id);
+    contentValues.put("Feedback_Service_Name", Feedback_Service_Name);
+        contentValues.put("Display_Name", Display_Name);
+        contentValues.put("Checked_Display_Name", Checked_Display_Name);
+        contentValues.put("Active_Setting", Active_Setting);
+    contentValues.put("Question_Timeout",Timeout);
+    contentValues.put("ShowLogo",ShowLogo);
+    contentValues.put("Icon_List",Icon_List);
+        long result = db.insert("admin_setting", null, contentValues);
+
+        if (result == -1)
+            return false;
+        else
+            return true;
+
+    }
+
 
     public boolean insertFeedbackData(String Rec_Id, String Question_ID, String Feedback_Icon_Id) {
         SQLiteDatabase db = this.getWritableDatabase();

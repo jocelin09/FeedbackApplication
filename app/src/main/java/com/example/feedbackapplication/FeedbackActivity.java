@@ -43,7 +43,7 @@ import static android.widget.LinearLayout.VERTICAL;
 
 public class FeedbackActivity extends BaseActivity {
 
-    String rbid = "", Icon_List;
+    String rbid = "", Icon_List,area_id,quest_id;
     int r_id = 0;
     ScrollView s;
     int totalfeedback, rec_id;
@@ -72,6 +72,7 @@ public class FeedbackActivity extends BaseActivity {
     private byte[] img9 = null;
     final Handler handler = new Handler();
     Snackbar snackbar;
+    int totalAreaQuestion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +89,7 @@ public class FeedbackActivity extends BaseActivity {
 //        area = getIntent().getStringExtra("area");
             SharedPreferences.Editor editor = prefs.edit();
             area = prefs.getString("area", "");
+            area_id = prefs.getString("area_id", "");
             if (!prefs.contains("QuestNo")) {
                 editor.putInt("QuestNo", 1);
                 editor.commit();
@@ -283,18 +285,19 @@ public class FeedbackActivity extends BaseActivity {
 
             }
 
-            try {
+           /* try {
                 SQLiteDatabase db2 = dbh.getWritableDatabase();
-                Cursor cursor1 = db2.rawQuery("Select Icon_List from store_setting ;", null);
+                Cursor cursor1 = db2.rawQuery("Select Icon_List from admin_setting ;", null);
                 if (cursor1.moveToFirst()) {
                     do {
-                        Icon_List = cursor1.getString(0);
+                        Icon_List =  cursor1.getString(0);
                     } while (cursor1.moveToNext());
                     db2.close();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
+            Icon_List = "Excellent|Very Good|Good|Average|Poor";
             System.out.println("Icon_List = " + Icon_List);
             String[] icon = Icon_List.split("\\|");
             for (int i = 0; i < icon.length; i++) {
@@ -320,11 +323,12 @@ public class FeedbackActivity extends BaseActivity {
             linearLayout1.setGravity(Gravity.CENTER_HORIZONTAL);
 //        linearLayout1.setPadding(10, 5, 2, 5);
 //    totalfeedback = dbh.feedback_count();
-
-            for (int i = 0; i < dbh.totalquestions_count(); i++) {
+           totalAreaQuestion= dbh.totalquestions_count(area_id);
+           // to check weather order id is present or not
+            for (int i = 0; i <totalAreaQuestion ; i++) {
                 if (dbh.isOrderIdpresent(totalfeedback)) {
                     break;
-                } else {
+                } else if(totalAreaQuestion!=totalfeedback){
                     totalfeedback++;
                 }
             }
@@ -332,14 +336,14 @@ public class FeedbackActivity extends BaseActivity {
 
                 SQLiteDatabase db1 = dbh.getWritableDatabase();
 //                 Cursor cursor1 = db1.rawQuery("Select * from feedback_adminquestions where ID =" + (totalfeedback + 1) + ";", null); //
-                Cursor cursor1 = db1.rawQuery("Select * from feedback_adminquestions where Order_Id= '" + String.valueOf(totalfeedback) + "' ;", null);
+                Cursor cursor1 = db1.rawQuery("Select * from feedback_adminquestions where Order_Id= '" + String.valueOf(totalfeedback) + "' and Area_Id= '"+area_id+"' ;", null);
                 String feedback_question = "", order_id, a_id, icon_type;
                 int id;
                 if (cursor1.moveToFirst()) {
 
                     do {
                         id = cursor1.getInt(0);
-                        a_id = cursor1.getString(1);
+                        quest_id = cursor1.getString(1);
                         feedback_question = cursor1.getString(2);
 //                    questions.add(feedback_question);
 
@@ -389,7 +393,7 @@ public class FeedbackActivity extends BaseActivity {
 //                                        System.out.print(iconList.get(i)+ i);
 //                                        if (iconList.get(i).equals(icon_name)) {
 //                                    if (iconList.contains(icon_name)) {
-                                    linearLayout3.addView(imageView(id, feedback_name, icon_id));
+                                    linearLayout3.addView(imageView(totalfeedback, feedback_name, icon_id));
                                     linearLayout3.addView(subtextView(icon_id, feedback_name));
                                     linearLayout2.addView(linearLayout3);
 //                                        }
@@ -400,8 +404,8 @@ public class FeedbackActivity extends BaseActivity {
                             }
 
                         }
-                        int questionscount = dbh.totalquestions_count();
-                        System.out.println("questionscount = " + questionscount);
+//                        int questionscount = totalAreaQuestion;//dbh.totalquestions_count();
+                        System.out.println("questionscount = " + totalAreaQuestion);
 
                         linearLayout4 = new LinearLayout(this);
                         new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
@@ -448,7 +452,7 @@ public class FeedbackActivity extends BaseActivity {
 
     public void timer() {
 
-        countDownTimer = new CountDownTimer(20000, 1000) {
+        countDownTimer = new CountDownTimer(30000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 Log.i("********feedback", "seconds remaining: " + millisUntilFinished / 1000);
@@ -613,20 +617,21 @@ public class FeedbackActivity extends BaseActivity {
 
 //                toast.cancel();
                 int count = dbh.feedback_count();
-                int totalquestionscount = dbh.totalquestions_count();
+//                int totalquestionscount = dbh.totalquestions_count();
                 dbh.insertFeedbackData(String.valueOf(rec_id), String.valueOf(totalfeedback), String.valueOf(icon_id));
                 System.out.print("********rec_count " + (rec_id) + "quest_id" + id + "icon_id" + icon_id);/**/
                 //Last Question
-                if (count == totalquestionscount) {
-                    if (strvalue.equals("Poor") || strvalue.equals("Average")) {
+                if (totalfeedback == totalAreaQuestion) {
+                    if ((strvalue.equals("Poor") || strvalue.equals("Average")) && (dbh.subquestion_count(quest_id)!=0)) {
                         // Toast.makeText(FeedbackActivity.this, "Negative", Toast.LENGTH_SHORT).show();
 
 
                         Intent intent = new Intent(FeedbackActivity.this, WashroomNegativeFB.class);
                         intent.putExtra("area_name", "Cafeteria");
-                        intent.putExtra("totalquestionscount", totalquestionscount);
+                        intent.putExtra("totalquestionscount", totalAreaQuestion);
                         intent.putExtra("current_question_id", id);
                         intent.putExtra("rec_id", rec_id);
+                        intent.putExtra("q_id", quest_id);
                         startActivity(intent);
                         finish();
                     } else {
@@ -640,15 +645,15 @@ public class FeedbackActivity extends BaseActivity {
 
 
                 } else {
-                    if (strvalue.equals("Poor") || strvalue.equals("Average")) {
+                    if ((strvalue.equals("Poor") || strvalue.equals("Average")) && (dbh.subquestion_count(quest_id)!=0)) {
                         // Toast.makeText(FeedbackActivity.this, "Negative", Toast.LENGTH_SHORT).show();
 
 
                         Intent intent = new Intent(FeedbackActivity.this, WashroomNegativeFB.class);
-                        intent.putExtra("area_name", "Cafeteria");
-                        intent.putExtra("totalquestionscount", totalquestionscount);
+//                        intent.putExtra("area_name", "Cafeteria");
+                        intent.putExtra("totalquestionscount", totalAreaQuestion);
                         intent.putExtra("current_question_id", id);
-
+                        intent.putExtra("q_id", quest_id);
                         startActivity(intent);
                         finish();
                     } else {

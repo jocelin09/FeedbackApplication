@@ -50,7 +50,7 @@ public class SelectArea extends BaseActivity {
 
     //    DatabaseHelper databaseHelper;
 //    SQLiteDatabase sqLiteDatabase;
-    String AreaName,Icon_List  ;//= "Cafeteria|Washroom";
+    String AreaName,Icon_List,AreaId  ;//= "Cafeteria|Washroom";
     ArrayList<String> areaList;
     LinearLayout linearLayout, linearLayout1;
     private byte[] img = null;
@@ -127,14 +127,14 @@ BroadcastRec broadcastRec = new BroadcastRec();
         try {
             SQLiteDatabase db1 = dbh.getWritableDatabase();
 
-            Cursor cursor1 = db1.rawQuery("Select Admin_Id,Area_Name,Icon_List from store_setting ;", null);
+            Cursor cursor1 = db1.rawQuery("Select Admin_Id,Area_Name from store_setting ;", null);
 
 
             if (cursor1.moveToFirst()) {
                 do {
                     rec_id= cursor1.getInt(0);
                     AreaName = cursor1.getString(1);
-                    Icon_List = cursor1.getString(2);
+                    //cursor1.getString(2);
 
                 } while (cursor1.moveToNext());
                 db1.close();
@@ -210,18 +210,40 @@ BroadcastRec broadcastRec = new BroadcastRec();
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                try {
+                    SQLiteDatabase db1 = dbh.getWritableDatabase();
+
+                    Cursor cursor1 = db1.rawQuery("Select Area_Id from admin_details where Area_Name='"+imgvalue+"';", null);
+
+
+                    if (cursor1.moveToFirst()) {
+                        do {
+
+                            AreaId = cursor1.getString(0);
+
+                        } while (cursor1.moveToNext());
+                        db1.close();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString("area", imgvalue);
+                editor.putString("area_id", AreaId);
+                editor.putInt("QuestNo", 1);
                 editor.commit();
 
                 if (imgvalue.equalsIgnoreCase("Cafeteria")) {
                     Intent i = new Intent(SelectArea.this, FeedbackActivity.class);
                     i.putExtra("rec_id",rec_id);
-                    i.putExtra("area",imgvalue);
+//                    i.putExtra("area",imgvalue);
                     startActivity(i);
                 } else if (imgvalue.equalsIgnoreCase("Washroom")) {
                     Intent i = new Intent(SelectArea.this, FeedbackActivity.class);
-                    i.putExtra("area",imgvalue);
+                    i.putExtra("rec_id",rec_id);
+//                    i.putExtra("area",imgvalue);
                     startActivity(i);
                 }
             }

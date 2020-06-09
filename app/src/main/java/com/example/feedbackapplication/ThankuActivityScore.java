@@ -88,7 +88,7 @@ public class ThankuActivityScore extends BaseActivity {
 
                 public void onTick(long millisUntilFinished) {
                     Log.i("********", "seconds remaining: " + millisUntilFinished / 1000);
-                    Toast.makeText(ThankuActivityScore.this, "You will be redirected to Feedback Questions page in " + millisUntilFinished / 1000+" secs", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ThankuActivityScore.this, "You will be redirected to Home page in " + millisUntilFinished / 1000+" secs", Toast.LENGTH_SHORT).show();
                   /*  try {
                             snackbar = Snackbar
                                     .make(linearLayout, "", snackbar.LENGTH_INDEFINITE);
