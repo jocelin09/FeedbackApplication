@@ -557,13 +557,19 @@ public void onClick(View view) {
                         JSONArray task = jsonObj.getJSONArray("adminsettingDetails");
                         Log.d("DATasValue", task + "" + task.length());
                         if (!task.toString().equals("[]")) {
-
+//String Auto_Id, String Feedback_Service_Name, String Display_Name, String Checked_Display_Name, String Active_Setting, String Timeout, String ShowLogo, String Icon_List, String VoiceActivated
                             for (int j = 0; j < task.length(); j++) {
                                 JSONObject c1 = task.getJSONObject(j);
+                                //Auto_Id,Feedback_Service_Name,Display_Name,Checked_Display_Name,Active_Setting,Question_Timeout,ShowLogo,Icon_List,VoiceActivate
                                 String Auto_Id = c1.getString("Auto_Id");
-                                String Company_Id = c1.getString("Company_Id");
-                                String Location_Id = c1.getString("Location_Id");
-                                String Site_Name = c1.getString("Site_Name");
+                                String Feedback_Service_Name = c1.getString("Feedback_Service_Name");
+                                String Display_Name = c1.getString("Display_Name");
+                                String Checked_Display_Name = c1.getString("Checked_Display_Name");
+                                String Active_Setting = c1.getString("Active_Setting");
+                                String Timeout = c1.getString("Question_Timeout");
+                                String ShowLogo = c1.getString("ShowLogo");
+                                String Icon_List = c1.getString("Icon_List");
+                                    String VoiceActivated = c1.getString("Activate_Voice");
                                 String selectQuery = "SELECT * FROM admin_details";
                                 databaseHelper1 = new DatabaseHelper(getApplicationContext());
                                 db1 = databaseHelper1.getWritableDatabase();
@@ -576,6 +582,7 @@ public void onClick(View view) {
                                     contentValues.put("Location_Id", Location_Id);
                                     contentValues.put("Site_Name", Site_Name);
                                     db1.insert("admin_details", null, contentValues);
+                                    dbh.insertadminSettings(Auto_Id, Feedback_Service_Name, Display_Name, Checked_Display_Name, Active_Setting, Timeout, ShowLogo, Icon_List, VoiceActivated);
                                 }
                                 cursor.close();
                                 db1.close();
