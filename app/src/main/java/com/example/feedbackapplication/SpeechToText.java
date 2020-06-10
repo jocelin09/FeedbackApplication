@@ -37,6 +37,7 @@ import com.example.feedbackapplication.database.DatabaseHelper;
 import com.sac.speech.Speech;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -47,45 +48,54 @@ public class SpeechToText extends BaseActivity implements TextToSpeech.OnInitLis
 private final int REQ_CODE_SPEECH_INPUT = 100;
 ArrayList<String> iconList = new ArrayList<>();
 String Icon_List;
-LinearLayout linearLayout34,linearLayout345;
+LinearLayout linearLayout34,linearLayout345,linearlayout_3,linearlayout_4,linearlayout_5,linearlayout_6,linearlayout_7,linearlayout_8;
 ArrayList<String> iconNames = new ArrayList<>();
+ArrayList<String> iconNameswithBad = new ArrayList<>(Arrays.asList("excellent", "very good", "good","average","poor","bad"));
+ArrayList<String> iconwithNegative = new ArrayList<>(Arrays.asList("litter bin full", "smelly", "dirty basin","dirty floor","no tissue paper","others"));
+ArrayList<String> iconwithNegativeCafe = new ArrayList<>(Arrays.asList("food", "seating", "service","ambience","hygiene","food others"));
+ArrayList<String> iconNameswithNos = new ArrayList<>(Arrays.asList("5", "4", "3","2","1"));
+ArrayList<String> iconNameswithAlphabets = new ArrayList<>(Arrays.asList("a", "b", "c","d","e"));
+ArrayList<String> iconNameswithOptions = new ArrayList<>(Arrays.asList("option a", "option b", "option c","option e","option e"));
+ArrayList<String> negativelists = new ArrayList<>();
 ArrayList<Integer> IconIDs = new ArrayList<>();
+ArrayList<Integer> IconIDswithAlphabets = new ArrayList<>(Arrays.asList(40,41,42,43,44));
+ArrayList<Integer> IconIDswithOptions = new ArrayList<>(Arrays.asList(60,61,62,63,64));
+ArrayList<Integer> IconIDswithBad = new ArrayList<>(Arrays.asList(10,11,12,13,14,15));
+ArrayList<Integer> IconIDswithnos = new ArrayList<>(Arrays.asList(20,21,22,23,24));
+ArrayList<Integer> IconIDsforneg = new ArrayList<>(Arrays.asList(30,31,32,33,34,35));
+ArrayList<Integer> IconIDsfornegcafe = new ArrayList<>(Arrays.asList(50,51,52,53,54,55));
 int IconID;
 String iconName;
 TextToSpeech tts;
 String Feedback;
 BroadcastRec broadcastRec = new BroadcastRec();
 AlertDialog alert = null;
+//String [] iconameswithbad = ["sdfd"];
+final TextView[] myTextViews = new TextView[5]; // create an empty array;
+final TextView[] negTextViews = new TextView[6]; // create an empty array;
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_speech_to_text);
     
-  //  mic_button = (ImageButton) findViewById(R.id.mic_button);
     linearLayout34 = (LinearLayout) findViewById(R.id.linearLayout34);
     linearLayout345 = (LinearLayout) findViewById(R.id.linearLayout345);
+    linearlayout_3 = (LinearLayout) findViewById(R.id.linearlayout_3);
+    linearlayout_4 = (LinearLayout) findViewById(R.id.linearlayout_4);
+    linearlayout_5 = (LinearLayout) findViewById(R.id.linearlayout_5);
+    linearlayout_6 = (LinearLayout) findViewById(R.id.linearlayout_6);
+    linearlayout_7 = (LinearLayout) findViewById(R.id.linearlayout_7);
+    linearlayout_8 = (LinearLayout) findViewById(R.id.linearlayout_8);
     
-/*    IntentFilter intentFilter = new IntentFilter("com.example.feedbackapplication.ACTION_BROADCAST");
-    registerReceiver(broadcastRec, intentFilter);
     
-    enableAutoStart();
+   // System.out.println("iconNameswithBad = " + iconNameswithBad);
     
-    Intent intent = new Intent(SpeechToText.this, JobIntentService.class);
-    JobIntentServiceClass.enqueueWork(this, intent);
-    */
     registerReceiver(broadcastReceiver, new IntentFilter("com.example.feedbackapplication.ACTION_FEEDBACK"));
     
     tts = new TextToSpeech(this, this);
-    
-   /* mic_button.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-        promptSpeech();
-        }
-    });*/
-    
-    try {
+ 
+  /*  try {
         SQLiteDatabase db2 = dbh.getWritableDatabase();
         Cursor cursor1 = db2.rawQuery("Select Icon_List from store_setting ;", null);
         if (cursor1.moveToFirst()) {
@@ -97,15 +107,12 @@ protected void onCreate(Bundle savedInstanceState) {
     } catch (Exception e) {
         e.printStackTrace();
     }
-  //  System.out.println("Icon_List = " + Icon_List);
     
     String[] icon = Icon_List.split("\\|");
     for (int i = 0; i < icon.length; i++) {
         iconList.add(icon[i]);
     }
-    //System.out.println("iconList = " + iconList.size());
     
-    //if (iconList.size() !=0)
     for (int i = 0; i < iconList.size(); i++)
     {
         SQLiteDatabase db2 = dbh.getWritableDatabase();
@@ -118,66 +125,97 @@ protected void onCreate(Bundle savedInstanceState) {
     
             do {
                 icon_id = cursor2.getInt(0);
-               // IconID = icon_id;
                 IconIDs.add(icon_id);
                 
                 icon_name = cursor2.getString(6);
                 icon_name1 = cursor2.getString(6).toLowerCase();
+                
                 iconNames.add(icon_name1);
                 linearLayout345.addView(subtextView(icon_id, icon_name));
-                
+              
             } while (cursor2.moveToNext());
         }
+    }*/
+    
+    for (int j = 0; j < iconNameswithBad.size(); j++) {
+        final TextView textView = new TextView(this);
+        //textView.setId(j);
+        textView.setId(IconIDswithBad.get(j));
+        textView.setPadding(20,20,20,20);
+        textView.setTextSize(1, 20);
+        textView.setTypeface(null, Typeface.BOLD);
+        textView.setText(iconNameswithBad.get(j).substring(0,1).toUpperCase() + iconNameswithBad.get(j).substring(1));
+        textView.setGravity(Gravity.CENTER_HORIZONTAL);
+        linearlayout_3.addView(textView);
+        negTextViews[j] = textView;
     }
     
-    System.out.println("iconNames = " + iconNames);
+    for (int k = 0; k < iconNameswithNos.size(); k++) {
+        final TextView textView = new TextView(this);
+        //textView.setId(k);
+        textView.setId(IconIDswithnos.get(k));
+        textView.setPadding(20,20,20,20);
+        textView.setTextSize(1, 20);
+        textView.setTypeface(null, Typeface.BOLD);
+        textView.setText(iconNameswithNos.get(k));
+        textView.setGravity(Gravity.CENTER_HORIZONTAL);
+        linearlayout_4.addView(textView);
+        myTextViews[k] = textView;
+    }
+    
+    for (int m = 0; m < iconNameswithAlphabets.size(); m++) {
+        final TextView textView = new TextView(this);
+        //textView.setId(k);
+        textView.setId(IconIDswithAlphabets.get(m));
+        textView.setPadding(20,20,20,20);
+        textView.setTextSize(1, 20);
+        textView.setTypeface(null, Typeface.BOLD);
+        textView.setText(iconNameswithAlphabets.get(m).substring(0,1).toUpperCase() + iconNameswithAlphabets.get(m).substring(1));
+        textView.setGravity(Gravity.CENTER_HORIZONTAL);
+        linearlayout_6.addView(textView);
+        myTextViews[m] = textView;
+    }
+    for (int m = 0; m < iconNameswithOptions.size(); m++) {
+        final TextView textView = new TextView(this);
+        //textView.setId(k);
+        textView.setId(IconIDswithOptions.get(m));
+        textView.setPadding(20,20,20,20);
+        textView.setTextSize(1, 20);
+        textView.setTypeface(null, Typeface.BOLD);
+        textView.setText(iconNameswithOptions.get(m).substring(0,1).toUpperCase() + iconNameswithOptions.get(m).substring(1));
+       // textView.setText(iconNameswithOptions.get(m).toUpperCase());
+        textView.setGravity(Gravity.CENTER_HORIZONTAL);
+        linearlayout_8.addView(textView);
+        myTextViews[m] = textView;
+    }
+    for (int l = 0; l < iconwithNegative.size(); l++) {
+        final TextView textView = new TextView(this);
+        //textView.setId(k);
+        textView.setId(IconIDsforneg.get(l));
+        textView.setPadding(20,20,20,20);
+        textView.setTextSize(1, 20);
+        textView.setTypeface(null, Typeface.BOLD);
+        textView.setText(iconwithNegative.get(l).substring(0,1).toUpperCase() + iconwithNegative.get(l).substring(1));
+        textView.setGravity(Gravity.CENTER_HORIZONTAL);
+        linearlayout_5.addView(textView);
+        negTextViews[l] = textView;
+    }
+    
+    for (int l = 0; l < iconwithNegativeCafe.size(); l++) {
+        final TextView textView = new TextView(this);
+        //textView.setId(k);
+        textView.setId(IconIDsfornegcafe.get(l));
+        textView.setPadding(20,20,20,20);
+        textView.setTextSize(1, 20);
+        textView.setTypeface(null, Typeface.BOLD);
+        textView.setText(iconwithNegativeCafe.get(l).substring(0,1).toUpperCase() + iconwithNegativeCafe.get(l).substring(1));
+        textView.setGravity(Gravity.CENTER_HORIZONTAL);
+        linearlayout_7.addView(textView);
+        negTextViews[l] = textView;
+    }
+    
 }
 
-private void enableAutoStart() {
-    for (Intent intent : Constants.AUTO_START_INTENTS) {
-        if (getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null) {
-            new android.app.AlertDialog.Builder(this)
-                    .setTitle(R.string.enable_autostart)
-                    .setMessage(R.string.ask_permission)
-                    .setPositiveButton(getString(R.string.allow), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            try {
-                               /* for (Intent intent1 : Constants.AUTO_START_INTENTS)
-                                    if (getPackageManager().resolveActivity(intent1, PackageManager.MATCH_DEFAULT_ONLY) != null) {
-                                        startActivity(intent1);
-                                        break;
-                                    }*/
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    })
-                    .show();
-            break;
-        }
-    }
-}
-
-private View imageView(String icon_name, int icon_id) {
-    final String imgvalue = icon_name;
-    ImageView imageView = new ImageView(this);
-    imageView.setLayoutParams(new ViewGroup.LayoutParams(250, 250));
-    final DatabaseHelper dbh = new DatabaseHelper(SpeechToText.this);
-    Bitmap b = null;
-    byte[] image_str = dbh.readDataIcon(icon_name);
-    
-    try {
-        b = BitmapFactory.decodeByteArray(image_str, 0, image_str.length);
-        
-        imageView.setImageBitmap(Bitmap.createScaledBitmap(b, 100, 100, true));
-    } catch (Exception e) {
-        
-        e.printStackTrace();
-    }
-    
-    return imageView;
-}
 
 private TextView subtextView(int hint, String uname) {
     System.out.println("hint = " + hint);
@@ -193,109 +231,6 @@ private TextView subtextView(int hint, String uname) {
     
 }
 
-private void promptSpeech() {
-    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-    intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
-            getString(R.string.speech_prompt));
-    try {
-        startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
-    } catch (ActivityNotFoundException a) {
-        Toast.makeText(getApplicationContext(),
-                getString(R.string.speech_not_supported),
-                Toast.LENGTH_SHORT).show();
-    }
-    
-}
-
-@Override
-public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    switch (requestCode) {
-        case REQ_CODE_SPEECH_INPUT: {
-            if (resultCode == Activity.RESULT_OK && null != data) {
-                
-                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                System.out.println("result = " + result.get(0));
-                if (iconNames.contains(result.get(0)))
-                {
-                    int pos = iconNames.indexOf(result.get(0));
-                    int id = IconIDs.get(pos);
-                    
-                    System.out.println("pos = " + pos);
-                    System.out.println("id = " + id);
-                    
-                    removeBackground();
-                    
-                    TextView textView = findViewById(id);
-                    textView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-                   
-                    if (result.get(0).equalsIgnoreCase("excellent") ||
-                                result.get(0).equalsIgnoreCase("very good") ||
-                                result.get(0).equalsIgnoreCase("good"))
-                    {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            tts.setSpeechRate(1);
-                            tts.setPitch(0.4f);
-                           int speechStatus = tts.speak( "Thank You",TextToSpeech.QUEUE_ADD,null,null);
-                            if (speechStatus == TextToSpeech.ERROR)
-                            {
-                                Log.e("TTS", "Error in converting Text to Speech!23");
-                            }
-                        } else
-                            {
-                            tts.setSpeechRate(1);
-                            tts.setPitch(0.4f);
-                          int speechStatus = tts.speak( "Thank You",TextToSpeech.QUEUE_ADD,null,null);
-                            if (speechStatus == TextToSpeech.ERROR) {
-                                Log.e("TTS", "Error in converting Text to Speech4!");
-                            }
-                            }
-                    }
-                    else{
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setMessage("Are you sure you want to select "+result.get(0).substring(0, 1).toUpperCase() + result.get(0).substring(1)+" ?")
-                                .setCancelable(false)
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        startActivity(new Intent(SpeechToText.this,SecondActivity.class));
-    
-                                    }
-                                })
-                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        removeBackground();
-    
-                                        dialog.cancel();
-                                    }
-                                });
-                        AlertDialog alert = builder.create();
-                        alert.show();
-                        
-                    
-                    }
-                    
-                } else {
-                    System.out.println("Not matched");
-                    Toast.makeText(this, "Not Present", Toast.LENGTH_SHORT).show();
-                }
-            
-            }
-            break;
-        }
-        
-    }
-}
-
-/*public void onPause(){
-    if(tts !=null){
-        tts.stop();
-        tts.shutdown();
-    }
-    super.onPause();
-}*/
 @Override
 protected void onDestroy() {
     super.onDestroy();
@@ -306,12 +241,42 @@ protected void onDestroy() {
 
 private void removeBackground() {
     
-    for (int i = 0; i < iconNames.size(); i++){
+   /* for (int i = 0; i < iconNames.size(); i++){
     
         TextView textView = findViewById(IconIDs.get(i));
         textView.setBackgroundColor(getResources().getColor(R.color.white));
+    }*/
+    for (int j = 0; j < iconNameswithBad.size(); j++){
+        
+        TextView textView = findViewById(IconIDswithBad.get(j));
+        textView.setBackgroundColor(getResources().getColor(R.color.white));
+    }
+    for (int k = 0; k < iconNameswithNos.size(); k++){
+        
+        TextView textView = findViewById(IconIDswithnos.get(k));
+        textView.setBackgroundColor(getResources().getColor(R.color.white));
     }
     
+    for (int m = 0; m < iconNameswithAlphabets.size(); m++){
+        
+        TextView textView = findViewById(IconIDswithAlphabets.get(m));
+        textView.setBackgroundColor(getResources().getColor(R.color.white));
+    }
+    for (int m = 0; m < iconNameswithOptions.size(); m++){
+        
+        TextView textView = findViewById(IconIDswithOptions.get(m));
+        textView.setBackgroundColor(getResources().getColor(R.color.white));
+    }
+    for (int l = 0; l < iconwithNegative.size(); l++){
+        
+        TextView textView = findViewById(IconIDsforneg.get(l));
+        textView.setBackgroundColor(getResources().getColor(R.color.white));
+    }
+    for (int n = 0; n < iconwithNegativeCafe.size(); n++){
+        
+        TextView textView = findViewById(IconIDsfornegcafe.get(n));
+        textView.setBackgroundColor(getResources().getColor(R.color.white));
+    }
 }
 
 
@@ -339,12 +304,6 @@ public void onBackPressed() {
     startActivity(new Intent(SpeechToText.this,FeedbackActivity.class));
 }
 
-public boolean isAlertDialogShowing(AlertDialog thisAlertDialog) {
-    if (thisAlertDialog != null) {
-        return thisAlertDialog.isShowing();
-    }
-    return false;
-}
 
 BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
     @Override
@@ -353,15 +312,11 @@ BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         if ("com.example.feedbackapplication.ACTION_FEEDBACK".equals(intent.getAction())) {
             Bundle b = intent.getExtras();
             String result = b.getString("value");
-            
-            JobIntentServiceClass jobIntentServiceClass = new JobIntentServiceClass();
-
-               /* System.out.println("Checking: " + jobIntentServiceClass.onStopCurrentWork());
-                System.out.println("Checking: " + jobIntentServiceClass.isStopped());*/
-            
+            System.out.println("result onReceive = " + result);
             AlertDialog.Builder builder;
             
-            if (iconNames.contains(result)) {
+            /*if (iconNames.contains(result)) {
+                System.out.println("if condition  iconNames= ");
                 int pos = iconNames.indexOf(result);
                 int id = IconIDs.get(pos);
                 
@@ -404,8 +359,300 @@ BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
                     
                 }
                 
-            } else {
+            }
+            
+           else */
+            if (iconNameswithBad.contains(result)) {
+                System.out.println("if condition iconNameswithBad = ");
+                int pos = iconNameswithBad.indexOf(result.toLowerCase());
+                int id = IconIDswithBad.get(pos);
+    
+                System.out.println("pos = " + pos);
+                System.out.println("id = " + id);
+    
+                removeBackground();
+    
+                TextView textView = findViewById(id);
+                textView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+    
+                if (result.equalsIgnoreCase("excellent") ||
+                            result.equalsIgnoreCase("very good") ||
+                            result.equalsIgnoreCase("good")) {
+        
+                    textToSpeechNormal("Thank You");
+        
+                } else {
+                    textToSpeech(result);
+        
+        
+                    builder = new AlertDialog.Builder(SpeechToText.this);
+                    builder.setMessage("Are you sure you want to select " + result.substring(0, 1).toUpperCase() + result.substring(1) + " ?")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    startActivity(new Intent(SpeechToText.this, SecondActivity.class));
+                        
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    removeBackground();
+                        
+                                    dialog.cancel();
+                                }
+                            });
+                    alert = builder.create();
+                    alert.show();
+        
+                }
+    
+            }
+            
+           else if (iconNameswithNos.contains(result)) {
+                System.out.println("if condition  iconNameswithNos= ");
+                int pos = iconNameswithNos.indexOf(result);
+                int id = IconIDswithnos.get(pos);
+        
+                System.out.println("pos = " + pos);
+                System.out.println("id = " + id);
+        
+                removeBackground();
+        
+                TextView textView = findViewById(id);
+                System.out.println("textView.getId() = " + textView.getText());
+                textView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        
+                if (result.equalsIgnoreCase("5") ||
+                            result.equalsIgnoreCase("4") ||
+                            result.equalsIgnoreCase("3")) {
+            
+                    textToSpeechNormal("Thank You");
+            
+                } else {
+                    textToSpeech(result);
+            
+            
+                    builder = new AlertDialog.Builder(SpeechToText.this);
+                    builder.setMessage("Are you sure you want to select " + result.substring(0, 1).toUpperCase() + result.substring(1) + " ?")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    startActivity(new Intent(SpeechToText.this, SecondActivity.class));
+                            
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    removeBackground();
+                            
+                                    dialog.cancel();
+                                }
+                            });
+                    alert = builder.create();
+                    alert.show();
+            
+                }
+        
+            }
+
+            else if (iconNameswithAlphabets.contains(result)) {
+                System.out.println("if condition  iconNameswithAlphabets= ");
+                int pos = iconNameswithAlphabets.indexOf(result);
+                int id = IconIDswithAlphabets.get(pos);
+    
+                System.out.println("pos = " + pos);
+                System.out.println("id = " + id);
+    
+                removeBackground();
+    
+                TextView textView = findViewById(id);
+                System.out.println("textView.getId() = " + textView.getText());
+                textView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+    
+                if (result.equalsIgnoreCase("a") ||
+                            result.equalsIgnoreCase("b") ||
+                            result.equalsIgnoreCase("c")) {
+        
+                    textToSpeechNormal("Thank You");
+        
+                } else {
+                    textToSpeech(result);
+        
+        
+                    builder = new AlertDialog.Builder(SpeechToText.this);
+                    builder.setMessage("Are you sure you want to select " + result.substring(0, 1).toUpperCase() + result.substring(1) + " ?")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    startActivity(new Intent(SpeechToText.this, SecondActivity.class));
+                        
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    removeBackground();
+                        
+                                    dialog.cancel();
+                                }
+                            });
+                    alert = builder.create();
+                    alert.show();
+        
+                }
+    
+            }
+
+            else if (iconNameswithOptions.contains(result)) {
+                System.out.println("if condition  iconNameswithAlphabets= ");
+                int pos = iconNameswithOptions.indexOf(result);
+                int id = IconIDswithOptions.get(pos);
+    
+                System.out.println("pos = " + pos);
+                System.out.println("id = " + id);
+    
+                removeBackground();
+    
+                TextView textView = findViewById(id);
+                System.out.println("textView.getId() = " + textView.getText());
+                textView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+    
+                if (result.equalsIgnoreCase("option a") ||
+                            result.equalsIgnoreCase("option b") ||
+                            result.equalsIgnoreCase("option c")) {
+        
+                    textToSpeechNormal("Thank You");
+        
+                } else {
+                    textToSpeech(result);
+        
+        
+                    builder = new AlertDialog.Builder(SpeechToText.this);
+                    builder.setMessage("Are you sure you want to select " + result.substring(0, 1).toUpperCase() + result.substring(1) + " ?")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    startActivity(new Intent(SpeechToText.this, SecondActivity.class));
+                        
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    removeBackground();
+                        
+                                    dialog.cancel();
+                                }
+                            });
+                    alert = builder.create();
+                    alert.show();
+        
+                }
+    
+            }
+            
+            else if (iconwithNegative.contains(result)) {
+                System.out.println("if condition  iconNameswithNos= ");
+                int pos = iconwithNegative.indexOf(result);
+                int id = IconIDsforneg.get(pos);
+    
+                System.out.println("pos = " + pos);
+                System.out.println("id = " + id);
+    
+                negativelists.remove(result);
+                removeBackground();
+    
+                TextView textView = findViewById(id);
+                System.out.println("textView.getId() = " + textView.getText());
+                textView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 
+                negativelists.add(result);
+    
+                System.out.println("negativelists = " + negativelists);
+                textToSpeechNormal("You have selected "+result.substring(0, 1).toUpperCase() + result.substring(1));
+
+             /*   if (result.equalsIgnoreCase("5") ||
+                            result.equalsIgnoreCase("4") ||
+                            result.equalsIgnoreCase("3")) {
+        
+                    textToSpeechNormal("Thank You");
+        
+                } else {
+                    textToSpeech(result);
+        
+        
+                    builder = new AlertDialog.Builder(SpeechToText.this);
+                    builder.setMessage("Are you sure you want to select " + result.substring(0, 1).toUpperCase() + result.substring(1) + " ?")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    startActivity(new Intent(SpeechToText.this, SecondActivity.class));
+                        
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    removeBackground();
+                        
+                                    dialog.cancel();
+                                }
+                            });
+                    alert = builder.create();
+                    alert.show();
+        
+                }*/
+    
+            }
+
+            else if (iconwithNegativeCafe.contains(result)) {
+                System.out.println("if condition iconwithNegativeCafe= ");
+                int pos = iconwithNegativeCafe.indexOf(result);
+                int id = IconIDsfornegcafe.get(pos);
+    
+                System.out.println("pos = " + pos);
+                System.out.println("id = " + id);
+    
+                removeBackground();
+    
+                TextView textView = findViewById(id);
+                System.out.println("textView.getId() = " + textView.getText());
+                textView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+    
+                textToSpeechNormal("You have selected "+result.substring(0, 1).toUpperCase() + result.substring(1));
+
+             /*   if (result.equalsIgnoreCase("5") ||
+                            result.equalsIgnoreCase("4") ||
+                            result.equalsIgnoreCase("3")) {
+        
+                    textToSpeechNormal("Thank You");
+        
+                } else {
+                    textToSpeech(result);
+        
+        
+                    builder = new AlertDialog.Builder(SpeechToText.this);
+                    builder.setMessage("Are you sure you want to select " + result.substring(0, 1).toUpperCase() + result.substring(1) + " ?")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    startActivity(new Intent(SpeechToText.this, SecondActivity.class));
+                        
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    removeBackground();
+                        
+                                    dialog.cancel();
+                                }
+                            });
+                    alert = builder.create();
+                    alert.show();
+        
+                }*/
+    
+            }
+
+            else {
+                System.out.println("else condition");
                 if (alert != null && alert.isShowing()) {
                     System.out.println("Alert is showing..");
                     
@@ -421,7 +668,6 @@ BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
                     System.out.println("Alert is not showing");
                 }
                 
-                //Toast.makeText(context, "Not matched.", Toast.LENGTH_SHORT).show();
             }
             
         }

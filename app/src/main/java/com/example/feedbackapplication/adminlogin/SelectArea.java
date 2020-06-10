@@ -166,18 +166,10 @@ BroadcastRec broadcastRec = new BroadcastRec();
 
 
         }
+        linearLayout.addView(textView());
+        
         linearLayout.addView(linearLayout1);
-        LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
-    
-        TextView textView = new TextView(this);
-        textView.setLayoutParams(textLayoutParams);
-        textView.setText(getResources().getString(R.string.activate_feedback));
-        textView.setPadding(5, 5, 5, 5);
-        textView.setGravity(TEXT_ALIGNMENT_CENTER);
-        textView.setTextColor(Color.BLACK);
-        textView.setTextSize(16);
-        textView.setTextAlignment(TEXT_ALIGNMENT_CENTER);
-        linearLayout.addView(textView);
+       
         setContentView(linearLayout);
     }
 
@@ -396,20 +388,19 @@ BroadcastRec broadcastRec = new BroadcastRec();
         return UploadArray;
     }*/
 
-
 private TextView textView() {
     
     LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(MATCH_PARENT, 100);
-    
+    textLayoutParams.setMargins(10, 30, 10, 10);
     TextView textView = new TextView(this);
     textView.setLayoutParams(textLayoutParams);
     textView.setText(getResources().getString(R.string.activate_feedback));
     textView.setPadding(5, 5, 5, 5);
     textView.setGravity(TEXT_ALIGNMENT_CENTER);
     textView.setTextColor(Color.BLACK);
-    textView.setTextSize(16);
+    textView.setTextSize(18);
     textView.setTextAlignment(TEXT_ALIGNMENT_CENTER);
-   
+    
     return textView;
     
 }

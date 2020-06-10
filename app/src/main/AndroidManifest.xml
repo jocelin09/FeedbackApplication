@@ -35,7 +35,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SpeechToText"/>
+        <activity android:name=".SpeechToText"
+            android:screenOrientation="sensorLandscape"/>
         <activity android:name=".SecondActivity"/>
         <activity
             android:name=".WashroomNegativeFB"

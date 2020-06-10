@@ -14,6 +14,6 @@
     <string name="ask_permission">Please allow Speech to always run in the background,else our services can\'t be accessed when you are in distress</string>
     <string name="allow">ALLOW</string>
     <string name="enable_autostart">Enable AutoStart</string>
-    <string name="activate_feedback">Say <b>Hello Feedback</b> to activate voice commands</string>
-    <string name="provide_feedback">(Say the above mentioned words to provide feedback)</string>
+    <string name="activate_feedback">(Say <b>“Start Feedback“</b> to activate voice commands)</string>
+    <string name="provide_feedback">(Say the below mentioned words to provide feedback)</string>
 </resources>

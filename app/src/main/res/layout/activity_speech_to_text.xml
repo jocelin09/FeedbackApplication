@@ -1,41 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     tools:context=".SpeechToText">
 
-  <!--  <TextView
-        android:id="@+id/txtview"
+
+
+
+    <LinearLayout
+        android:id="@+id/linearLayoutmain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="20dp"
-        android:padding="12dp"
         android:gravity="center"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:text="Feedback Survey"/>-->
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
 
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:text="@string/provide_feedback"
+          android:textSize="17sp" />
   <LinearLayout
       android:id="@+id/linearLayout34"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center"
-      android:layout_marginTop="30dp"
     android:orientation="horizontal">
-   <!--
-    <ImageView
-        android:id="@+id/imgview"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_gravity="top"
-        android:layout_below="@+id/txtview"
-        android:layout_above="@+id/mic_button"
 
-        />-->
   </LinearLayout>
     <LinearLayout
         android:id="@+id/linearLayout345"
@@ -43,38 +37,73 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_marginTop="30dp"
+        android:visibility="gone"
         android:orientation="horizontal">
-        <!--
-         <ImageView
-             android:id="@+id/imgview"
-             android:layout_width="200dp"
-             android:layout_height="200dp"
-             android:layout_gravity="top"
-             android:layout_below="@+id/txtview"
-             android:layout_above="@+id/mic_button"
 
-             />-->
     </LinearLayout>
 
- <!--   <ImageButton
-        android:id="@+id/mic_button"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linearlayout_3"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:layout_gravity="center"
-        android:backgroundTint="@color/colorAccent"
-        android:background="@drawable/ic_mic_black" />-->
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearlayout_4"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:text="@string/provide_feedback"
-        android:textSize="17sp" />
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
 
-</RelativeLayout>
+    </LinearLayout>
+
+      <LinearLayout
+          android:id="@+id/linearlayout_6"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="center"
+          android:layout_marginTop="20dp"
+          android:orientation="horizontal">
+
+      </LinearLayout>
+
+      <LinearLayout
+          android:id="@+id/linearlayout_8"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="center"
+          android:layout_marginTop="20dp"
+          android:orientation="horizontal">
+
+      </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearlayout_5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
+      <LinearLayout
+          android:id="@+id/linearlayout_7"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="center"
+          android:layout_marginTop="20dp"
+          android:orientation="horizontal">
+
+      </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</ScrollView>

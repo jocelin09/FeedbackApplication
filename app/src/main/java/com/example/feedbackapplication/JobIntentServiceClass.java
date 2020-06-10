@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
@@ -68,6 +69,7 @@ protected void onHandleWork(@NonNull Intent intent) {
                             try {
                                 System.out.println("Permission Accepted");
                                 Speech.getInstance().stopTextToSpeech();
+                                Speech.getInstance().setLocale(Locale.getDefault());
                                 Speech.getInstance().startListening(null, JobIntentServiceClass.this);
                             } catch (SpeechRecognitionNotAvailable exc) {
                                 //showSpeechNotSupportedDialog();
@@ -103,6 +105,7 @@ public void onSpecifiedCommandPronounced(String event) {
                 public void accept(Permission permission) throws Exception {
                     try {
                         Speech.getInstance().stopTextToSpeech();
+                        Speech.getInstance().setLocale(Locale.getDefault());
                         Speech.getInstance().startListening(null, delegate);
                     } catch (SpeechRecognitionNotAvailable exc) {
                         //showSpeechNotSupportedDialog();
@@ -136,13 +139,13 @@ public void onSpeechPartialResults(List<String> results) {
 @Override
 public void onSpeechResult(String result) {
     System.out.println("result = " + result);
-    
+   // Toast.makeText(contextClass, "Result: "+result, Toast.LENGTH_SHORT).show();
     if (!TextUtils.isEmpty(result)) {
         //Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
         if (megavision) {
-            if (result.toLowerCase().equalsIgnoreCase("hello feedback") ||
-                        result.toLowerCase().equalsIgnoreCase("hey feedback")/* ||
-                        result.toLowerCase().contains("feedback")*/) {
+            if (/*result.toLowerCase().equalsIgnoreCase("hello feedback") ||
+                        result.toLowerCase().equalsIgnoreCase("hey feedback") ||*/
+                        result.toLowerCase().contains("start feedback")) {
                 //muteBeepSoundOfRecorder();
                 megavision = false;
                 
@@ -152,9 +155,9 @@ public void onSpeechResult(String result) {
             }
         } else {
             switch (result.toLowerCase()) {
-                case "hello feedback":
-                case "hey feedback":
-               // case "feedback":
+                //case "hello feedback":
+                ///case "hey feedback":
+                case "start feedback":
                     Intent intent = new Intent("com.example.feedbackapplication.ACTION_BROADCAST");
                     sendBroadcast(intent);
                     break;

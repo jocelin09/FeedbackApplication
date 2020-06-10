@@ -301,7 +301,7 @@ public class WashroomNegativeFB extends BaseActivity {
 //                    toast.cancel();
 //                    handler.removeCallbacks(runnable);
                     if (negative_lists.size() != 0) {
-                        Toast.makeText(WashroomNegativeFB.this, "Submited ", Toast.LENGTH_LONG).show();
+                        Toast.makeText(WashroomNegativeFB.this, "Submitted ", Toast.LENGTH_LONG).show();
                         String neg_feedback = "";
                         for (int i = 0; i < negative_lists.size(); i++) {
                             if ("".equals(neg_feedback)) {
@@ -477,7 +477,7 @@ public class WashroomNegativeFB extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        /*super.onBackPressed();
         countDownTimer.cancel();
 //        toast.cancel();
         if (current_question_id == totalquestionscount) {
@@ -486,6 +486,6 @@ public class WashroomNegativeFB extends BaseActivity {
         } else {
             finish();
             startActivity(new Intent(WashroomNegativeFB.this, FeedbackActivity.class));
-        }
+        }*/
     }
 }

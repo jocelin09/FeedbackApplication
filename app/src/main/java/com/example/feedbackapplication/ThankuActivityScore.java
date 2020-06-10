@@ -43,7 +43,7 @@ public class ThankuActivityScore extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thanku);
-        try {
+       // try {
             countDownTimer=null;
             linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
             //  Toast.makeText(this, "ThankuActivityScore called...", Toast.LENGTH_SHORT).show();
@@ -89,8 +89,8 @@ public class ThankuActivityScore extends BaseActivity {
 
                 public void onTick(long millisUntilFinished) {
                     Log.i("********", "seconds remaining: " + millisUntilFinished / 1000);
-                    Toast.makeText(ThankuActivityScore.this, "You will be redirected to Home page in " + millisUntilFinished / 1000+" secs", Toast.LENGTH_SHORT).show();
-                  /*  try {
+                   // Toast.makeText(ThankuActivityScore.this, "You will be redirected to Home page in " + millisUntilFinished / 1000+" secs", Toast.LENGTH_SHORT).show();
+                    try {
                             snackbar = Snackbar
                                     .make(linearLayout, "", snackbar.LENGTH_INDEFINITE);
                             (snackbar.getView()).getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -99,11 +99,11 @@ public class ThankuActivityScore extends BaseActivity {
                            snackbar.show();
                        }
                          if (millisUntilFinished / 1000 < 21){
-                            snackbar.setText("You will be redirected to Feedback Questions page in " + millisUntilFinished / 1000 + " secs");
+                            snackbar.setText("You will be redirected to Home page in " + millisUntilFinished / 1000 + " secs");
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                    }*/
+                    }
                 }
 
                 public void onFinish() {
@@ -115,9 +115,9 @@ public class ThankuActivityScore extends BaseActivity {
                 }
             }.start();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
 

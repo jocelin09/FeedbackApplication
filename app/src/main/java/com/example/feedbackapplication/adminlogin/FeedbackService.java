@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.feedbackapplication.BaseActivity;
-import com.example.feedbackapplication.FeedbackActivity;
 import com.example.feedbackapplication.R;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class FeedbackService extends BaseActivity {
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT);
         linearLayout.setLayoutParams(params);
         linearLayout.setOrientation(VERTICAL);
-        //  linearLayout.setBackgroundColor(R.color.colorAccent);
+        //  mainLayout.setBackgroundColor(R.color.colorAccent);
 
 
         linearLayout1 = new LinearLayout(this);
