@@ -398,7 +398,7 @@ public class FeedbackActivity extends BaseActivity {
 //                                        System.out.print(iconList.get(i)+ i);
 //                                        if (iconList.get(i).equals(icon_name)) {
 //                                    if (iconList.contains(icon_name)) {
-                                    linearLayout3.addView(imageView(totalfeedback, icon_name, icon_id));
+                                    linearLayout3.addView(imageView(totalfeedback,feedback_name , icon_id,icon_name));
                                     linearLayout3.addView(subtextView(icon_id, feedback_name));
                                     linearLayout2.addView(linearLayout3);
 //                                        }
@@ -579,22 +579,20 @@ public class FeedbackActivity extends BaseActivity {
     }
 
 
-    private ImageView imageView(final int id, final String strvalue, final int icon_id) {
+    private ImageView imageView(final int id, final String strvalue, final int icon_id,String imgname) {
         System.out.println("strvalue = " + strvalue);
         
         final String imgvalue = strvalue;
         ImageView imageView = new ImageView(this);
         imageView.setLayoutParams(new ViewGroup.LayoutParams(350, 350));
-
+//        imageView.setBackgroundResource(getResources().getColor(R.color.transparent));
         File mydir = cntxt.getDir("images", Context.MODE_PRIVATE); //Creating an internal dir;
 
-        String currentDBPath = "//data//" + cntxt.getPackageName()
-                + "//app_images//"+imgvalue;
-
-        File fileWithinMyDir = new File(mydir, imgvalue);
+        File fileWithinMyDir = new File(mydir, imgname);
         if(fileWithinMyDir.exists()){
             Bitmap myBitmap = BitmapFactory.decodeFile(fileWithinMyDir.getAbsolutePath());
-
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            myBitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
             imageView.setImageBitmap(myBitmap);
 
         }

@@ -3,6 +3,7 @@ package com.example.feedbackapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -29,6 +30,8 @@ import com.example.feedbackapplication.adminlogin.SelectArea;
 import com.example.feedbackapplication.database.DatabaseHelper;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
@@ -50,11 +53,13 @@ public class WashroomNegativeFB extends BaseActivity {
     Snackbar snackbar;
     String q_id;
     public CountDownTimer countDownTimer;
+    Context cntxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
+        cntxt=this;
         countDownTimer=null;
         // area_name = getIntent().getStringExtra("area_name");
         totalquestionscount = getIntent().getIntExtra("totalquestionscount", 0);
@@ -113,7 +118,7 @@ public class WashroomNegativeFB extends BaseActivity {
         neg_iconnames.remove("Seating");
         neg_iconnames.remove("Service");
         neg_iconnames.remove("Ambience");
-        neg_iconnames.remove("Wet Floor");
+        neg_iconnames.remove("Leakage");
         neg_iconnames.remove("Hygiene");
         
         LinearLayout sub1_secondlayout = new LinearLayout(this);
@@ -369,15 +374,27 @@ public class WashroomNegativeFB extends BaseActivity {
         // linearLayout1.setBackground(getDrawable(R.drawable.selectbackground_2));
         linearLayout1.setGravity(Gravity.CENTER);
         linearLayout1.setOrientation(HORIZONTAL);
-
+        try {
+        String imgname=dbh.getImageName(strvalue);
 
         final ImageView imageView = new ImageView(this);
         imageView.setId(id);
         imageView.setLayoutParams(new android.view.ViewGroup.LayoutParams(300, 300));
-        final DatabaseHelper dbh = new DatabaseHelper(WashroomNegativeFB.this);
-        Bitmap b = null;
+//        final DatabaseHelper dbh = new DatabaseHelper(WashroomNegativeFB.this);
+
+        File mydir = cntxt.getDir("images", Context.MODE_PRIVATE); //Creating an internal dir;
+
+        File fileWithinMyDir = new File(mydir, imgname);
+        if(fileWithinMyDir.exists()){
+            Bitmap myBitmap = BitmapFactory.decodeFile(fileWithinMyDir.getAbsolutePath());
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            myBitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            imageView.setImageBitmap(myBitmap);
+
+        }
+//        Bitmap b = null;
         //Faulty Equipments,No Toilet Paper ,Floor Not Clean,Leakage,Others,Smelly
-        if (strvalue.equals("Faulty Equipments")) {
+      /*  if (strvalue.equals("Faulty Equipments")) {
             imageView.setBackgroundResource(R.drawable.litter_bin);
         } else if (strvalue.equals("No Tissue Paper ")) {
             imageView.setBackgroundResource(R.drawable.notissue);
@@ -389,16 +406,13 @@ public class WashroomNegativeFB extends BaseActivity {
             imageView.setBackgroundResource(R.drawable.smelly);
         } else if (strvalue.equals("Others")) {
             imageView.setBackgroundResource(R.drawable.others);
-        }
+        }*/
 //        byte[] image_str = dbh.readDataIcon(strvalue);
 //
-//        try {
+//
 //            b = BitmapFactory.decodeByteArray(image_str, 0, image_str.length);
 //            imageView.setImageBitmap(Bitmap.createScaledBitmap(b, 100, 100, true));
-//        } catch (Exception e) {
-//}
-//            e.printStackTrace();
-//        }
+
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -433,7 +447,7 @@ public class WashroomNegativeFB extends BaseActivity {
                         negative_lists.remove(strvalue);
                         service = false;
                     }
-                } else if (strvalue.equals("Leakage")) {
+                } else if (strvalue.equals("Wet Floor")) {
                     if (hygiene == false) {
                         linearLayout1.setBackground(getDrawable(R.drawable.selected_item_green));
                         negative_lists.add(strvalue);
@@ -469,7 +483,12 @@ public class WashroomNegativeFB extends BaseActivity {
             }
         });
 
+
         linearLayout1.addView(imageView);
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
 
         return linearLayout1;
     }

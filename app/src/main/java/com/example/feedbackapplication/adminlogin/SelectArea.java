@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.JobIntentService;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -39,6 +40,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 
 import static android.view.View.TEXT_ALIGNMENT_CENTER;
@@ -57,11 +59,12 @@ public class SelectArea extends BaseActivity {
     private byte[] img1 = null;
     int imagecount,rec_id;
 BroadcastRec broadcastRec = new BroadcastRec();
+    Context cntxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+        cntxt=this;
         IntentFilter intentFilter = new IntentFilter("com.example.feedbackapplication.ACTION_BROADCAST");
         registerReceiver(broadcastRec, intentFilter);
     
@@ -182,12 +185,22 @@ BroadcastRec broadcastRec = new BroadcastRec();
         params.setMargins(50, 20, 50, 20);
         imageView.setLayoutParams(params);
         Bitmap b = null;
+        String imgname=dbh.getImageName(strvalue);
+        File mydir = cntxt.getDir("images", Context.MODE_PRIVATE); //Creating an internal dir;
 
-            if (imgvalue.equalsIgnoreCase("Cafeteria")) {
+        File fileWithinMyDir = new File(mydir, imgname);
+        if(fileWithinMyDir.exists()){
+            Bitmap myBitmap = BitmapFactory.decodeFile(fileWithinMyDir.getAbsolutePath());
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            myBitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            imageView.setImageBitmap(myBitmap);
+
+        }
+          /*  if (imgvalue.equalsIgnoreCase("Cafeteria")) {
                 imageView.setBackgroundResource(R.drawable.cafeteria);
             } else if (imgvalue.equalsIgnoreCase("Washroom")) {
                 imageView.setBackgroundResource(R.drawable.washroom);
-            }
+            }*/
 //        byte[] image_str = dbh.readDataIcon(strvalue);
 //
 //        try {

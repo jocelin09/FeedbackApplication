@@ -1088,5 +1088,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public String getImageName(String feedback_name){
+        String icon_name = "";
+        try {
+            String query = "SELECT * FROM feedback_admin_icondetails Where FeedBack_Name ='" + feedback_name + "'";
+
+            Log.d("ASdasdasdasd", query);
+            SQLiteDatabase db = getWritableDatabase();
+            Cursor res = db.rawQuery(query, null);
+            if (res.moveToFirst()) {
+                do {
+                    icon_name = res.getString(res.getColumnIndex("Icon_Name"));
+                } while (res.moveToNext());
+            }
+            res.close();
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return icon_name;
+    }
+
 
 }

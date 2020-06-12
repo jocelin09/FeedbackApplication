@@ -910,7 +910,7 @@ public void onClick(View view) {
             File fileWithinMyDir = new File(mydir, ImageName);
             if(!fileWithinMyDir.exists()){
                 FileOutputStream out = new FileOutputStream(fileWithinMyDir);
-                image.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                image.compress(Bitmap.CompressFormat.PNG, 100, out);
                 out.flush();
                 out.close();
             }else {
