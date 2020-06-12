@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.feedbackapplication.adminlogin.SelectArea;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
@@ -91,16 +92,25 @@ public class ThankuActivityScore extends BaseActivity {
                     Log.i("********", "seconds remaining: " + millisUntilFinished / 1000);
                    // Toast.makeText(ThankuActivityScore.this, "You will be redirected to Home page in " + millisUntilFinished / 1000+" secs", Toast.LENGTH_SHORT).show();
                     try {
-                            snackbar = Snackbar
-                                    .make(linearLayout, "", snackbar.LENGTH_INDEFINITE);
-                            (snackbar.getView()).getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
 
-                       if (!snackbar.isShown()) {
+
+                       if(millisUntilFinished / 1000 == 19) {
+                           snackbar = Snackbar
+                                   .make(linearLayout, "", snackbar.LENGTH_INDEFINITE)
+                                   .setAction("", new View.OnClickListener() {
+                                       @Override
+                                       public void onClick(View view) {
+
+                                       }
+
+                                   });
+                           (snackbar.getView()).getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
                            snackbar.show();
                        }
-                         if (millisUntilFinished / 1000 < 21){
-                            snackbar.setText("You will be redirected to Home page in " + millisUntilFinished / 1000 + " secs");
-                        }
+                           if (millisUntilFinished / 1000 < 20) {
+                               snackbar.setText("You will be redirected to Home page in " + millisUntilFinished / 1000 + " secs");
+                           }
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -109,7 +119,7 @@ public class ThankuActivityScore extends BaseActivity {
                 public void onFinish() {
                     Log.i("********", "Timer Finished");
                     countDownTimer.cancel();
-                    Intent intent = new Intent(getApplicationContext(), FeedbackActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), SelectArea.class);
                     intent.putExtra("area", area);
                     startActivity(intent);
                 }

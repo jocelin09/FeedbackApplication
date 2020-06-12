@@ -34,7 +34,7 @@ protected void onCreate(Bundle savedInstanceState) {
     
     feedbackserviceList = new ArrayList<>();
    
-    feedbackservicetypes = dbh.getFeedbackServiceType(client_id);
+    feedbackservicetypes ="Area specific"; //dbh.getFeedbackServiceType(client_id);
    
         if (feedbackservicetypes.contains("|")) {
             String[] areas = feedbackservicetypes.split("\\|");

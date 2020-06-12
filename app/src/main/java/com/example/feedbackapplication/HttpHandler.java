@@ -151,16 +151,33 @@ public class HttpHandler {
     public Bitmap GetImage(String image_name) {
 //
         //http://45.118.160.162:81/punctualiti/com/dell_bangalore_feedback/android/imageslist.php
-        String reqUrl =  new ApplicationClass().urlString()+"/android/"+image_name;
+        String reqUrl =  new ApplicationClass().urlString()+"Images/appimages/"+image_name;
 
         Bitmap bitmap = null;
         try {
-            // Download Image from URL
+          /*  // Download Image from URL
             InputStream input = new URL(reqUrl).openStream();
             // Decode Bitmap
-            bitmap = BitmapFactory.decodeStream(input);
+            bitmap = BitmapFactory.decodeStream(input);*/
+
+          /*  InputStream input = new java.net.URL(reqUrl).openStream();
+//            convertStreamToString(input);
+            Log.d("JsonOUtput", "*****");
+            // Decode Bitmap
+            bitmap = BitmapFactory.decodeStream(input);*/
+            bitmap = BitmapFactory.decodeStream(new URL(reqUrl).openConnection().getInputStream());
+               /* URL url = new URL(reqUrl);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap myBitmap = BitmapFactory.decodeStream(input);
+                return myBitmap;*/
+
+
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
         return bitmap;
 

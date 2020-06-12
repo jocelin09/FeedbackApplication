@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,6 +35,8 @@ import com.example.feedbackapplication.database.DatabaseHelper;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -61,6 +64,7 @@ public class FeedbackActivity extends BaseActivity {
     String area;
     ArrayList<String> iconList = new ArrayList<>();
     //    private byte[] img = null;
+    Context cntxt;
     private byte[] img = null;
     private byte[] img1 = null;
     private byte[] img2 = null;
@@ -78,7 +82,7 @@ public class FeedbackActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+        cntxt=this;
 //        setContentView(R.layout.activity_feedback);
 //        dbh = new DatabaseHelper(FeedbackActivity.this);
 //        sqLiteDatabase = dbh.getWritableDatabase();
@@ -394,7 +398,7 @@ public class FeedbackActivity extends BaseActivity {
 //                                        System.out.print(iconList.get(i)+ i);
 //                                        if (iconList.get(i).equals(icon_name)) {
 //                                    if (iconList.contains(icon_name)) {
-                                    linearLayout3.addView(imageView(totalfeedback, feedback_name, icon_id));
+                                    linearLayout3.addView(imageView(totalfeedback, icon_name, icon_id));
                                     linearLayout3.addView(subtextView(icon_id, feedback_name));
                                     linearLayout2.addView(linearLayout3);
 //                                        }
@@ -581,19 +585,32 @@ public class FeedbackActivity extends BaseActivity {
         final String imgvalue = strvalue;
         ImageView imageView = new ImageView(this);
         imageView.setLayoutParams(new ViewGroup.LayoutParams(350, 350));
-        final DatabaseHelper dbh = new DatabaseHelper(FeedbackActivity.this);
+
+        File mydir = cntxt.getDir("images", Context.MODE_PRIVATE); //Creating an internal dir;
+
+        String currentDBPath = "//data//" + cntxt.getPackageName()
+                + "//app_images//"+imgvalue;
+
+        File fileWithinMyDir = new File(mydir, imgvalue);
+        if(fileWithinMyDir.exists()){
+            Bitmap myBitmap = BitmapFactory.decodeFile(fileWithinMyDir.getAbsolutePath());
+
+            imageView.setImageBitmap(myBitmap);
+
+        }
+        /*final DatabaseHelper dbh = new DatabaseHelper(FeedbackActivity.this);
         Bitmap b = null;
-//        byte[] image_str = dbh.readDataIcon(strvalue);
-//        ;
-//        try {
-//            b = BitmapFactory.decodeByteArray(image_str, 0, image_str.length);
-//
-//            imageView.setImageBitmap(Bitmap.createScaledBitmap(b, 100, 100, true));
-//        } catch (Exception e) {
-//
-//            e.printStackTrace();
-//        }
-        if (imgvalue.equalsIgnoreCase("Poor")) {
+        byte[] image_str = dbh.readDataIcon(strvalue);
+        ;
+        try {
+            b = BitmapFactory.decodeByteArray(image_str, 0, image_str.length);
+
+            imageView.setImageBitmap(Bitmap.createScaledBitmap(b, 100, 100, true));
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }*/
+     /*   if (imgvalue.equalsIgnoreCase("Poor")) {
             imageView.setBackgroundResource(R.drawable.poor);
         } else if (imgvalue.equalsIgnoreCase("Average")) {
             imageView.setBackgroundResource(R.drawable.average);
@@ -603,7 +620,7 @@ public class FeedbackActivity extends BaseActivity {
             imageView.setBackgroundResource(R.drawable.very_good);
         } else if (imgvalue.equalsIgnoreCase("Excellent")) {
             imageView.setBackgroundResource(R.drawable.excellent);
-        }
+        }*/
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

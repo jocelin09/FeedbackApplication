@@ -50,7 +50,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(" CREATE TABLE EmailSMSList (Id INTEGER PRIMARY KEY, Auto_Id TEXT,Building_Id TEXT, Employee_Email TEXT, Recipient_Type TEXT,Mobile_Number TEXT, Record_Status TEXT)");
         sqLiteDatabase.execSQL(" CREATE TABLE sms_master(Id INTEGER PRIMARY KEY ,Auto_Id TEXT,UserName TEXT, Password TEXT, Type TEXT, Source TEXT, URL TEXT)");
         sqLiteDatabase.execSQL(" CREATE TABLE store_setting(Admin_Id INTEGER PRIMARY KEY , Auto_Id TEXT,Company_Name TEXT,Location_Name TEXT, Site_Name TEXT, Building_Name TEXT,Wing_Name TEXT, Floor_Name TEXT, Virtual_Area_Name TXET, Area_Name TEXT)");
-        sqLiteDatabase.execSQL(" CREATE TABLE admin_setting(Id INTEGER PRIMARY KEY , Auto_Id TEXT, Feedback_Service_Name TEXT, Display_Name TEXT, Checked_Display_Name TEXT,Active_Setting Text,Question_Timeout TEXT,ShowLogo TEXT,Icon_List TEXT,VoiceActivated TEXT)");
+        sqLiteDatabase.execSQL(" CREATE TABLE admin_setting(Id INTEGER PRIMARY KEY , Auto_Id TEXT, Feedback_Service_Name TEXT,Active_Setting Text,Question_Timeout TEXT,ShowLogo TEXT,Icon_List TEXT,VoiceActivated TEXT,Thank_u_Timeout TEXT,Greeting_Setting TEXT)");// Display_Name TEXT, Checked_Display_Name TEXT,
     }
 
     @Override
@@ -211,14 +211,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean insertadminSettings(String Auto_Id, String Feedback_Service_Name, String Display_Name, String Checked_Display_Name, String Active_Setting, String Timeout, String ShowLogo, String Icon_List, String VoiceActivated) {//,
+    public boolean insertadminSettings(String Auto_Id, String Feedback_Service_Name, String Active_Setting, String Timeout, String ShowLogo, String Icon_List, String VoiceActivated,String Thank_u_Timeout,String Greeting_Setting) {//,
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        //Feedback_Service_Name TEXT, Display_Name TEXT, Checked_Display_Name TEXT,Active_Setting Text,Icon_Type TEXT,Question_Timeout TEXT,ShowLogo TEXT,Icon_List TEXT
+        //Feedback_Service_Name TEXT, Display_Name TEXT, Checked_Display_Name TEXT,Active_Setting Text,Icon_Type TEXT,Question_Timeout TEXT,ShowLogo TEXT,Icon_List TEXT,Thank_u_Timeout TEXT,Greeting_Setting TEXT
         contentValues.put("Auto_Id", Auto_Id);
         contentValues.put("Feedback_Service_Name", Feedback_Service_Name);
-        contentValues.put("Display_Name", Display_Name);
-        contentValues.put("Checked_Display_Name", Checked_Display_Name);
+        contentValues.put("Thank_u_Timeout", Thank_u_Timeout);
+        contentValues.put("Greeting_Setting", Greeting_Setting);
         contentValues.put("Active_Setting", Active_Setting);
         contentValues.put("Question_Timeout", Timeout);
         contentValues.put("ShowLogo", ShowLogo);
