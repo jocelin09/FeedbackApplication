@@ -927,9 +927,9 @@ public void onClick(View view) {
         }
         if(LastImageName.equalsIgnoreCase(ImageName)){
             //intentHomepage();
-            Intent intent = new Intent(getApplicationContext(), AdminDetailsConfig.class);
+      /*      Intent intent = new Intent(getApplicationContext(), AdminDetailsConfig.class);
             intent.putExtra("feedbackservicename",feedbackservicename);
-            intent.putExtra("client_id",str_clientid);
+            intent.putExtra("client_id",str_clientid);*/
         }
     }
 
@@ -957,7 +957,7 @@ public void onClick(View view) {
         }else {
             imageFound = false;
         }
-        if(LastImageName.equalsIgnoreCase(Image)){
+        /*if(LastImageName.equalsIgnoreCase(Image)){
 //            intentHomepage();
             Intent intent = new Intent(getApplicationContext(), FeedbackServiceAct.class);
             intent.putExtra("feedbackservicename",feedbackservicename);
@@ -965,7 +965,7 @@ public void onClick(View view) {
 //            count++;
 //            intent.putExtra("Count", count);
             startActivity(intent);
-        }
+        }*/
 
         return imageFound;
     }
